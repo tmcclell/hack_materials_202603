@@ -1,3 +1,5 @@
+# [📋 Open the Interactive Agenda](readme.html)
+
 # GitHub Copilot Hackathon — Day 2
 
 ## Overview
