@@ -185,7 +185,7 @@ Before arriving at the hackathon, ensure:
 |----------|------|
 | Squad — AI Agent Teams | [github.com/bradygaster/squad](https://github.com/bradygaster/squad) |
 | Copilot SDK | `@github/copilot-sdk` (technical preview) |
-| OpenClaw Video | [Build Your Own OpenClaw Bot](https://youtu.be/PEtM45hG-5A) |
+| OpenClaw Video | [Build Your Own OpenClaw Bot like with GitHub Copilot](https://youtu.be/PEtM45hG-5A) |
 | GitHub Docs: Premium Requests | [docs.github.com](https://docs.github.com/en/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests) |
 
 ---
