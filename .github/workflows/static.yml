@@ -31,13 +31,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Prepare deploy folder (HTML only, no demo-app)
+        run: |
+          mkdir -p _site
+          # Copy readme.html as index.html (default page)
+          cp readme.html _site/index.html
+          # Copy hack-artifacts HTML files, preserving folder structure but excluding demo-app
+          find hack-artifacts -name '*.html' -not -path '*/demo-app/*' | while read f; do
+            mkdir -p "_site/$(dirname "$f")"
+            cp "$f" "_site/$f"
+          done
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
