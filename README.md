@@ -79,13 +79,6 @@ A comprehensive preparation repository for a full-day GitHub Copilot hackathon.
 ## Repo Structure
 
 ```
-├── Facilitor/                              # Facilitator materials
-│   ├── customer-copilot-hack-day2.html    # Interactive agenda (main hub)
-│   ├── customer-copilot-hack.md           # Master Day 2 plan
-│   ├── coaching-guide.md                  # Instructor guide
-│   ├── coaching-guide-readaloud-part1.html # Read-aloud: Sessions 1 & 2
-│   └── coaching-guide-readaloud-part2.html # Read-aloud: Session 3 + Afternoon
-│
 ├── hack-artifacts/                         # Interactive content linked from agenda
 │   ├── presentations/                     # 3 visual presentation pages
 │   │   ├── copilot-in-vscode.html        # How Copilot works in VS Code
