@@ -1,4 +1,4 @@
-# [📋 Open the Interactive Agenda](readme.html)
+# [📋 Open the Interactive Agenda](https://tmcclell.github.io/hack_materials_202603/readme.html)
 
 # GitHub Copilot Hackathon — Day 2
 
