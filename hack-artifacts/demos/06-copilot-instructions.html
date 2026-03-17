@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo: Copilot Instructions &amp; Prompt Files</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      line-height: 1.7;
+      padding: 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      color: #8b949e;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #58a6ff;
+    }
+
+    /* ── Header ─────────────────────────────────── */
+    .demo-header {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .demo-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #58a6ff, #3fb950, #d29922);
+    }
+
+    .demo-header .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .badge-time {
+      background: rgba(88, 166, 255, 0.15);
+      color: #58a6ff;
+      border: 1px solid rgba(88, 166, 255, 0.3);
+    }
+
+    .badge-topic {
+      background: rgba(63, 185, 80, 0.15);
+      color: #3fb950;
+      border: 1px solid rgba(63, 185, 80, 0.3);
+    }
+
+    .badge-level {
+      background: rgba(210, 153, 34, 0.15);
+      color: #d29922;
+      border: 1px solid rgba(210, 153, 34, 0.3);
+    }
+
+    .demo-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .demo-header p {
+      color: #8b949e;
+      font-size: 1rem;
+      max-width: 700px;
+    }
+
+    /* ── Cards ──────────────────────────────────── */
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Setup Card ─────────────────────────────── */
+    .setup-card {
+      border-left: 4px solid #58a6ff;
+    }
+
+    .setup-card h2 {
+      color: #58a6ff;
+    }
+
+    .setup-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .setup-list li {
+      padding: 0.5rem 0;
+      padding-left: 1.6rem;
+      position: relative;
+      color: #c9d1d9;
+    }
+
+    .setup-list li::before {
+      content: '✔';
+      position: absolute;
+      left: 0;
+      color: #3fb950;
+      font-weight: 700;
+    }
+
+    /* ── Step Cards ─────────────────────────────── */
+    .step-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step-number {
+      position: absolute;
+      top: -0.2rem;
+      right: 1rem;
+      font-size: 8rem;
+      font-weight: 800;
+      color: rgba(88, 166, 255, 0.06);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .step-card h2 {
+      color: #e6edf3;
+      font-size: 1.35rem;
+      position: relative;
+    }
+
+    .step-card h2 .step-label {
+      color: #58a6ff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    /* ── Callout Boxes ─────────────────────────── */
+    .callout {
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .callout-label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+    }
+
+    /* 💬 Say */
+    .say {
+      background: rgba(88, 166, 255, 0.08);
+      border: 1px solid rgba(88, 166, 255, 0.25);
+      border-left: 4px solid #58a6ff;
+    }
+
+    .say .callout-label {
+      color: #58a6ff;
+    }
+
+    .say p {
+      color: #c9d1d9;
+      font-style: italic;
+    }
+
+    /* ⌨️ Type */
+    .type-action {
+      background: rgba(63, 185, 80, 0.08);
+      border: 1px solid rgba(63, 185, 80, 0.25);
+      border-left: 4px solid #3fb950;
+    }
+
+    .type-action .callout-label {
+      color: #3fb950;
+    }
+
+    /* 👀 What They See */
+    .see {
+      background: rgba(139, 148, 158, 0.08);
+      border: 1px solid rgba(139, 148, 158, 0.25);
+      border-left: 4px solid #8b949e;
+    }
+
+    .see .callout-label {
+      color: #8b949e;
+    }
+
+    .see p {
+      color: #8b949e;
+    }
+
+    /* 💡 Teaching Point */
+    .teach {
+      background: rgba(210, 153, 34, 0.08);
+      border: 1px solid rgba(210, 153, 34, 0.25);
+      border-left: 4px solid #d29922;
+    }
+
+    .teach .callout-label {
+      color: #d29922;
+    }
+
+    .teach p {
+      color: #c9d1d9;
+    }
+
+    /* ── Narrator text ─────────────────────────── */
+    .narrator {
+      color: #8b949e;
+      font-size: 0.95rem;
+      margin: 0.75rem 0;
+    }
+
+    /* ── Code Blocks ───────────────────────────── */
+    pre {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #c9d1d9;
+      margin: 0.75rem 0;
+    }
+
+    code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88em;
+      background: rgba(110, 118, 129, 0.15);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      color: #e6edf3;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    /* ── File Tree Diagram ─────────────────────── */
+    .file-tree-card {
+      border-top: 3px solid #58a6ff;
+    }
+
+    .file-tree {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.9rem;
+      line-height: 2;
+      padding: 0.5rem 0;
+    }
+
+    .file-tree .tree-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.15rem 0;
+    }
+
+    .file-tree .tree-indent {
+      color: #30363d;
+      user-select: none;
+    }
+
+    .file-tree .tree-icon {
+      font-size: 1.05rem;
+      width: 1.4rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .file-tree .tree-name {
+      color: #e6edf3;
+    }
+
+    .file-tree .tree-name.folder {
+      font-weight: 600;
+    }
+
+    .file-tree .tree-annotation {
+      color: #8b949e;
+      font-size: 0.8rem;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      margin-left: 0.5rem;
+    }
+
+    .annotation-blue {
+      color: #58a6ff !important;
+      background: rgba(88, 166, 255, 0.1);
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(88, 166, 255, 0.2);
+    }
+
+    .annotation-green {
+      color: #3fb950 !important;
+      background: rgba(63, 185, 80, 0.1);
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(63, 185, 80, 0.2);
+    }
+
+    /* ── Divider ────────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid #21262d;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Footer ─────────────────────────────────── */
+    .footer {
+      text-align: center;
+      color: #484f58;
+      font-size: 0.8rem;
+      padding: 2rem 0 1rem;
+    }
+
+    /* ── Responsive ─────────────────────────────── */
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem;
+      }
+
+      .demo-header {
+        padding: 1.5rem;
+      }
+
+      .demo-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .step-number {
+        font-size: 5rem;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Back Link -->
+  <a href="../index.html" class="back-link">← Back to Agenda</a>
+
+  <!-- Header -->
+  <header class="demo-header">
+    <div class="badge-row">
+      <span class="badge badge-time">⏱ 10 min</span>
+      <span class="badge badge-topic">📋 Customization &amp; Configuration</span>
+      <span class="badge badge-level">📁 Project: Emoji Battle Arena</span>
+    </div>
+    <h1>📜 Copilot Instructions &amp; Prompt Files</h1>
+    <p>Teach your team how to embed coding standards into Copilot and build reusable prompt templates that supercharge productivity across the entire team.</p>
+  </header>
+
+  <!-- File Tree Diagram -->
+  <section class="card file-tree-card" aria-label="File hierarchy diagram">
+    <h2>🗂️ File Hierarchy Overview</h2>
+    <p style="color: #8b949e; margin-bottom: 1rem; font-size: 0.9rem;">These are the key files Copilot reads for project context and reusable prompts.</p>
+
+    <div class="file-tree" role="img" aria-label="Project file tree showing .github directory with copilot-instructions.md and prompts folder">
+      <div class="tree-line">
+        <span class="tree-icon">📁</span>
+        <span class="tree-name folder">demo-app/</span>
+      </div>
+      <div class="tree-line">
+        <span class="tree-indent">&nbsp;&nbsp;├──</span>
+        <span class="tree-icon">📁</span>
+        <span class="tree-name folder">.github/</span>
+      </div>
+      <div class="tree-line">
+        <span class="tree-indent">&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├──</span>
+        <span class="tree-icon">📄</span>
+        <span class="tree-name">copilot-instructions.md</span>
+        <span class="tree-annotation annotation-blue">← Project-level rules</span>
+      </div>
+      <div class="tree-line">
+        <span class="tree-indent">&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└──</span>
+        <span class="tree-icon">📁</span>
+        <span class="tree-name folder">prompts/</span>
+        <span class="tree-annotation annotation-green">← Reusable templates</span>
+      </div>
+      <div class="tree-line">
+        <span class="tree-indent">&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──</span>
+        <span class="tree-icon">📝</span>
+        <span class="tree-name">add-fighter.md</span>
+      </div>
+      <div class="tree-line">
+        <span class="tree-indent">&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──</span>
+        <span class="tree-icon">📝</span>
+        <span class="tree-name">add-test-suite.md</span>
+        <span class="tree-annotation" style="color: #d29922;">← Created live in demo</span>
+      </div>
+      <div class="tree-line">
+        <span class="tree-indent">&nbsp;&nbsp;├──</span>
+        <span class="tree-icon">📁</span>
+        <span class="tree-name folder">src/</span>
+      </div>
+      <div class="tree-line">
+        <span class="tree-indent">&nbsp;&nbsp;├──</span>
+        <span class="tree-icon">📄</span>
+        <span class="tree-name">package.json</span>
+      </div>
+      <div class="tree-line">
+        <span class="tree-indent">&nbsp;&nbsp;└──</span>
+        <span class="tree-icon">📄</span>
+        <span class="tree-name">tsconfig.json</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Setup -->
+  <section class="card setup-card" aria-label="Setup checklist">
+    <h2>🎬 Setup</h2>
+    <p style="color: #8b949e; margin-bottom: 1rem;">Have these ready before you begin:</p>
+    <ul class="setup-list">
+      <li>VS Code open with the <code>demo-app/</code> project folder</li>
+      <li><code>.github/copilot-instructions.md</code> visible in the Explorer sidebar</li>
+      <li>GitHub Copilot Chat panel open (Agent mode enabled)</li>
+      <li>No other chat conversations open (start fresh)</li>
+      <li>Font size increased for audience visibility (Cmd/Ctrl + =)</li>
+    </ul>
+  </section>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- Step 1 -->
+  <!-- ════════════════════════════════════════════ -->
+  <article class="card step-card" aria-label="Demo step 1">
+    <span class="step-number" aria-hidden="true">1</span>
+
+    <h2>
+      <span class="step-label">Step 1</span>
+      📄 Show the Instructions File
+    </h2>
+
+    <p class="narrator">Open the file and walk through each rule so the audience understands what Copilot will enforce.</p>
+
+    <div class="callout say">
+      <div class="callout-label">💬 Say:</div>
+      <p>"This file tells Copilot HOW your team writes code. Every response respects these rules."</p>
+    </div>
+
+    <div class="callout type-action">
+      <div class="callout-label">⌨️ Do:</div>
+      <p style="color: #c9d1d9;">Open <code>.github/copilot-instructions.md</code> in the editor. Scroll through the file slowly — point out each rule as you go.</p>
+    </div>
+
+    <p class="narrator">Walk through each rule in the file. Highlight the patterns the team has standardized:</p>
+
+    <pre><code># Key rules to point out:
+- JSDoc comments on every exported function
+- Use `const` over `let` wherever possible
+- Consistent error handling pattern (try/catch with typed errors)
+- Structured API response format { success, data, error }</code></pre>
+
+    <div class="callout see">
+      <div class="callout-label">👀 What They See:</div>
+      <p>The <code>copilot-instructions.md</code> file with clear, readable rules about JSDoc comments, <code>const</code> usage, error handling patterns, and structured API response format.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="callout teach">
+      <div class="callout-label">💡 Teaching Point:</div>
+      <p>This is like a <code>.eslintrc</code> for AI — organizational coding standards that Copilot follows automatically. Every suggestion, every generation, every refactor will respect these rules.</p>
+    </div>
+  </article>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- Step 2 -->
+  <!-- ════════════════════════════════════════════ -->
+  <article class="card step-card" aria-label="Demo step 2">
+    <span class="step-number" aria-hidden="true">2</span>
+
+    <h2>
+      <span class="step-label">Step 2</span>
+      🧪 Demo the Impact
+    </h2>
+
+    <p class="narrator">Prove the instructions work by generating code and inspecting the output for compliance.</p>
+
+    <div class="callout say">
+      <div class="callout-label">💬 Say:</div>
+      <p>"Let's prove it works. Watch how Copilot follows these rules."</p>
+    </div>
+
+    <div class="callout type-action">
+      <div class="callout-label">⌨️ Type in Chat (Agent mode):</div>
+      <pre><code>Create a new analytics endpoint at /api/analytics that returns battle statistics</code></pre>
+    </div>
+
+    <p class="narrator">Wait for Copilot to generate the code. Then walk through the output with the audience, checking for compliance:</p>
+
+    <pre><code># ✅ Check the generated code for:
+- JSDoc comments on functions? ✓
+- const declarations (not let)?  ✓
+- try/catch error handling?      ✓
+- { success, data, error } shape? ✓</code></pre>
+
+    <div class="callout see">
+      <div class="callout-label">👀 What They See:</div>
+      <p>Generated code that matches the project's style perfectly — JSDoc on every function, <code>const</code> declarations throughout, consistent error handling, and the structured response format. It looks like a senior developer on your team wrote it.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="callout teach">
+      <div class="callout-label">💡 Teaching Point:</div>
+      <p>Instructions = org-wide coding standards enforced automatically. No more "please follow our conventions" in code review. The AI already knows your team's style.</p>
+    </div>
+  </article>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- Step 3 -->
+  <!-- ════════════════════════════════════════════ -->
+  <article class="card step-card" aria-label="Demo step 3">
+    <span class="step-number" aria-hidden="true">3</span>
+
+    <h2>
+      <span class="step-label">Step 3</span>
+      📋 Show Prompt Files
+    </h2>
+
+    <p class="narrator">Transition from project-level rules to reusable prompt templates.</p>
+
+    <div class="callout say">
+      <div class="callout-label">💬 Say:</div>
+      <p>"Prompt files are reusable templates. Instead of typing the same complex prompt every time, save it as a file."</p>
+    </div>
+
+    <div class="callout type-action">
+      <div class="callout-label">⌨️ Do:</div>
+      <p style="color: #c9d1d9;">Open <code>.github/prompts/add-fighter.md</code> in the editor. Show its structure to the audience.</p>
+    </div>
+
+    <p class="narrator">Point out how the prompt file defines a repeatable pattern — all the context and requirements baked in.</p>
+
+    <div class="callout type-action">
+      <div class="callout-label">⌨️ Type in Chat:</div>
+      <pre><code>Using #file:.github/prompts/add-fighter.md, add a new 🌙 Moon fighter</code></pre>
+    </div>
+
+    <div class="callout see">
+      <div class="callout-label">👀 What They See:</div>
+      <p>Copilot creates a complete fighter following the prompt file template — consistent structure every time. The Moon fighter has all the same properties, formatting, and patterns as existing fighters.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="callout teach">
+      <div class="callout-label">💡 Teaching Point:</div>
+      <p>Prompt files = team productivity multiplier. New team member? Give them the prompt library. They're immediately productive, generating code that matches your team's patterns from day one.</p>
+    </div>
+  </article>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- Step 4 -->
+  <!-- ════════════════════════════════════════════ -->
+  <article class="card step-card" aria-label="Demo step 4">
+    <span class="step-number" aria-hidden="true">4</span>
+
+    <h2>
+      <span class="step-label">Step 4</span>
+      ✍️ Create a New Prompt File Live
+    </h2>
+
+    <p class="narrator">Build a prompt file from scratch so the audience sees how easy it is to create their own.</p>
+
+    <div class="callout say">
+      <div class="callout-label">💬 Say:</div>
+      <p>"Let's create one together — this is something you'll do on your own team."</p>
+    </div>
+
+    <div class="callout type-action">
+      <div class="callout-label">⌨️ Create file <code>.github/prompts/add-test-suite.md</code> with:</div>
+      <pre><code># Add Test Suite
+
+Create a comprehensive test suite for the specified service.
+
+## Requirements
+- Use vitest with describe/it blocks
+- Include setup and teardown
+- Test happy paths and error cases
+- Mock external dependencies
+- Aim for &gt;80% coverage
+
+## Structure
+- Group tests by method
+- Use descriptive test names
+- Include edge cases</code></pre>
+    </div>
+
+    <p class="narrator">Now use the prompt file you just created:</p>
+
+    <div class="callout type-action">
+      <div class="callout-label">⌨️ Type in Chat:</div>
+      <pre><code>Using #file:.github/prompts/add-test-suite.md, create tests for the battle service</code></pre>
+    </div>
+
+    <div class="callout see">
+      <div class="callout-label">👀 What They See:</div>
+      <p>Consistent, well-structured tests generated from the template — vitest describe/it blocks, setup/teardown, mocked dependencies, happy paths and error cases. Every team member will produce the same quality of tests.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="callout teach">
+      <div class="callout-label">💡 Teaching Point:</div>
+      <p>Teams can share prompt libraries — put them in your repo, version them with git, iterate together. It's collaborative prompt engineering. Your best prompts become team assets, not tribal knowledge.</p>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Copilot Instructions &amp; Prompt Files — Instructor Demo Script</p>
+  </footer>
+
+</body>
+</html>

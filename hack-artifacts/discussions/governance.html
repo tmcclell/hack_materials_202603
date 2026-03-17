@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Governance & Policy + Audit & Compliance</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            padding: 2rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            color: #8b949e;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #58a6ff; text-decoration: none; }
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .duration {
+            display: inline-block;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 20px;
+            padding: 0.25rem 0.85rem;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+        .key-message {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #58a6ff;
+        }
+        .key-message .label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #58a6ff;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .key-message .message {
+            font-size: 1.15rem;
+            font-weight: 500;
+            font-style: italic;
+        }
+        .section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-header {
+            border-left: 4px solid #58a6ff;
+            padding-left: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .section-header.green { border-left-color: #3fb950; }
+        .section-header.yellow { border-left-color: #d29922; }
+        .section-header.red { border-left-color: #f85149; }
+        .section-header h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+        .section-header .sub-duration {
+            font-size: 0.8rem;
+            color: #8b949e;
+        }
+        .talking-points {
+            list-style: none;
+            padding: 0;
+        }
+        .talking-points li {
+            position: relative;
+            padding: 0.6rem 0 0.6rem 1.75rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .talking-points li:last-child { border-bottom: none; }
+        .talking-points li::before {
+            content: '▸';
+            position: absolute;
+            left: 0.25rem;
+            color: #58a6ff;
+            font-weight: 700;
+        }
+        .talking-points li.green::before { color: #3fb950; }
+        .talking-points li.yellow::before { color: #d29922; }
+        .qa-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-top: 2rem;
+        }
+        .qa-section h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            border-left: 4px solid #d29922;
+            padding-left: 1rem;
+        }
+        .qa-item {
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .qa-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .qa-item .question {
+            font-weight: 600;
+            color: #d29922;
+            margin-bottom: 0.35rem;
+        }
+        .qa-item .answer {
+            color: #b1bac4;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .qa-item .answer::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #3fb950;
+        }
+        .divider {
+            border: none;
+            border-top: 1px solid #30363d;
+            margin: 2.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <a href="../agenda.html" class="back-link">← Back to Agenda</a>
+
+    <div class="page-header">
+        <h1>Model Governance & Policy + Audit & Compliance</h1>
+        <span class="duration">⏱ 10 minutes total</span>
+    </div>
+
+    <!-- Section 1: Governance -->
+    <div class="key-message">
+        <div class="label">🎯 Key Message</div>
+        <div class="message">"You control which models your developers use, and how much they cost."</div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h2>Model Governance & Policy</h2>
+            <span class="sub-duration">5 minutes</span>
+        </div>
+        <ul class="talking-points">
+            <li>Model selection is controlled at the org/enterprise level</li>
+            <li>Admins can restrict models via policy (block specific models or allow only approved ones)</li>
+            <li>Content exclusions: prevent Copilot from accessing sensitive files/repos</li>
+            <li>IP indemnity: only applies to certain models and plans</li>
+            <li>Audit logging: every Copilot interaction can be tracked</li>
+        </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 2: Audit & Compliance -->
+    <div id="audit"></div>
+
+    <div class="key-message">
+        <div class="label">🎯 Key Message</div>
+        <div class="message">"AI-generated code needs the same review rigor as human code — maybe more."</div>
+    </div>
+
+    <div class="section">
+        <div class="section-header green">
+            <h2>Audit & Compliance</h2>
+            <span class="sub-duration">5 minutes</span>
+        </div>
+        <ul class="talking-points">
+            <li class="green">Session trails: Copilot logs show what was generated and when</li>
+            <li class="green">Code review hygiene: AI-generated PRs need human review</li>
+            <li class="green">Building trust incrementally: start with Agent Mode (interactive), graduate to Autopilot</li>
+            <li class="green">License scanning: Copilot's public code filter</li>
+            <li class="green">Compliance considerations for regulated industries</li>
+        </ul>
+    </div>
+
+    <div class="qa-section">
+        <h2>❓ Anticipated Questions</h2>
+
+        <div class="qa-item">
+            <div class="question">"Can we block developers from using expensive models?"</div>
+            <div class="answer">Yes, admin policies can restrict model access</div>
+        </div>
+
+        <div class="qa-item">
+            <div class="question">"Is our code sent to external servers?"</div>
+            <div class="answer">Copilot processes in GitHub's infrastructure, no code is stored for training on Business/Enterprise plans</div>
+        </div>
+
+        <div class="qa-item">
+            <div class="question">"Can we see who's using the most premium requests?"</div>
+            <div class="answer">Yes, usage reports show per-user consumption</div>
+        </div>
+    </div>
+</body>
+</html>

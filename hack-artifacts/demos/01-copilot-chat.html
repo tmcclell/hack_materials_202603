@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Demo: Copilot Chat — Instructor Guide</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      line-height: 1.7;
+      padding: 2rem 1.5rem 4rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover {
+      opacity: 1;
+    }
+
+    /* Header */
+    .demo-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #30363d;
+    }
+    .demo-header .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.85rem;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .badge-duration {
+      background: rgba(88, 166, 255, 0.15);
+      color: #58a6ff;
+      border: 1px solid rgba(88, 166, 255, 0.3);
+    }
+    .badge-topic {
+      background: rgba(63, 185, 80, 0.15);
+      color: #3fb950;
+      border: 1px solid rgba(63, 185, 80, 0.3);
+    }
+    .badge-type {
+      background: rgba(210, 153, 34, 0.15);
+      color: #d29922;
+      border: 1px solid rgba(210, 153, 34, 0.3);
+    }
+    .demo-header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #58a6ff 0%, #3fb950 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .demo-header .subtitle {
+      color: #8b949e;
+      font-size: 1.05rem;
+    }
+
+    /* Cards */
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Setup section */
+    .setup-card {
+      border-left: 4px solid #58a6ff;
+    }
+    .setup-card h2 {
+      font-size: 1.35rem;
+      margin-bottom: 1rem;
+      color: #e6edf3;
+    }
+    .setup-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .setup-card ul li {
+      padding: 0.45rem 0;
+      padding-left: 1.6rem;
+      position: relative;
+      color: #c9d1d9;
+    }
+    .setup-card ul li::before {
+      content: '✅';
+      position: absolute;
+      left: 0;
+    }
+    .setup-card code {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88em;
+      color: #79c0ff;
+    }
+
+    /* Step cards */
+    .step-card {
+      position: relative;
+      overflow: hidden;
+      padding-left: 2rem;
+    }
+    .step-number-bg {
+      position: absolute;
+      top: -0.3rem;
+      right: 1rem;
+      font-size: 8rem;
+      font-weight: 900;
+      color: #e6edf3;
+      opacity: 0.04;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .step-card h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .step-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #58a6ff;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .step-card .step-description {
+      color: #8b949e;
+      font-size: 0.95rem;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Say callout */
+    .say-box {
+      background: rgba(88, 166, 255, 0.08);
+      border: 1px solid rgba(88, 166, 255, 0.25);
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 1rem;
+    }
+    .say-box .label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #58a6ff;
+      margin-bottom: 0.3rem;
+    }
+    .say-box p {
+      font-style: italic;
+      color: #c9d1d9;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Type / action callout */
+    .type-box {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      margin-bottom: 1rem;
+    }
+    .type-box .label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #3fb950;
+      margin-bottom: 0.45rem;
+    }
+    .type-box code {
+      display: block;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.92rem;
+      color: #79c0ff;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.6;
+    }
+    .type-box .action-note {
+      color: #8b949e;
+      font-size: 0.85rem;
+      margin-bottom: 0.4rem;
+      font-style: italic;
+    }
+
+    /* What they see */
+    .see-box {
+      background: rgba(63, 185, 80, 0.06);
+      border: 1px solid rgba(63, 185, 80, 0.2);
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 1rem;
+    }
+    .see-box .label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #3fb950;
+      margin-bottom: 0.3rem;
+    }
+    .see-box p {
+      color: #c9d1d9;
+      font-size: 0.93rem;
+      line-height: 1.6;
+    }
+
+    /* Teaching point */
+    .teach-box {
+      background: rgba(210, 153, 34, 0.08);
+      border: 1px solid rgba(210, 153, 34, 0.25);
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      margin-top: 0.5rem;
+    }
+    .teach-box .label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #d29922;
+      margin-bottom: 0.3rem;
+    }
+    .teach-box p {
+      color: #c9d1d9;
+      font-size: 0.93rem;
+      line-height: 1.6;
+    }
+
+    /* Keyboard shortcut badges */
+    kbd {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      padding: 0.1rem 0.45rem;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.82em;
+      color: #e6edf3;
+      white-space: nowrap;
+    }
+
+    /* Footer */
+    .demo-footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #30363d;
+      color: #484f58;
+      font-size: 0.85rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem;
+      }
+      .card {
+        padding: 1.25rem;
+      }
+      .step-number-bg {
+        font-size: 5rem;
+      }
+      .demo-header h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Back to Agenda -->
+  <nav>
+    <a href="../index.html" class="back-link">← Back to Agenda</a>
+  </nav>
+
+  <!-- Header -->
+  <header class="demo-header">
+    <div class="badge-row">
+      <span class="badge badge-type">🎤 Live Demo</span>
+      <span class="badge badge-duration">⏱️ 5 min</span>
+      <span class="badge badge-topic">💬 Copilot Chat</span>
+    </div>
+    <h1>🤖 Live Demo: Copilot Chat</h1>
+    <p class="subtitle">Walk through Copilot Chat's core capabilities — from workspace questions to inline edits — using the Emoji Battle Arena project.</p>
+  </header>
+
+  <!-- Setup -->
+  <section class="card setup-card" aria-label="Setup checklist">
+    <h2>🎬 Setup — Before You Begin</h2>
+    <ul>
+      <li>VS Code open with the <strong>Emoji Battle Arena</strong> project (<code>../demo-app/</code>)</li>
+      <li>Copilot Chat panel visible (sidebar or secondary panel)</li>
+      <li><code>src/services/battleService.ts</code> open in the editor</li>
+      <li>Terminal hidden to maximize screen real estate</li>
+      <li>Font size bumped up for audience visibility (<kbd>Ctrl +</kbd>)</li>
+    </ul>
+  </section>
+
+  <!-- ===== STEP 1 ===== -->
+  <article class="card step-card" aria-label="Step 1">
+    <div class="step-number-bg" aria-hidden="true">1</div>
+    <span class="step-label">Step 1</span>
+    <h2>🌐 @workspace Question</h2>
+    <p class="step-description">Ask Copilot a high-level question about the entire project to show workspace-wide context.</p>
+
+    <div class="say-box">
+      <div class="label">💬 Say:</div>
+      <p>"Let's ask Copilot about the whole project. Instead of reading every file ourselves, we'll use <strong>@workspace</strong> to let Copilot index everything and answer."</p>
+    </div>
+
+    <div class="type-box">
+      <div class="label">⌨️ Type in Chat:</div>
+      <code>@workspace How does the battle system work in this project?</code>
+    </div>
+
+    <div class="see-box">
+      <div class="label">👀 What They See:</div>
+      <p>Copilot returns a <strong>detailed explanation</strong> referencing <code>battleService.ts</code>, the <code>Fighter</code> interface, damage calculations, the battle loop flow, and how results are returned. It pulls context from multiple files across the workspace.</p>
+    </div>
+
+    <div class="teach-box">
+      <div class="label">💡 Teaching Point:</div>
+      <p><strong>@workspace</strong> indexes the entire project for context. It's like giving Copilot a map of your whole codebase — it can reference any file, interface, or function to answer your questions.</p>
+    </div>
+  </article>
+
+  <!-- ===== STEP 2 ===== -->
+  <article class="card step-card" aria-label="Step 2">
+    <div class="step-number-bg" aria-hidden="true">2</div>
+    <span class="step-label">Step 2</span>
+    <h2>🔍 /explain — Understand Code</h2>
+    <p class="step-description">Select the <code>simulateBattle</code> function in battleService.ts and ask Copilot to explain it.</p>
+
+    <div class="say-box">
+      <div class="label">💬 Say:</div>
+      <p>"Now let's have Copilot explain a specific piece of code. I'll select the <strong>simulateBattle</strong> function and use the <strong>/explain</strong> command."</p>
+    </div>
+
+    <div class="type-box">
+      <div class="label">⌨️ Do:</div>
+      <p class="action-note">Select the entire <code>simulateBattle</code> function in the editor, then type in Chat:</p>
+      <code>/explain</code>
+    </div>
+
+    <div class="see-box">
+      <div class="label">👀 What They See:</div>
+      <p>Copilot breaks down the function step by step — the <strong>damage formula</strong>, the <strong>battle loop</strong> with turn-based logic, HP tracking, and the <strong>return values</strong>. It reads and interprets the selected code like a knowledgeable colleague.</p>
+    </div>
+
+    <div class="teach-box">
+      <div class="label">💡 Teaching Point:</div>
+      <p>Copilot reads the selected code and explains it in <strong>plain English</strong>. Great for onboarding, code reviews, or understanding unfamiliar code written by someone else.</p>
+    </div>
+  </article>
+
+  <!-- ===== STEP 3 ===== -->
+  <article class="card step-card" aria-label="Step 3">
+    <div class="step-number-bg" aria-hidden="true">3</div>
+    <span class="step-label">Step 3</span>
+    <h2>🐛 /fix — Find Bugs</h2>
+    <p class="step-description">Stay on battleService.ts and ask Copilot to find potential bugs in the damage calculation.</p>
+
+    <div class="say-box">
+      <div class="label">💬 Say:</div>
+      <p>"Let's see if Copilot can find bugs for us. There's a subtle issue hiding in the damage calculation — let's see if Copilot catches it."</p>
+    </div>
+
+    <div class="type-box">
+      <div class="label">⌨️ Type in Chat:</div>
+      <code>/fix Look for potential bugs in the damage calculation</code>
+    </div>
+
+    <div class="see-box">
+      <div class="label">👀 What They See:</div>
+      <p>Copilot identifies the <strong>operator precedence bug</strong>! The expression <code>attacker.attack - defender.defense / 2</code> should be <code>attacker.attack - (defender.defense / 2)</code>. Division binds tighter than subtraction, so without parentheses the defense is halved before subtraction — not the intended behavior.</p>
+    </div>
+
+    <div class="teach-box">
+      <div class="label">💡 Teaching Point:</div>
+      <p><strong>/fix</strong> is great for code review — it catches <strong>subtle bugs</strong> that are easy to miss during manual review. Think of it as a second pair of eyes that never gets tired.</p>
+    </div>
+  </article>
+
+  <!-- ===== STEP 4 ===== -->
+  <article class="card step-card" aria-label="Step 4">
+    <div class="step-number-bg" aria-hidden="true">4</div>
+    <span class="step-label">Step 4</span>
+    <h2>🧪 /tests — Generate Tests</h2>
+    <p class="step-description">Open the empty <code>tests/leaderboard.test.ts</code> file and ask Copilot to generate comprehensive tests.</p>
+
+    <div class="say-box">
+      <div class="label">💬 Say:</div>
+      <p>"What about generating tests? Even for code that doesn't fully exist yet? Let's open our empty leaderboard test file and see what Copilot can do."</p>
+    </div>
+
+    <div class="type-box">
+      <div class="label">⌨️ Do:</div>
+      <p class="action-note">Open <code>tests/leaderboard.test.ts</code> (empty file), then type in Chat:</p>
+      <code>/tests Generate comprehensive tests for the leaderboard service</code>
+    </div>
+
+    <div class="see-box">
+      <div class="label">👀 What They See:</div>
+      <p>Copilot generates a full test suite with <strong>describe/it blocks</strong>, proper <strong>mocks</strong>, and meaningful <strong>assertions</strong>. Test cases cover adding scores, retrieving rankings, handling ties, and edge cases — even though the service implementation is minimal.</p>
+    </div>
+
+    <div class="teach-box">
+      <div class="label">💡 Teaching Point:</div>
+      <p>Copilot generates test cases <strong>even for stub services</strong>. It infers expected behavior from naming conventions, interfaces, and project context. Great for TDD or bootstrapping your test suite.</p>
+    </div>
+  </article>
+
+  <!-- ===== STEP 5 ===== -->
+  <article class="card step-card" aria-label="Step 5">
+    <div class="step-number-bg" aria-hidden="true">5</div>
+    <span class="step-label">Step 5</span>
+    <h2>✏️ Inline Chat — Edit in Place</h2>
+    <p class="step-description">Use Inline Chat (<kbd>Ctrl+I</kbd>) to implement the <code>validateFighterData</code> function directly in the editor.</p>
+
+    <div class="say-box">
+      <div class="label">💬 Say:</div>
+      <p>"Finally, Inline Chat lets you edit code right where you are. No need to copy-paste from the chat panel — Copilot writes the code directly into your file."</p>
+    </div>
+
+    <div class="type-box">
+      <div class="label">⌨️ Do:</div>
+      <p class="action-note">Open <code>src/utils/validators.ts</code>, place cursor inside the <code>validateFighterData</code> function, then press <kbd>Ctrl+I</kbd> and type:</p>
+      <code>Implement this validation function</code>
+    </div>
+
+    <div class="see-box">
+      <div class="label">👀 What They See:</div>
+      <p>An <strong>inline diff</strong> appears showing the implementation being added directly in the editor. The audience sees green highlighted lines with validation logic — checking required fields, types, value ranges — appearing right in the function body. Accept or reject with one click.</p>
+    </div>
+
+    <div class="teach-box">
+      <div class="label">💡 Teaching Point:</div>
+      <p><strong>Inline Chat</strong> (<kbd>Ctrl+I</kbd>) is perfect for quick edits without leaving your code. It's the fastest way to go from "I need this function" to "it's implemented" — right in context, with a diff preview.</p>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="demo-footer">
+    <p>🎮 Emoji Battle Arena — Copilot Chat Demo Script</p>
+  </footer>
+
+</body>
+</html>

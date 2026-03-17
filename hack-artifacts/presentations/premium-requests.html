@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Requests &amp; Model Selection</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      padding: 2rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 1rem; }
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      background: linear-gradient(135deg, #58a6ff, #d29922);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle { color: #8b949e; font-size: 1.15rem; margin-bottom: 2.5rem; }
+    .section { margin-bottom: 3rem; }
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #30363d;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-title .num {
+      background: #58a6ff;
+      color: #0d1117;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; }
+    .card-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card p, .card ul { color: #b1bac4; font-size: 1rem; }
+    .card ul { padding-left: 1.3rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-blue { background: rgba(88,166,255,0.15); color: #58a6ff; }
+    .badge-green { background: rgba(63,185,80,0.15); color: #3fb950; }
+    .badge-yellow { background: rgba(210,153,34,0.15); color: #d29922; }
+    .badge-red { background: rgba(248,81,73,0.15); color: #f85149; }
+    code {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      border-radius: 6px;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.9em;
+      color: #e6edf3;
+    }
+    .callout {
+      background: rgba(88,166,255,0.08);
+      border-left: 4px solid #58a6ff;
+      border-radius: 0 12px 12px 0;
+      padding: 1rem 1.5rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    .callout strong { color: #58a6ff; }
+    .callout.green { background: rgba(63,185,80,0.08); border-left-color: #3fb950; }
+    .callout.green strong { color: #3fb950; }
+    .callout.yellow { background: rgba(210,153,34,0.08); border-left-color: #d29922; }
+    .callout.yellow strong { color: #d29922; }
+    .callout.red { background: rgba(248,81,73,0.08); border-left-color: #f85149; }
+    .callout.red strong { color: #f85149; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #30363d;
+      font-size: 0.95rem;
+    }
+    th { color: #8b949e; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { color: #e6edf3; }
+    tr:hover td { background: rgba(88,166,255,0.04); }
+
+    /* Plan cards */
+    .plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .plan-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+      transition: transform 0.15s;
+    }
+    .plan-card:hover { transform: translateY(-2px); }
+    .plan-card .plan-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .plan-card .plan-price {
+      color: #8b949e;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .plan-card .plan-requests {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    .plan-card .plan-label {
+      color: #8b949e;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+    }
+    .plan-card.popular {
+      border-color: #58a6ff;
+      box-shadow: 0 0 20px rgba(88,166,255,0.12);
+    }
+    .plan-card.popular::before {
+      content: "MOST POPULAR";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #58a6ff;
+      color: #0d1117;
+      padding: 0.15rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    /* Multiplier grid */
+    .mult-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .mult-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.2fr 2fr;
+      gap: 0;
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid #30363d;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+    .mult-row:first-child {
+      color: #8b949e;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .mult-row:hover:not(:first-child) { background: rgba(88,166,255,0.04); }
+    .mult-value { font-weight: 700; font-size: 1.1rem; }
+    .mult-free { color: #3fb950; }
+    .mult-cheap { color: #58a6ff; }
+    .mult-normal { color: #e6edf3; }
+    .mult-expensive { color: #f85149; }
+
+    /* Highlight box */
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(63,185,80,0.08), rgba(88,166,255,0.08));
+      border: 2px solid #3fb950;
+      border-radius: 12px;
+      padding: 2rem;
+    }
+    .highlight-box h3 {
+      font-size: 1.4rem;
+      color: #3fb950;
+      margin-bottom: 1rem;
+    }
+
+    /* Math example */
+    .math-compare {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1.5rem;
+      align-items: center;
+      margin: 1.5rem 0;
+    }
+    .math-box {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .math-box .math-label { color: #8b949e; font-size: 0.85rem; margin-bottom: 0.3rem; }
+    .math-box .math-num { font-size: 2rem; font-weight: 800; }
+    .math-box .math-detail { color: #8b949e; font-size: 0.85rem; margin-top: 0.3rem; }
+    .math-vs { font-size: 1.5rem; color: #58a6ff; font-weight: 700; }
+    .math-savings {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #3fb950;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 1000px) {
+      body { padding: 1rem; }
+      h1 { font-size: 2rem; }
+      .plan-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+      .mult-row { grid-template-columns: 1.5fr 0.8fr 1fr 1.5fr; font-size: 0.85rem; }
+      .card-grid-3 { grid-template-columns: 1fr; }
+      .math-compare { grid-template-columns: 1fr; }
+      .math-vs { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="agenda.html" class="back-link">← Back to Agenda</a>
+
+  <h1>Premium Requests &amp; Model Selection</h1>
+  <p class="subtitle">Understanding costs, quotas, and how to get the most from your Copilot plan</p>
+
+  <!-- Section 1: What Are Premium Requests? -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">1</span> What Are Premium Requests?</h2>
+    <div class="card" style="max-width: 900px;">
+      <h3>💡 The Basics</h3>
+      <p>Every Copilot interaction — a chat message, an inline suggestion with a premium model, an agent action — is a <strong style="color:#e6edf3;">"request."</strong></p>
+      <ul style="margin-top: 0.8rem;">
+        <li>Basic requests with <strong style="color: #3fb950;">included models</strong> are <strong style="color: #3fb950;">FREE</strong> on paid plans — no quota consumed</li>
+        <li>Advanced models and features consume <strong style="color: #d29922;">premium requests</strong> from your monthly quota</li>
+        <li>Each plan gets a fixed number of premium requests per month</li>
+      </ul>
+      <div style="margin-top: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
+        <div style="background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:0.5rem 1rem; font-size:0.9rem;">
+          <span style="color:#3fb950; font-weight:700;">FREE</span> <span style="color:#8b949e;">GPT-5 mini</span>
+        </div>
+        <div style="background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:0.5rem 1rem; font-size:0.9rem;">
+          <span style="color:#3fb950; font-weight:700;">FREE</span> <span style="color:#8b949e;">GPT-4.1</span>
+        </div>
+        <div style="background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:0.5rem 1rem; font-size:0.9rem;">
+          <span style="color:#3fb950; font-weight:700;">FREE</span> <span style="color:#8b949e;">GPT-4o</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Plan Allocations -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">2</span> Plan Allocations</h2>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0/month</div>
+        <div class="plan-requests" style="color: #8b949e;">50</div>
+        <div class="plan-label">premium requests/mo</div>
+      </div>
+      <div class="plan-card popular">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$10/month</div>
+        <div class="plan-requests" style="color: #58a6ff;">300</div>
+        <div class="plan-label">premium requests/mo</div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Pro+</div>
+        <div class="plan-price">$39/month</div>
+        <div class="plan-requests" style="color: #3fb950;">1,500</div>
+        <div class="plan-label">premium requests/mo</div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Business</div>
+        <div class="plan-price">$19/user/month</div>
+        <div class="plan-requests" style="color: #58a6ff;">300</div>
+        <div class="plan-label">per user/mo</div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">$39/user/month</div>
+        <div class="plan-requests" style="color: #3fb950;">1,000</div>
+        <div class="plan-label">per user/mo</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+      <div class="callout yellow" style="flex: 1; min-width: 280px;">
+        <strong>⚠️ No carry-over.</strong> Unused premium requests do NOT roll over to the next month.
+      </div>
+      <div class="callout" style="flex: 1; min-width: 280px;">
+        <strong>🗓️ Resets monthly.</strong> Your quota resets on the 1st of each month (UTC).
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Model Multipliers -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">3</span> Model Multipliers — The Cost Table</h2>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <div class="mult-grid">
+        <div class="mult-row">
+          <div>Model</div>
+          <div>Multiplier</div>
+          <div>Cost Per Use</div>
+          <div>Notes</div>
+        </div>
+        <div class="mult-row">
+          <div><strong>GPT-5 mini</strong></div>
+          <div class="mult-value mult-free">0×</div>
+          <div><span class="badge badge-green">Free</span></div>
+          <div style="color:#8b949e;">Included model</div>
+        </div>
+        <div class="mult-row">
+          <div><strong>GPT-4.1</strong></div>
+          <div class="mult-value mult-free">0×</div>
+          <div><span class="badge badge-green">Free</span></div>
+          <div style="color:#8b949e;">Included model</div>
+        </div>
+        <div class="mult-row">
+          <div><strong>GPT-4o</strong></div>
+          <div class="mult-value mult-free">0×</div>
+          <div><span class="badge badge-green">Free</span></div>
+          <div style="color:#8b949e;">Included model</div>
+        </div>
+        <div class="mult-row" style="border-top: 2px solid #30363d;">
+          <div><strong>Gemini 2.0 Flash</strong></div>
+          <div class="mult-value mult-cheap">0.25×</div>
+          <div>¼ request</div>
+          <div style="color:#8b949e;">Super cheap</div>
+        </div>
+        <div class="mult-row">
+          <div><strong>o4-mini</strong></div>
+          <div class="mult-value mult-cheap">0.33×</div>
+          <div>⅓ request</div>
+          <div style="color:#8b949e;">Budget reasoning</div>
+        </div>
+        <div class="mult-row" style="border-top: 2px solid #30363d;">
+          <div><strong>Claude Sonnet 4.x</strong></div>
+          <div class="mult-value mult-normal">1×</div>
+          <div>1 request</div>
+          <div style="color:#8b949e;">Great balance</div>
+        </div>
+        <div class="mult-row">
+          <div><strong>GPT-5.x</strong></div>
+          <div class="mult-value mult-normal">1×</div>
+          <div>1 request</div>
+          <div style="color:#8b949e;">Versatile</div>
+        </div>
+        <div class="mult-row">
+          <div><strong>Claude Haiku 4.5</strong></div>
+          <div class="mult-value mult-normal">1×</div>
+          <div>1 request</div>
+          <div style="color:#8b949e;">Fast</div>
+        </div>
+        <div class="mult-row">
+          <div><strong>Claude Opus 4.5 / 4.6</strong></div>
+          <div class="mult-value mult-normal">1×</div>
+          <div>1 request</div>
+          <div style="color:#8b949e;">Premium quality</div>
+        </div>
+        <div class="mult-row" style="border-top: 2px solid #30363d; background: rgba(248,81,73,0.04);">
+          <div><strong style="color:#f85149;">Claude Opus 4</strong></div>
+          <div class="mult-value mult-expensive">10×</div>
+          <div><span class="badge badge-red">10 requests</span></div>
+          <div style="color:#f85149; font-weight:600;">Deep reasoning — use wisely!</div>
+        </div>
+      </div>
+    </div>
+    <div class="callout red" style="margin-top: 1rem;">
+      <strong>⚠️ Heads up!</strong> Using <strong>Claude Opus 4</strong> costs <strong>10×</strong> — a single request eats <strong>10 premium requests</strong> from your quota. On a Pro plan (300/mo), that's only 30 Opus 4 uses per month!
+    </div>
+  </div>
+
+  <!-- Section 4: Auto Model Selection -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">4</span> Auto Model Selection = 10% Discount</h2>
+    <div class="highlight-box">
+      <h3>🎯 "Auto" is the Smart Default</h3>
+      <p style="color:#b1bac4; font-size:1.05rem; margin-bottom: 1rem;">
+        When you select <strong style="color:#e6edf3;">"Auto"</strong> in the VS Code model picker, Copilot automatically chooses the best available model for each request — and gives you a <strong style="color:#3fb950;">10% discount</strong> on every premium request.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="card" style="border-color: #3fb950;">
+          <h3 style="color: #3fb950;">✅ Auto WILL</h3>
+          <ul>
+            <li>Pick the best model for the task</li>
+            <li>Apply <strong>0.9× multiplier</strong> to all 1× models</li>
+            <li>Respect org policy restrictions</li>
+          </ul>
+        </div>
+        <div class="card" style="border-color: #f85149;">
+          <h3 style="color: #f85149;">❌ Auto WON'T</h3>
+          <ul>
+            <li>Use models with multipliers &gt;1×</li>
+            <li>Use models blocked by your org</li>
+            <li>Override explicit manual selection</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-compare">
+        <div class="math-box">
+          <div class="math-label">Manual Selection (1× models)</div>
+          <div class="math-num" style="color: #e6edf3;">300</div>
+          <div class="math-detail">interactions from 300 requests</div>
+        </div>
+        <div class="math-vs">→</div>
+        <div class="math-box" style="border-color: #3fb950;">
+          <div class="math-label">Auto Selection (0.9× models)</div>
+          <div class="math-num" style="color: #3fb950;">333</div>
+          <div class="math-detail">interactions from 300 requests</div>
+        </div>
+      </div>
+      <div class="math-savings">🎉 33 free interactions just by using Auto!</div>
+      <div class="callout green" style="margin-top: 1rem; text-align: center; font-size: 1.1rem;">
+        <strong>Set it and forget it — Auto is the smart default.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Cost Optimization Tips -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">5</span> Cost Optimization Tips</h2>
+    <div class="card-grid-3">
+      <div class="card" style="border-top: 3px solid #3fb950;">
+        <h3><span style="font-size:1.4rem;">💚</span> Routine Work</h3>
+        <p style="margin-bottom: 0.5rem;">Use <strong style="color:#3fb950;">included models</strong> for everyday tasks.</p>
+        <div style="background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:0.6rem; margin-top:0.5rem; text-align:center;">
+          <span style="font-size:1.5rem; font-weight:800; color:#3fb950;">0×</span>
+          <div style="color:#8b949e; font-size:0.8rem;">cost per request</div>
+        </div>
+        <p style="margin-top:0.8rem; font-size:0.9rem;">GPT-5 mini, GPT-4.1, GPT-4o — great for quick completions, simple chat questions, and routine edits.</p>
+      </div>
+      <div class="card" style="border-top: 3px solid #58a6ff;">
+        <h3><span style="font-size:1.4rem;">💙</span> Quality Work</h3>
+        <p style="margin-bottom: 0.5rem;">Use <strong style="color:#58a6ff;">Auto selection</strong> for smart model choice.</p>
+        <div style="background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:0.6rem; margin-top:0.5rem; text-align:center;">
+          <span style="font-size:1.5rem; font-weight:800; color:#58a6ff;">0.9×</span>
+          <div style="color:#8b949e; font-size:0.8rem;">with Auto discount</div>
+        </div>
+        <p style="margin-top:0.8rem; font-size:0.9rem;">Auto picks the best model and saves 10%. Perfect for complex coding, code reviews, and architectural decisions.</p>
+      </div>
+      <div class="card" style="border-top: 3px solid #f85149;">
+        <h3><span style="font-size:1.4rem;">❤️‍🔥</span> Deep Reasoning</h3>
+        <p style="margin-bottom: 0.5rem;">Manually select <strong style="color:#f85149;">Claude Opus 4</strong> when needed.</p>
+        <div style="background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:0.6rem; margin-top:0.5rem; text-align:center;">
+          <span style="font-size:1.5rem; font-weight:800; color:#f85149;">10×</span>
+          <div style="color:#8b949e; font-size:0.8rem;">cost per request</div>
+        </div>
+        <p style="margin-top:0.8rem; font-size:0.9rem;">Reserve for truly complex problems — architecture design, deep debugging, cross-system analysis. Know the cost before you click!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6: What Happens When You Run Out -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">6</span> What Happens When You Run Out?</h2>
+    <div class="card" style="max-width: 900px;">
+      <div style="display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: start;">
+        <div style="font-size: 2rem;">🔋</div>
+        <div>
+          <h3 style="margin-bottom: 0.5rem;">You're not locked out — you're downgraded</h3>
+          <p>When your premium request quota hits zero:</p>
+          <ul style="margin-top: 0.5rem;">
+            <li><strong style="color:#e6edf3;">Included models still work</strong> — GPT-5 mini, GPT-4.1, and GPT-4o remain fully available at no cost</li>
+            <li><strong style="color:#e6edf3;">Premium models become unavailable</strong> until your quota resets on the 1st</li>
+            <li><strong style="color:#e6edf3;">Inline completions continue</strong> using included models</li>
+          </ul>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;">
+        <div class="callout" style="margin-top:0;">
+          <strong>💳 Overage billing (org admins)</strong><br>
+          <span style="color:#b1bac4;">Admins can enable overage at <strong style="color:#e6edf3;">$0.04/request</strong> so users are never blocked.</span>
+        </div>
+        <div class="callout yellow" style="margin-top:0;">
+          <strong>🛑 Hard budget caps</strong><br>
+          <span style="color:#b1bac4;">Alternatively, set a budget that <strong style="color:#e6edf3;">blocks usage</strong> when reached — no surprise bills.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

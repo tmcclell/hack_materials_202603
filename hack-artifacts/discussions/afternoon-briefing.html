@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's Ahead This Afternoon</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            padding: 2rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            color: #8b949e;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #58a6ff; text-decoration: none; }
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .duration {
+            display: inline-block;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 20px;
+            padding: 0.25rem 0.85rem;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+        .key-message {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #58a6ff;
+        }
+        .key-message .label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #58a6ff;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .key-message .message {
+            font-size: 1.15rem;
+            font-weight: 500;
+            font-style: italic;
+        }
+        .section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-header {
+            border-left: 4px solid #3fb950;
+            padding-left: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .section-header h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+        .talking-points {
+            list-style: none;
+            padding: 0;
+        }
+        .talking-points li {
+            position: relative;
+            padding: 0.6rem 0 0.6rem 1.75rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .talking-points li:last-child { border-bottom: none; }
+        .talking-points li::before {
+            content: '▸';
+            position: absolute;
+            left: 0.25rem;
+            color: #3fb950;
+            font-weight: 700;
+        }
+        .highlight-box {
+            background: #3fb95015;
+            border: 1px solid #3fb95033;
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 1.05rem;
+            font-style: italic;
+            color: #3fb950;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <a href="../agenda.html" class="back-link">← Back to Agenda</a>
+
+    <div class="page-header">
+        <h1>What's Ahead This Afternoon</h1>
+        <span class="duration">⏱ 5 minutes</span>
+    </div>
+
+    <div class="key-message">
+        <div class="label">🎯 Key Message</div>
+        <div class="message">"The afternoon is YOUR time to build. We're here to help, not lecture."</div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h2>Afternoon Format</h2>
+        </div>
+        <ul class="talking-points">
+            <li><strong>Format:</strong> 4 hours of hands-on hacking (1:00–5:00 PM)</li>
+            <li>🚨 <strong>Room change during lunch</strong> — grab your stuff!</li>
+            <li>Teams of 3–5, mix experience levels</li>
+            <li>Use ANY Copilot features from the morning</li>
+            <li>Facilitators roam — flag us down anytime</li>
+            <li>Two tracks: bring your own use case OR follow the fallback track</li>
+            <li>Show & Tell at 4:15 — prepare a 5-min demo</li>
+        </ul>
+    </div>
+
+    <div class="highlight-box">
+        "This is where the real learning happens — experiment, break things, ask questions."
+    </div>
+</body>
+</html>

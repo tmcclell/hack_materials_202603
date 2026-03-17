@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's Next: Copilot SDK & OpenClaw</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            padding: 2rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            color: #8b949e;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #58a6ff; text-decoration: none; }
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .duration {
+            display: inline-block;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 20px;
+            padding: 0.25rem 0.85rem;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+        .key-message {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #58a6ff;
+        }
+        .key-message .label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #58a6ff;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .key-message .message {
+            font-size: 1.15rem;
+            font-weight: 500;
+            font-style: italic;
+        }
+        .section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-header {
+            border-left: 4px solid #58a6ff;
+            padding-left: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .section-header.green { border-left-color: #3fb950; }
+        .section-header.yellow { border-left-color: #d29922; }
+        .section-header.red { border-left-color: #f85149; }
+        .section-header h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+        .talking-points {
+            list-style: none;
+            padding: 0;
+        }
+        .talking-points li {
+            position: relative;
+            padding: 0.6rem 0 0.6rem 1.75rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .talking-points li:last-child { border-bottom: none; }
+        .talking-points li::before {
+            content: '▸';
+            position: absolute;
+            left: 0.25rem;
+            color: #58a6ff;
+            font-weight: 700;
+        }
+        .talking-points li.green::before { color: #3fb950; }
+        .talking-points li.yellow::before { color: #d29922; }
+        code {
+            background: #21262d;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #f0883e;
+        }
+        .video-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .video-card .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+        .video-card .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .video-card .video-info {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid #30363d;
+        }
+        .video-card .video-info .video-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .video-card .video-info .video-link {
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+        .qa-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-top: 2rem;
+        }
+        .qa-section h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            border-left: 4px solid #d29922;
+            padding-left: 1rem;
+        }
+        .qa-item {
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .qa-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .qa-item .question {
+            font-weight: 600;
+            color: #d29922;
+            margin-bottom: 0.35rem;
+        }
+        .qa-item .answer {
+            color: #b1bac4;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .qa-item .answer::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #3fb950;
+        }
+    </style>
+</head>
+<body>
+    <a href="../agenda.html" class="back-link">← Back to Agenda</a>
+
+    <div class="page-header">
+        <h1>What's Next: Copilot SDK & OpenClaw</h1>
+        <span class="duration">⏱ 5 minutes</span>
+    </div>
+
+    <div class="key-message">
+        <div class="label">🎯 Key Message</div>
+        <div class="message">"You can embed Copilot's brain into your own apps — and OpenClaw shows what that looks like."</div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h2>Copilot SDK</h2>
+        </div>
+        <ul class="talking-points">
+            <li><code>@github/copilot-sdk</code> is in technical preview</li>
+            <li>Available for Node.js, Python, Go, .NET</li>
+            <li>Capabilities: multi-turn conversations, tool orchestration, model routing, streaming</li>
+            <li>Build custom agents, add tools, integrate into your own workflows</li>
+            <li>Authentication and model management handled out-of-the-box</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header green">
+            <h2>OpenClaw</h2>
+        </div>
+        <ul class="talking-points">
+            <li class="green">A real-world example of building on Copilot — open-source AI assistant framework</li>
+            <li class="green">Uses Copilot as a model provider</li>
+            <li class="green">Shows the pattern: <strong>your app → SDK → Copilot models</strong></li>
+        </ul>
+    </div>
+
+    <div class="video-card">
+        <div class="video-wrapper">
+            <iframe
+                src="https://www.youtube.com/embed/PEtM45hG-5A"
+                title="Build your own OpenClaw bot"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <div class="video-info">
+            <div class="video-title">📹 Build your own OpenClaw bot</div>
+            <div class="video-link"><a href="https://youtu.be/PEtM45hG-5A" target="_blank">https://youtu.be/PEtM45hG-5A</a></div>
+        </div>
+    </div>
+
+    <div class="qa-section">
+        <h2>❓ Anticipated Questions</h2>
+
+        <div class="qa-item">
+            <div class="question">"Can we build internal tools with this?"</div>
+            <div class="answer">Yes, that's the primary use case</div>
+        </div>
+
+        <div class="qa-item">
+            <div class="question">"Is the SDK production-ready?"</div>
+            <div class="answer">Technical preview — APIs may change</div>
+        </div>
+
+        <div class="qa-item">
+            <div class="question">"What's the cost?"</div>
+            <div class="answer">SDK is free, you pay for Copilot model usage via premium requests</div>
+        </div>
+    </div>
+</body>
+</html>

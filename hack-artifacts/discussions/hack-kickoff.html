@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hack Kickoff</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            padding: 2rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            color: #8b949e;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #58a6ff; text-decoration: none; }
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .duration {
+            display: inline-block;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 20px;
+            padding: 0.25rem 0.85rem;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+        .key-message {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #58a6ff;
+        }
+        .key-message .label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #58a6ff;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .key-message .message {
+            font-size: 1.15rem;
+            font-weight: 500;
+            font-style: italic;
+        }
+        .section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-header {
+            border-left: 4px solid #58a6ff;
+            padding-left: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .section-header.green { border-left-color: #3fb950; }
+        .section-header.yellow { border-left-color: #d29922; }
+        .section-header.red { border-left-color: #f85149; }
+        .section-header h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+        .talking-points {
+            list-style: none;
+            padding: 0;
+        }
+        .talking-points li {
+            position: relative;
+            padding: 0.6rem 0 0.6rem 1.75rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .talking-points li:last-child { border-bottom: none; }
+        .talking-points li::before {
+            content: '▸';
+            position: absolute;
+            left: 0.25rem;
+            color: #58a6ff;
+            font-weight: 700;
+        }
+        .talking-points li.green::before { color: #3fb950; }
+        .talking-points li.yellow::before { color: #d29922; }
+        .divider {
+            border: none;
+            border-top: 1px solid #30363d;
+            margin: 2.5rem 0;
+        }
+        .format-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .format-box .section-header {
+            border-left-color: #d29922;
+            margin-bottom: 1rem;
+        }
+        .format-item {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #21262d;
+        }
+        .format-item:last-child { border-bottom: none; }
+        .format-item .bullet {
+            color: #d29922;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .highlight-quote {
+            background: #58a6ff15;
+            border: 1px solid #58a6ff33;
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin-top: 1rem;
+            font-style: italic;
+            color: #58a6ff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <a href="../agenda.html" class="back-link">← Back to Agenda</a>
+
+    <div class="page-header">
+        <h1>Hack Kickoff</h1>
+        <span class="duration">⏱ 20 minutes</span>
+    </div>
+
+    <!-- Section 1: Kickoff -->
+    <div class="key-message">
+        <div class="label">🎯 Key Message</div>
+        <div class="message">"Pick your challenge, form your team, and start building."</div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h2>Kickoff</h2>
+        </div>
+        <ul class="talking-points">
+            <li>Use-case themes: what real projects can you Copilot-ify?</li>
+            <li>Team formation: 3–5 people, mix disciplines</li>
+            <li>Repo access: use your sandbox repo or create a new one</li>
+            <li>Fallback track for teams without use cases (3 guided specs — see <a href="../hacking-guide.html">hacking-guide.html</a>)</li>
+            <li>Recommended workflow: Start with Plan Mode → let it propose steps → approve → switch to Agent/Autopilot</li>
+            <li>WiFi, power, bathroom locations</li>
+        </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 2: Mid-Hack Check-In -->
+    <div id="checkin"></div>
+
+    <div class="key-message">
+        <div class="label">🎯 Key Message</div>
+        <div class="message">"Quick progress share — what's working, what's stuck, what's surprising?"</div>
+    </div>
+
+    <div class="format-box">
+        <div class="section-header yellow">
+            <h2>Mid-Hack Check-In</h2>
+        </div>
+
+        <div class="format-item">
+            <span class="bullet">▸</span>
+            <span>2–3 min per team: what are you building? What's your status?</span>
+        </div>
+        <div class="format-item">
+            <span class="bullet">▸</span>
+            <span>Facilitators highlight interesting discoveries</span>
+        </div>
+        <div class="format-item">
+            <span class="bullet">▸</span>
+            <span>Unblock stuck teams with quick tips</span>
+        </div>
+
+        <div class="highlight-quote">
+            "If you're ahead of schedule, try Autopilot for the remaining work."
+        </div>
+    </div>
+</body>
+</html>

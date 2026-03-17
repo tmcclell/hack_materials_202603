@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo 07 — Autonomous Copilot &amp; Agent Teams</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      line-height: 1.7;
+      padding: 2rem 1.5rem 4rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      color: #58a6ff;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 0.8; }
+
+    /* Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #30363d;
+    }
+    .page-header .topic-badge {
+      display: inline-block;
+      background: rgba(88,166,255,0.12);
+      color: #58a6ff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      border: 1px solid rgba(88,166,255,0.25);
+      margin-bottom: 1rem;
+    }
+    .page-header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #58a6ff, #3fb950);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-header .duration {
+      font-size: 1.1rem;
+      color: #8b949e;
+    }
+    .page-header .duration strong {
+      color: #d29922;
+    }
+
+    /* Section dividers */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 3rem 0 2rem;
+    }
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #30363d, transparent);
+    }
+    .section-divider span {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #8b949e;
+      white-space: nowrap;
+    }
+
+    /* Section heading */
+    .section-heading {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: #e6edf3;
+    }
+    .section-time {
+      font-size: 0.9rem;
+      color: #8b949e;
+      margin-bottom: 1.5rem;
+    }
+    .section-time strong { color: #d29922; }
+
+    /* Cards */
+    .step-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2rem 2rem 1.8rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .step-card .step-number-bg {
+      position: absolute;
+      top: -0.2rem;
+      right: 1rem;
+      font-size: 7rem;
+      font-weight: 900;
+      color: rgba(88,166,255,0.06);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .step-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    /* Setup box */
+    .setup-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+    }
+    .setup-box h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .setup-box ul {
+      list-style: none;
+      padding: 0;
+    }
+    .setup-box ul li {
+      padding: 0.4rem 0;
+      padding-left: 1.6rem;
+      position: relative;
+      color: #c9d1d9;
+    }
+    .setup-box ul li::before {
+      content: '✅';
+      position: absolute;
+      left: 0;
+      top: 0.4rem;
+    }
+
+    /* Say callout */
+    .say-box {
+      background: rgba(88,166,255,0.08);
+      border-left: 4px solid #58a6ff;
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.2rem;
+      margin: 0.8rem 0;
+      font-style: italic;
+      color: #c9d1d9;
+    }
+    .say-box .label {
+      font-style: normal;
+      font-weight: 700;
+      color: #58a6ff;
+      margin-right: 0.4rem;
+    }
+
+    /* Type / code block */
+    .type-box {
+      margin: 0.8rem 0;
+    }
+    .type-box .label {
+      display: inline-block;
+      font-weight: 700;
+      color: #3fb950;
+      margin-bottom: 0.4rem;
+    }
+    .type-box pre {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: #e6edf3;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* See box */
+    .see-box {
+      background: rgba(63,185,80,0.08);
+      border-left: 4px solid #3fb950;
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.2rem;
+      margin: 0.8rem 0;
+      color: #c9d1d9;
+    }
+    .see-box .label {
+      font-weight: 700;
+      color: #3fb950;
+      margin-right: 0.4rem;
+    }
+
+    /* Teaching point */
+    .teach-box {
+      background: rgba(210,153,34,0.08);
+      border-left: 4px solid #d29922;
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.2rem;
+      margin: 0.8rem 0;
+      color: #c9d1d9;
+    }
+    .teach-box .label {
+      font-weight: 700;
+      color: #d29922;
+      margin-right: 0.4rem;
+    }
+
+    /* Instructor note */
+    .instructor-note {
+      color: #8b949e;
+      font-size: 0.92rem;
+      margin: 0.5rem 0;
+      padding-left: 1.4rem;
+      position: relative;
+    }
+    .instructor-note::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: #58a6ff;
+    }
+
+    /* Autonomy progression */
+    .progression-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .progression-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .progression-item .pip {
+      width: 110px;
+      padding: 0.65rem 0.4rem;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.3;
+      border: 1px solid transparent;
+    }
+    .pip-chat        { background: rgba(88,166,255,0.15); color: #58a6ff; border-color: rgba(88,166,255,0.3); }
+    .pip-agent       { background: rgba(88,166,255,0.22); color: #79c0ff; border-color: rgba(88,166,255,0.4); }
+    .pip-plan        { background: rgba(63,185,80,0.18); color: #3fb950; border-color: rgba(63,185,80,0.35); }
+    .pip-autopilot   { background: rgba(210,153,34,0.18); color: #d29922; border-color: rgba(210,153,34,0.35); }
+    .pip-coding      { background: rgba(248,81,73,0.15); color: #f85149; border-color: rgba(248,81,73,0.3); }
+    .pip-squad       { background: linear-gradient(135deg, rgba(248,81,73,0.18), rgba(210,153,34,0.18)); color: #f0883e; border-color: rgba(240,136,62,0.35); }
+    .progression-item .sublabel {
+      font-size: 0.68rem;
+      color: #8b949e;
+      text-align: center;
+      max-width: 110px;
+    }
+    .progression-arrow {
+      font-size: 1.1rem;
+      color: #484f58;
+      margin: 0 0.2rem;
+      padding-bottom: 1.4rem;
+    }
+
+    /* Comparison table */
+    .comparison-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .comparison-table th {
+      background: #0d1117;
+      color: #58a6ff;
+      font-weight: 700;
+      text-align: left;
+      padding: 0.8rem 1rem;
+      border-bottom: 2px solid #30363d;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .comparison-table th:first-child { border-radius: 8px 0 0 0; }
+    .comparison-table th:last-child  { border-radius: 0 8px 0 0; }
+    .comparison-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #21262d;
+      color: #c9d1d9;
+      vertical-align: top;
+    }
+    .comparison-table tr:last-child td { border-bottom: none; }
+    .comparison-table tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+    .comparison-table tr:last-child td:last-child  { border-radius: 0 0 8px 0; }
+    .comparison-table tbody tr:hover td { background: rgba(88,166,255,0.04); }
+    .comparison-table .mode-name {
+      font-weight: 700;
+      color: #e6edf3;
+    }
+
+    /* Key points list */
+    .key-points {
+      list-style: none;
+      padding: 0;
+      margin: 0.6rem 0;
+    }
+    .key-points li {
+      padding: 0.3rem 0 0.3rem 1.6rem;
+      position: relative;
+      color: #c9d1d9;
+    }
+    .key-points li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: #58a6ff;
+      font-weight: 700;
+    }
+
+    /* Wrap-up section */
+    .wrapup-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .wrapup-card .step-number-bg {
+      position: absolute;
+      top: -0.2rem;
+      right: 1rem;
+      font-size: 7rem;
+      font-weight: 900;
+      color: rgba(88,166,255,0.06);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Footer */
+    .page-footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #30363d;
+      color: #484f58;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Back link -->
+  <a href="../index.html" class="back-link">← Back to Agenda</a>
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="topic-badge">🤖 Autonomous AI &amp; Multi-Agent Systems</div>
+    <h1>Autonomous Copilot &amp; Agent Teams</h1>
+    <p class="duration">⏱️ Duration: <strong>25 min</strong> &nbsp;|&nbsp; Demo 07 — Instructor Script</p>
+  </header>
+
+  <!-- ============================================================ -->
+  <!-- SETUP                                                         -->
+  <!-- ============================================================ -->
+  <section class="setup-box" aria-label="Setup checklist">
+    <h2>🎬 Setup</h2>
+    <p style="color:#8b949e; margin-bottom:0.8rem;">Have the following ready before you begin:</p>
+    <ul>
+      <li>VS Code open with the <code style="color:#58a6ff;">demo-app/</code> project (Emoji Battle Arena — TypeScript/Express)</li>
+      <li>Terminal visible inside VS Code — project builds and runs cleanly</li>
+      <li>GitHub Copilot Chat panel open in VS Code</li>
+      <li>GitHub.com open in a browser tab — logged in, with the demo repo visible</li>
+      <li>Browser tab with <a href="https://github.com/bradygaster/squad" target="_blank">github.com/bradygaster/squad</a> ready</li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 1 — Concept                                          -->
+  <!-- ============================================================ -->
+  <div class="section-divider"><span>Section 1</span></div>
+
+  <h2 class="section-heading">📖 Section 1 — Concept</h2>
+  <p class="section-time">⏱️ <strong>5 min</strong></p>
+
+  <article class="step-card">
+    <div class="step-number-bg">1</div>
+    <h3>1 &nbsp;🧭 The Autonomy Arc</h3>
+
+    <div class="say-box">
+      <span class="label">💬 Say:</span>
+      "We've gone from Chat where you drive, to Agent Mode where you collaborate, to Plan Mode where you supervise. Now: full autonomy."
+    </div>
+
+    <p class="instructor-note">Show the progression visual below — walk through each level left-to-right:</p>
+
+    <!-- Autonomy Progression Visual -->
+    <nav class="progression-bar" aria-label="Autonomy progression">
+      <div class="progression-item">
+        <div class="pip pip-chat">💬<br>Chat</div>
+        <span class="sublabel">You drive</span>
+      </div>
+      <span class="progression-arrow">→</span>
+      <div class="progression-item">
+        <div class="pip pip-agent">🤝<br>Agent Mode</div>
+        <span class="sublabel">Collaborate</span>
+      </div>
+      <span class="progression-arrow">→</span>
+      <div class="progression-item">
+        <div class="pip pip-plan">📋<br>Plan Mode</div>
+        <span class="sublabel">Supervise</span>
+      </div>
+      <span class="progression-arrow">→</span>
+      <div class="progression-item">
+        <div class="pip pip-autopilot">🚀<br>Autopilot</div>
+        <span class="sublabel">Hands-off</span>
+      </div>
+      <span class="progression-arrow">→</span>
+      <div class="progression-item">
+        <div class="pip pip-coding">☁️<br>Coding Agent</div>
+        <span class="sublabel">Async / Cloud</span>
+      </div>
+      <span class="progression-arrow">→</span>
+      <div class="progression-item">
+        <div class="pip pip-squad">👥<br>Squad</div>
+        <span class="sublabel">AI Team</span>
+      </div>
+    </nav>
+
+    <div class="see-box">
+      <span class="label">👀 What They See:</span>
+      A clear visual showing the progression from human-driven to fully autonomous — six levels of increasing AI autonomy.
+    </div>
+
+    <div class="teach-box">
+      <span class="label">💡 Teaching Point:</span>
+      Each level of autonomy fits different scenarios — there's no "best" mode, just the right one for the job.
+    </div>
+  </article>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 2 — Live Demo: Autopilot                             -->
+  <!-- ============================================================ -->
+  <div class="section-divider"><span>Section 2</span></div>
+
+  <h2 class="section-heading" id="live-demo">🎯 Section 2 — Live Demo: Autopilot</h2>
+  <p class="section-time">⏱️ <strong>8 min</strong></p>
+
+  <article class="step-card">
+    <div class="step-number-bg">2</div>
+    <h3>2 &nbsp;⚡ Start Autopilot Task</h3>
+
+    <div class="say-box">
+      <span class="label">💬 Say:</span>
+      "Autopilot takes Agent Mode and removes the training wheels. It makes decisions and executes without asking permission."
+    </div>
+
+    <p class="instructor-note">Enable Autopilot mode in VS Code (if available) or use Agent Mode without confirmations.</p>
+
+    <div class="type-box">
+      <span class="label">⌨️ Type:</span>
+      <pre>Add a complete tournament bracket system to the Emoji Battle Arena. Create a Tournament model with bracket, rounds, and results. Create TournamentService with createTournament (accepts fighter IDs, generates bracket), playRound (simulates all matches in a round), and getTournamentResults. Create Express routes at /api/tournaments. Write comprehensive tests. Update the browser UI to show tournaments.</pre>
+    </div>
+
+    <p class="instructor-note">🛑 <strong>LET IT RUN</strong> — don't touch anything. Narrate what's happening as Copilot works.</p>
+    <p class="instructor-note">Point out: file creation → code generation → test writing → UI updates — all autonomous.</p>
+
+    <div class="see-box">
+      <span class="label">👀 What They See:</span>
+      Full autonomous execution — file creation, code writing, test running, UI updates — all without any human interaction.
+    </div>
+
+    <div class="teach-box">
+      <span class="label">💡 Teaching Point:</span>
+      Autopilot = end-to-end execution from plain English. One prompt → complete feature.
+    </div>
+  </article>
+
+  <article class="step-card">
+    <div class="step-number-bg">3</div>
+    <h3>3 &nbsp;🔍 Review Results</h3>
+
+    <p class="instructor-note">Walk through the files Copilot created — models, services, routes, tests, UI changes.</p>
+    <p class="instructor-note">Run tests in the terminal to show they pass.</p>
+    <p class="instructor-note">Open the browser to show the tournament feature live in the UI.</p>
+
+    <div class="see-box">
+      <span class="label">👀 What They See:</span>
+      A working tournament feature — from zero code to a functional feature in minutes. Tests pass. UI works.
+    </div>
+
+    <div class="teach-box">
+      <span class="label">💡 Teaching Point:</span>
+      For well-defined tasks, Autopilot can deliver faster than typing individual prompts. The key is a clear, detailed instruction.
+    </div>
+  </article>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 3 — Copilot Coding Agent                             -->
+  <!-- ============================================================ -->
+  <div class="section-divider"><span>Section 3</span></div>
+
+  <h2 class="section-heading">☁️ Section 3 — Copilot Coding Agent</h2>
+  <p class="section-time">⏱️ <strong>5 min</strong></p>
+
+  <article class="step-card">
+    <div class="step-number-bg">4</div>
+    <h3>4 &nbsp;🌐 Show GitHub Coding Agent</h3>
+
+    <p class="instructor-note">Switch to GitHub.com in the browser.</p>
+
+    <div class="say-box">
+      <span class="label">💬 Say:</span>
+      "What if you don't even need VS Code open? The coding agent works in the cloud."
+    </div>
+
+    <p class="instructor-note">Show an issue (or create one live): <strong>"Add fighter matchmaking based on skill level"</strong></p>
+    <p class="instructor-note">Assign the issue to <code style="color:#58a6ff;">@copilot</code> (or show how you would assign it).</p>
+    <p class="instructor-note">If previously triggered, show the PR that the coding agent created — real code changes, tests, docs.</p>
+
+    <div class="see-box">
+      <span class="label">👀 What They See:</span>
+      On GitHub.com — an issue assigned to <code style="color:#58a6ff;">@copilot</code>, then (if previously triggered) a PR created by the coding agent with real code changes.
+    </div>
+
+    <div class="teach-box">
+      <span class="label">💡 Teaching Point:</span>
+      Async, cloud-based autonomous coding. Write an issue, assign to Copilot, come back to a PR. No IDE needed.
+    </div>
+  </article>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 4 — Squad Pattern                                    -->
+  <!-- ============================================================ -->
+  <div class="section-divider"><span>Section 4</span></div>
+
+  <h2 class="section-heading">👥 Section 4 — Squad Pattern</h2>
+  <p class="section-time">⏱️ <strong>5 min</strong></p>
+
+  <article class="step-card">
+    <div class="step-number-bg">5</div>
+    <h3>5 &nbsp;🏗️ Introduce Squad</h3>
+
+    <div class="say-box">
+      <span class="label">💬 Say:</span>
+      "What if you could have a whole TEAM of AI agents? That's Squad."
+    </div>
+
+    <p class="instructor-note">Open: <a href="https://github.com/bradygaster/squad" target="_blank" style="color:#58a6ff;">https://github.com/bradygaster/squad</a></p>
+
+    <p style="font-weight:600; margin:0.8rem 0 0.4rem; color:#e6edf3;">🔑 Key Points to Mention:</p>
+    <ul class="key-points">
+      <li>Each team member runs in its own context — independent agent processes</li>
+      <li>Parallel execution of different concerns — frontend, backend, tests all at once</li>
+      <li>Shared decisions and coordination between agents</li>
+      <li>Session persistence across runs — agents remember context</li>
+    </ul>
+
+    <p class="instructor-note">Compare on screen: <strong>Single agent</strong> (one thing at a time) vs <strong>Squad team</strong> (frontend + backend + tests simultaneously).</p>
+
+    <div class="see-box">
+      <span class="label">👀 What They See:</span>
+      The Squad repo and README showing the multi-agent architecture — multiple agents working in parallel on different parts of a codebase.
+    </div>
+
+    <div class="teach-box">
+      <span class="label">💡 Teaching Point:</span>
+      This is where agentic development is heading — from a single AI assistant to AI development teams working in concert.
+    </div>
+  </article>
+
+  <!-- ============================================================ -->
+  <!-- WRAP-UP                                                       -->
+  <!-- ============================================================ -->
+  <div class="section-divider"><span>Wrap-Up</span></div>
+
+  <h2 class="section-heading">🎁 Wrap-Up — When to Use Each</h2>
+  <p class="section-time">⏱️ <strong>2 min</strong></p>
+
+  <article class="wrapup-card">
+    <div class="step-number-bg">6</div>
+    <h3>6 &nbsp;📊 The Autonomy Cheat Sheet</h3>
+
+    <div class="say-box">
+      <span class="label">💬 Say:</span>
+      "Let me give you a cheat sheet for which mode to use when."
+    </div>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Mode</th>
+          <th>Best For</th>
+          <th>Control Level</th>
+          <th>Speed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="mode-name">🤝 Agent Mode</span></td>
+          <td>Interactive, learning, exploring — you're in the driver's seat</td>
+          <td>🟢 High — you approve each step</td>
+          <td>Moderate</td>
+        </tr>
+        <tr>
+          <td><span class="mode-name">📋 Plan Mode</span></td>
+          <td>Complex tasks, need oversight — trust but verify</td>
+          <td>🟡 Medium — review plan, then execute</td>
+          <td>Moderate</td>
+        </tr>
+        <tr>
+          <td><span class="mode-name">🚀 Autopilot</span></td>
+          <td>Well-defined tasks, trust the output — hands-off execution</td>
+          <td>🟠 Low — review after completion</td>
+          <td>Fast</td>
+        </tr>
+        <tr>
+          <td><span class="mode-name">☁️ Coding Agent</span></td>
+          <td>Async work, PR-based workflow — set it and forget it</td>
+          <td>🔴 Minimal — review the PR</td>
+          <td>Background</td>
+        </tr>
+        <tr>
+          <td><span class="mode-name">👥 Squad</span></td>
+          <td>Multi-concern projects, team simulation — AI development team</td>
+          <td>🔴 Minimal — orchestrated autonomy</td>
+          <td>Fastest ⚡</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="teach-box">
+      <span class="label">💡 Teaching Point:</span>
+      Start with more control (Agent Mode), increase autonomy as you build trust. Match the autonomy level to the task complexity and your confidence in the outcome.
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="page-footer">
+    <p>Demo 07 — Autonomous Copilot &amp; Agent Teams &nbsp;|&nbsp; Instructor Script &nbsp;|&nbsp; 25 min</p>
+  </footer>
+
+</body>
+</html>

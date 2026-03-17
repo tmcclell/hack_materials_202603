@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afternoon Hacking Guide</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0d1117; color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7; padding: 2rem; max-width: 900px; margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link { display: inline-block; margin-bottom: 2rem; font-size: 0.95rem; }
+        .lab-header {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+            padding: 2rem; margin-bottom: 2rem;
+        }
+        .lab-header h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; }
+        .badge {
+            display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600;
+        }
+        .badge-time { background: rgba(88,166,255,0.15); color: #58a6ff; }
+        .badge-level { background: rgba(63,185,80,0.15); color: #3fb950; }
+        .goal {
+            background: rgba(88,166,255,0.08); border-left: 3px solid #58a6ff;
+            padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+        .section-card {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+            padding: 1.75rem; margin-bottom: 1.5rem;
+        }
+        .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .section-icon {
+            width: 42px; height: 42px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
+        }
+        .icon-format { background: rgba(88,166,255,0.2); }
+        .icon-usecase { background: rgba(63,185,80,0.2); }
+        .icon-fallback { background: rgba(210,153,34,0.2); }
+        .icon-showntell { background: rgba(248,81,73,0.2); }
+        .icon-tips { background: rgba(88,166,255,0.2); }
+        .section-header h2 { font-size: 1.3rem; }
+        .section-card ul { margin: 0.75rem 0 0.75rem 1.5rem; }
+        .section-card li { margin-bottom: 0.4rem; }
+        .section-card ol { margin: 0.75rem 0 0.75rem 1.5rem; }
+        .section-card ol li { margin-bottom: 0.4rem; }
+        pre {
+            background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+            padding: 1rem 1.25rem; overflow-x: auto; margin: 0.75rem 0;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem; line-height: 1.6;
+        }
+        code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 0.9rem; }
+        :not(pre) > code {
+            background: rgba(110,118,129,0.2); padding: 0.15rem 0.4rem; border-radius: 4px;
+        }
+        .challenge {
+            background: #0d1117; border: 1px solid #30363d; border-radius: 10px;
+            padding: 1.25rem 1.5rem; margin: 1rem 0;
+        }
+        .challenge h3 { margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .challenge-a h3 { color: #58a6ff; }
+        .challenge-b h3 { color: #3fb950; }
+        .challenge-c h3 { color: #d29922; }
+        .challenge ul { margin: 0.5rem 0 0.5rem 1.5rem; }
+        .challenge li { margin-bottom: 0.3rem; }
+        .spec {
+            background: rgba(110,118,129,0.08); border-left: 3px solid #484f58;
+            padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; margin: 0.5rem 0;
+            font-style: italic; color: #8b949e;
+        }
+        .timeline {
+            display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1rem;
+            margin: 1rem 0;
+        }
+        .timeline-time {
+            font-weight: 600; color: #58a6ff; white-space: nowrap;
+        }
+        .tip-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;
+        }
+        .tip-item {
+            background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+            padding: 1rem;
+        }
+        .tip-item strong { display: block; margin-bottom: 0.35rem; }
+        .showntell-template {
+            background: rgba(248,81,73,0.06); border: 1px solid rgba(248,81,73,0.25);
+            border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0;
+        }
+        @media (max-width: 640px) {
+            .tip-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="../" class="back-link">← Back to Agenda</a>
+
+<div class="lab-header">
+    <h1>🔨 Afternoon Hacking Guide</h1>
+    <p>Your orientation doc for the afternoon build session.</p>
+    <div class="meta">
+        <span class="badge badge-time">🕐 1:00 – 5:00 PM</span>
+        <span class="badge badge-level">📖 Reference Document</span>
+    </div>
+</div>
+
+<div class="goal">
+    <strong>Mission:</strong> Use everything you learned this morning to build something real with your team. This guide covers the format, tracks, and tips for a great hack session.
+</div>
+
+<!-- Section 1: Hack Format -->
+<div class="section-card">
+    <div class="section-header">
+        <div class="section-icon icon-format">📋</div>
+        <h2>Hack Format</h2>
+    </div>
+    <ul>
+        <li>Teams of <strong>3–5 people</strong></li>
+        <li>Use any Copilot features from the morning sessions</li>
+        <li>Goal: <strong>build something demoable</strong> in ~3 hours</li>
+        <li>Facilitators roaming for support — flag them down anytime!</li>
+    </ul>
+    <div class="timeline">
+        <span class="timeline-time">1:00 PM</span><span>Teams form, pick a track, start hacking</span>
+        <span class="timeline-time">2:30 PM</span><span>Check-in — are you on track? Pivot if needed</span>
+        <span class="timeline-time">3:45 PM</span><span>Polish &amp; prep demos</span>
+        <span class="timeline-time">4:15 PM</span><span>Show &amp; Tell begins</span>
+        <span class="timeline-time">4:50 PM</span><span>Wrap-up &amp; retro</span>
+    </div>
+</div>
+
+<!-- Section 2: Primary Track -->
+<div class="section-card">
+    <div class="section-header">
+        <div class="section-icon icon-usecase">💼</div>
+        <h2>If You Have a Use Case</h2>
+    </div>
+    <p style="color: #8b949e; margin-bottom: 0.75rem;">Primary track — recommended if you have a real project to work on.</p>
+    <ol>
+        <li><strong>Bring your real project/repo</strong> — something you're actively working on</li>
+        <li><strong>Identify one feature or improvement</strong> to tackle in the time available</li>
+        <li>Use <strong>Agent Mode</strong>, <strong>Plan Mode</strong>, or <strong>Autopilot</strong> to accelerate your work</li>
+        <li><strong>Prepare a 5-minute demo</strong> for Show &amp; Tell</li>
+    </ol>
+    <p style="margin-top: 0.75rem;">💡 <strong>Tip:</strong> Scope small! It's better to have one complete feature than three half-done ones. Pick the thing that will have the most impact and demo the best.</p>
+</div>
+
+<!-- Section 3: Fallback Track -->
+<div class="section-card">
+    <div class="section-header">
+        <div class="section-icon icon-fallback">🎯</div>
+        <h2>Fallback Track: No Use Case? No Problem!</h2>
+    </div>
+    <p style="margin-bottom: 1rem;">Pick one of these three guided challenges. Each one is scoped to be completable in 3 hours with Copilot assistance.</p>
+
+    <!-- Challenge A -->
+    <div class="challenge challenge-a">
+        <h3>Challenge A: REST API from a PRD</h3>
+        <div class="spec">"Build a bookmark manager API with folders, tags, and search. Users can save URLs with titles and descriptions, organize into folders, tag for filtering, and full-text search."</div>
+        <ul>
+            <li>Use <strong>Plan Mode</strong> to break the spec into tasks</li>
+            <li>Use <strong>Autopilot</strong> to implement each task</li>
+            <li>Suggested stack: Express + TypeScript + in-memory store (or SQLite)</li>
+        </ul>
+    </div>
+
+    <!-- Challenge B -->
+    <div class="challenge challenge-b">
+        <h3>Challenge B: Repo Health Automation</h3>
+        <div class="spec">"Build a CLI tool that audits a GitHub repo: checks for stale branches (&gt;30 days), missing README sections, test coverage gaps, and outdated dependencies. Output a markdown report."</div>
+        <ul>
+            <li>Use <strong>Agent Mode</strong> for the CLI scaffold</li>
+            <li>Use <strong>Chat</strong> for individual health checks</li>
+            <li>Suggested stack: Node.js CLI with Commander + Octokit</li>
+        </ul>
+    </div>
+
+    <!-- Challenge C -->
+    <div class="challenge challenge-c">
+        <h3>Challenge C: Internal Tool Generator</h3>
+        <div class="spec">"Build a team standup bot — a simple web app where team members post daily updates (what they did, what they'll do, blockers). Shows a dashboard of today's updates."</div>
+        <ul>
+            <li>Use <strong>Agent Mode</strong> end-to-end</li>
+            <li>Use <code>/tests</code> for test coverage</li>
+            <li>Suggested stack: Express + HTML/CSS frontend (or React if ambitious)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Section 4: Show & Tell -->
+<div class="section-card">
+    <div class="section-header">
+        <div class="section-icon icon-showntell">🎤</div>
+        <h2>Show &amp; Tell Format</h2>
+    </div>
+    <p style="color: #8b949e; margin-bottom: 0.75rem;">4:15 – 4:50 PM · ~5 minutes per team</p>
+
+    <div class="showntell-template">
+        <strong style="display: block; margin-bottom: 0.5rem; color: #f85149;">Demo Template:</strong>
+        <ol>
+            <li><strong>What was the challenge?</strong> — Brief description of what you set out to build</li>
+            <li><strong>What Copilot features did you use?</strong> — Agent Mode? Prompt files? Custom instructions? Which were most helpful?</li>
+            <li><strong>Live demo</strong> — Show what you built, working or not!</li>
+            <li><strong>What surprised you?</strong> — Best moment? Worst moment? What did you learn?</li>
+        </ol>
+    </div>
+    <p style="margin-top: 0.75rem;">📸 <strong>Remember:</strong> Demos don't have to be polished. Sharing what you learned is just as valuable as sharing what you built.</p>
+</div>
+
+<!-- Section 5: Tips -->
+<div class="section-card">
+    <div class="section-header">
+        <div class="section-icon icon-tips">💡</div>
+        <h2>Tips for a Great Hack</h2>
+    </div>
+
+    <div class="tip-grid">
+        <div class="tip-item">
+            <strong>🗺️ Start with Plan Mode</strong>
+            Let Copilot help you break down the problem before writing code. A good plan saves hours.
+        </div>
+        <div class="tip-item">
+            <strong>🤖 Delegate the boring parts</strong>
+            Let Copilot write boilerplate, tests, and docs. Focus your brain on architecture and design decisions.
+        </div>
+        <div class="tip-item">
+            <strong>🔍 Trust but verify</strong>
+            Review everything Copilot generates. It's fast but not infallible — catching one bug early saves a lot of time.
+        </div>
+        <div class="tip-item">
+            <strong>🆘 Ask for help</strong>
+            If you're stuck for more than 10 minutes, flag a facilitator. That's what they're here for!
+        </div>
+        <div class="tip-item">
+            <strong>💾 Commit early, commit often</strong>
+            Use git to save your progress. Nothing worse than losing work to a stray <code>Ctrl+Z</code>.
+        </div>
+        <div class="tip-item">
+            <strong>🎯 Scope ruthlessly</strong>
+            It's better to ship one complete feature than to have three features at 50%. Pick the most demoable path.
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

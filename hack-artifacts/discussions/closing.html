@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closing & Next Steps</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            padding: 2rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            color: #8b949e;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #58a6ff; text-decoration: none; }
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .duration {
+            display: inline-block;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 20px;
+            padding: 0.25rem 0.85rem;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+        .key-message {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #58a6ff;
+        }
+        .key-message .label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #58a6ff;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .key-message .message {
+            font-size: 1.15rem;
+            font-weight: 500;
+            font-style: italic;
+        }
+        .section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-header {
+            border-left: 4px solid #58a6ff;
+            padding-left: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .section-header.green { border-left-color: #3fb950; }
+        .section-header.yellow { border-left-color: #d29922; }
+        .section-header.red { border-left-color: #f85149; }
+        .section-header h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+        .talking-points {
+            list-style: none;
+            padding: 0;
+        }
+        .talking-points li {
+            position: relative;
+            padding: 0.6rem 0 0.6rem 1.75rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .talking-points li:last-child { border-bottom: none; }
+        .talking-points li::before {
+            content: '▸';
+            position: absolute;
+            left: 0.25rem;
+            color: #58a6ff;
+            font-weight: 700;
+        }
+        .talking-points li.green::before { color: #3fb950; }
+        .talking-points li.yellow::before { color: #d29922; }
+        .resource-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .resource-card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            transition: border-color 0.2s;
+        }
+        .resource-card:hover { border-color: #58a6ff; }
+        .resource-card .resource-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+        .resource-card .resource-url {
+            font-size: 0.8rem;
+            color: #8b949e;
+            word-break: break-all;
+        }
+        .feedback-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .feedback-section .section-header { border-left-color: #d29922; }
+        .survey-placeholder {
+            background: #0d1117;
+            border: 2px dashed #30363d;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 1rem;
+            color: #8b949e;
+        }
+        .survey-placeholder .qr-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .closing-banner {
+            background: linear-gradient(135deg, #58a6ff15, #3fb95015);
+            border: 1px solid #58a6ff33;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .closing-banner .emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+        .closing-banner .text {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #58a6ff;
+        }
+        .closing-banner .subtext {
+            font-size: 1rem;
+            color: #8b949e;
+            margin-top: 0.35rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="../agenda.html" class="back-link">← Back to Agenda</a>
+
+    <div class="page-header">
+        <h1>Closing & Next Steps</h1>
+        <span class="duration">⏱ 10 minutes</span>
+    </div>
+
+    <div class="key-message">
+        <div class="label">🎯 Key Message</div>
+        <div class="message">"Today is the beginning, not the end. Here's how to keep the momentum."</div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h2>Recap</h2>
+        </div>
+        <ul class="talking-points">
+            <li>What we covered — the autonomy arc (Agent → Plan → Autopilot)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header green">
+            <h2>Next Steps</h2>
+        </div>
+        <ul class="talking-points">
+            <li class="green">Office hours cadence — weekly drop-in sessions</li>
+            <li class="green">Champion team — volunteers to be Copilot ambassadors</li>
+            <li class="green">Internal Slack/Teams channel for sharing tips</li>
+            <li class="green">Share your <code style="background:#21262d;padding:0.1rem 0.4rem;border-radius:4px;font-size:0.9em;color:#f0883e;">copilot-instructions.md</code> with your team</li>
+        </ul>
+    </div>
+
+    <div class="feedback-section">
+        <div class="section-header">
+            <h2>Feedback Collection</h2>
+        </div>
+        <ul class="talking-points">
+            <li class="yellow">"What was the most useful thing you learned?"</li>
+            <li class="yellow">"What should we cover next time?"</li>
+        </ul>
+        <div class="survey-placeholder">
+            <div class="qr-icon">📱</div>
+            <div>Quick survey link / QR code placeholder</div>
+            <div style="font-size:0.8rem;margin-top:0.35rem;">Insert survey URL here</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header yellow">
+            <h2>Resources</h2>
+        </div>
+        <div class="resource-grid">
+            <a href="https://docs.github.com/copilot" target="_blank" class="resource-card">
+                <div class="resource-title">📖 GitHub Copilot Docs</div>
+                <div class="resource-url">docs.github.com/copilot</div>
+            </a>
+            <a href="https://code.visualstudio.com/docs/copilot" target="_blank" class="resource-card">
+                <div class="resource-title">🔧 VS Code Copilot Tips</div>
+                <div class="resource-url">code.visualstudio.com/docs/copilot</div>
+            </a>
+            <a href="https://github.com/bradygaster/squad" target="_blank" class="resource-card">
+                <div class="resource-title">🤖 Brady Gaster's Squad</div>
+                <div class="resource-url">github.com/bradygaster/squad</div>
+            </a>
+            <a href="https://github.com/github/copilot-sdk" target="_blank" class="resource-card">
+                <div class="resource-title">🧰 Copilot SDK</div>
+                <div class="resource-url">github.com/github/copilot-sdk</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="closing-banner">
+        <div class="emoji">🚀</div>
+        <div class="text">Thank you! Go build amazing things.</div>
+        <div class="subtext">Today is just the beginning.</div>
+    </div>
+</body>
+</html>

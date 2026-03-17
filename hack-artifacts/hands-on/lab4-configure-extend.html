@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 4: Configure &amp; Extend</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0d1117; color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7; padding: 2rem; max-width: 900px; margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link { display: inline-block; margin-bottom: 2rem; font-size: 0.95rem; }
+        .lab-header {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+            padding: 2rem; margin-bottom: 2rem;
+        }
+        .lab-header h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; }
+        .badge {
+            display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600;
+        }
+        .badge-time { background: rgba(88,166,255,0.15); color: #58a6ff; }
+        .badge-level { background: rgba(248,81,73,0.15); color: #f85149; }
+        .goal {
+            background: rgba(88,166,255,0.08); border-left: 3px solid #58a6ff;
+            padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+        .step-card {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+            padding: 1.75rem; margin-bottom: 1.5rem;
+        }
+        .step-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .step-number {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #f85149; color: #ffffff; display: flex;
+            align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1rem; flex-shrink: 0;
+        }
+        .step-header h2 { font-size: 1.2rem; }
+        .step-card ul { margin: 0.75rem 0 0.75rem 1.5rem; }
+        .step-card li { margin-bottom: 0.4rem; }
+        pre {
+            background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+            padding: 1rem 1.25rem; overflow-x: auto; margin: 0.75rem 0;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem; line-height: 1.6;
+        }
+        code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 0.9rem; }
+        :not(pre) > code {
+            background: rgba(110,118,129,0.2); padding: 0.15rem 0.4rem; border-radius: 4px;
+        }
+        .expected {
+            background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.3);
+            border-radius: 8px; padding: 0.85rem 1.1rem; margin: 0.75rem 0;
+        }
+        .expected::before { content: '✅ Expected Result: '; font-weight: 600; color: #3fb950; }
+        .troubleshoot {
+            background: rgba(210,153,34,0.08); border: 1px solid rgba(210,153,34,0.3);
+            border-radius: 8px; padding: 0.85rem 1.1rem; margin: 0.75rem 0;
+        }
+        .troubleshoot::before { content: '🆘 Stuck? Try this: '; font-weight: 600; color: #d29922; }
+        .stretch {
+            background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.3);
+            border-radius: 12px; padding: 1.5rem; margin-top: 2rem;
+        }
+        .stretch h3 { color: #58a6ff; margin-bottom: 0.5rem; }
+        kbd {
+            background: #21262d; border: 1px solid #30363d; border-radius: 4px;
+            padding: 0.1rem 0.45rem; font-size: 0.85rem; font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<a href="../" class="back-link">← Back to Agenda</a>
+
+<div class="lab-header">
+    <h1>⚙️ Lab 4: Configure &amp; Extend</h1>
+    <p>Create Copilot Instructions and prompt files that customize Copilot's behavior.</p>
+    <div class="meta">
+        <span class="badge badge-time">⏱ 15 minutes</span>
+        <span class="badge badge-level">🔴 Advanced</span>
+    </div>
+</div>
+
+<div class="goal">
+    <strong>Goal:</strong> Create Copilot Instructions and reusable prompt files that customize Copilot's behavior to match your team's coding standards and workflows.
+</div>
+
+<!-- Step 1 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">1</div>
+        <h2>Create copilot-instructions.md</h2>
+    </div>
+    <ul>
+        <li>In your project root, create a folder: <code>.github/</code></li>
+        <li>Inside that folder, create a file: <code>.github/copilot-instructions.md</code></li>
+        <li>Add the following content:</li>
+    </ul>
+    <pre># Copilot Instructions
+
+## Coding Standards
+- Always use TypeScript strict mode
+- Use JSDoc comments on all public functions
+- Use const by default, let only when needed
+- All API responses: { success: boolean, data?, error? }
+- Error messages must be user-friendly (no stack traces)
+- Use descriptive variable names (no single letters except in loops)</pre>
+    <ul>
+        <li>Save the file</li>
+    </ul>
+    <div class="expected">File created at <code>.github/copilot-instructions.md</code>. Copilot will automatically read this file and apply these standards to all suggestions in this workspace.</div>
+    <div class="troubleshoot">Make sure the file is in the <code>.github</code> folder at the root of your workspace (not inside <code>src/</code> or another subfolder). The file must be named exactly <code>copilot-instructions.md</code> — Copilot looks for this specific name.</div>
+</div>
+
+<!-- Step 2 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">2</div>
+        <h2>Test the Instructions</h2>
+    </div>
+    <ul>
+        <li>Open Copilot Chat in <strong>Agent mode</strong></li>
+        <li>Type:</li>
+    </ul>
+    <pre>Create a UserService with getUser and createUser methods</pre>
+    <ul>
+        <li>When the code is generated, check:</li>
+    </ul>
+    <ul>
+        <li>✅ Does it use <strong>JSDoc comments</strong> on the methods?</li>
+        <li>✅ Does it use <strong>const</strong> by default?</li>
+        <li>✅ Does the API response match <code>{ success: boolean, data?, error? }</code>?</li>
+        <li>✅ Are error messages <strong>user-friendly</strong>?</li>
+        <li>✅ Are variable names <strong>descriptive</strong>?</li>
+    </ul>
+    <div class="expected">The generated code follows your defined standards — JSDoc comments, const usage, standardized response format, user-friendly errors, and descriptive names.</div>
+    <div class="troubleshoot">If the instructions aren't being followed, try reopening the Chat panel or reloading VS Code (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → "Developer: Reload Window"). You can also explicitly reference the file: "Follow the instructions in #file:.github/copilot-instructions.md".</div>
+</div>
+
+<!-- Step 3 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">3</div>
+        <h2>Create a Prompt File</h2>
+    </div>
+    <ul>
+        <li>Create a subfolder: <code>.github/prompts/</code></li>
+        <li>Create a file: <code>.github/prompts/add-api-endpoint.md</code></li>
+        <li>Add the following content:</li>
+    </ul>
+    <pre># Add API Endpoint
+
+Create a new REST API endpoint with:
+1. Input validation using a validate function
+2. Service layer for business logic
+3. Express route handler
+4. Vitest tests with at least 3 test cases
+5. JSDoc documentation
+
+Follow the patterns in the existing codebase.</pre>
+    <ul>
+        <li>Save the file</li>
+    </ul>
+    <div class="expected">File created at <code>.github/prompts/add-api-endpoint.md</code>. This is a reusable template you can reference any time you need a new endpoint.</div>
+    <div class="troubleshoot">The <code>.github/prompts/</code> folder is the conventional location for prompt files. Make sure the folder exists before creating the file. You can create both in the terminal: <code>mkdir -p .github/prompts</code>.</div>
+</div>
+
+<!-- Step 4 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">4</div>
+        <h2>Use the Prompt File</h2>
+    </div>
+    <ul>
+        <li>In Chat, reference the prompt file you just created:</li>
+    </ul>
+    <pre>Using #file:.github/prompts/add-api-endpoint.md, add a /api/comments endpoint</pre>
+    <ul>
+        <li>Watch Copilot follow the template steps:</li>
+    </ul>
+    <ul>
+        <li>1️⃣ Input validation function</li>
+        <li>2️⃣ Service layer with business logic</li>
+        <li>3️⃣ Express route handler</li>
+        <li>4️⃣ Vitest tests (at least 3)</li>
+        <li>5️⃣ JSDoc documentation</li>
+    </ul>
+    <div class="expected">A complete <code>/api/comments</code> endpoint with all five components from the template — validation, service, routes, tests, and documentation.</div>
+    <div class="troubleshoot">If <code>#file:</code> doesn't resolve, try the full relative path: <code>#file:.github/prompts/add-api-endpoint.md</code>. You can also copy-paste the prompt file content directly into Chat as a workaround.</div>
+</div>
+
+<!-- Stretch Goal -->
+<div class="stretch">
+    <h3>🚀 Finished Early?</h3>
+    <p>Create a second prompt file! Make <code>.github/prompts/refactor-to-pattern.md</code>:</p>
+    <pre># Refactor to Strategy Pattern
+
+Refactor the selected code to use the Strategy pattern:
+1. Extract the varying behavior into a Strategy interface
+2. Create concrete strategy implementations
+3. Modify the context class to accept a strategy
+4. Update all call sites
+5. Add tests for each strategy
+
+Maintain backward compatibility.</pre>
+    <p>Then test it: select some code with conditional logic and ask Chat to apply the prompt.</p>
+</div>
+
+</body>
+</html>

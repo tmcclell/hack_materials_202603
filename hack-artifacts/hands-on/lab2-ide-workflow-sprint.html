@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 2: IDE Workflow Sprint</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0d1117; color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7; padding: 2rem; max-width: 900px; margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link { display: inline-block; margin-bottom: 2rem; font-size: 0.95rem; }
+        .lab-header {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+            padding: 2rem; margin-bottom: 2rem;
+        }
+        .lab-header h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; }
+        .badge {
+            display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600;
+        }
+        .badge-time { background: rgba(88,166,255,0.15); color: #58a6ff; }
+        .badge-level { background: rgba(210,153,34,0.15); color: #d29922; }
+        .goal {
+            background: rgba(88,166,255,0.08); border-left: 3px solid #58a6ff;
+            padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+        .step-card {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+            padding: 1.75rem; margin-bottom: 1.5rem;
+        }
+        .step-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .step-number {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #d29922; color: #0d1117; display: flex;
+            align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1rem; flex-shrink: 0;
+        }
+        .step-header h2 { font-size: 1.2rem; }
+        .step-card ul { margin: 0.75rem 0 0.75rem 1.5rem; }
+        .step-card li { margin-bottom: 0.4rem; }
+        pre {
+            background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+            padding: 1rem 1.25rem; overflow-x: auto; margin: 0.75rem 0;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem; line-height: 1.6;
+        }
+        code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 0.9rem; }
+        :not(pre) > code {
+            background: rgba(110,118,129,0.2); padding: 0.15rem 0.4rem; border-radius: 4px;
+        }
+        .expected {
+            background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.3);
+            border-radius: 8px; padding: 0.85rem 1.1rem; margin: 0.75rem 0;
+        }
+        .expected::before { content: '✅ Expected Result: '; font-weight: 600; color: #3fb950; }
+        .troubleshoot {
+            background: rgba(210,153,34,0.08); border: 1px solid rgba(210,153,34,0.3);
+            border-radius: 8px; padding: 0.85rem 1.1rem; margin: 0.75rem 0;
+        }
+        .troubleshoot::before { content: '🆘 Stuck? Try this: '; font-weight: 600; color: #d29922; }
+        .stretch {
+            background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.3);
+            border-radius: 12px; padding: 1.5rem; margin-top: 2rem;
+        }
+        .stretch h3 { color: #58a6ff; margin-bottom: 0.5rem; }
+        kbd {
+            background: #21262d; border: 1px solid #30363d; border-radius: 4px;
+            padding: 0.1rem 0.45rem; font-size: 0.85rem; font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<a href="../" class="back-link">← Back to Agenda</a>
+
+<div class="lab-header">
+    <h1>⚡ Lab 2: IDE Workflow Sprint</h1>
+    <p>Master prompt engineering, refactoring, test generation, and documentation.</p>
+    <div class="meta">
+        <span class="badge badge-time">⏱ 20 minutes</span>
+        <span class="badge badge-level">🟡 Intermediate</span>
+    </div>
+</div>
+
+<div class="goal">
+    <strong>Goal:</strong> Master prompt engineering, refactoring, test generation, and documentation — the core Copilot workflows you'll use every day.
+</div>
+
+<!-- Step 1 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">1</div>
+        <h2>Comment-Driven Prompting</h2>
+    </div>
+    <ul>
+        <li>Create a new file called <code>calculator.ts</code></li>
+        <li>Type the following detailed comment:</li>
+    </ul>
+    <pre>// Calculator class with add, subtract, multiply, divide methods.
+// Division by zero should throw an error.
+// All methods should accept two numbers and return a number.</pre>
+    <ul>
+        <li>Press <kbd>Enter</kbd> and let Copilot generate the class from the comment</li>
+        <li>Accept suggestions with <kbd>Tab</kbd>, keep pressing <kbd>Enter</kbd> for more</li>
+    </ul>
+    <div class="expected">A full <code>Calculator</code> class with <code>add</code>, <code>subtract</code>, <code>multiply</code>, and <code>divide</code> methods. The <code>divide</code> method includes a check for division by zero.</div>
+    <div class="troubleshoot">If Copilot only gives you one method at a time, accept it and press <kbd>Enter</kbd> — it should suggest the next one. You can also write <code>class Calculator {</code> first to give it more structure to work with.</div>
+</div>
+
+<!-- Step 2 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">2</div>
+        <h2>Refactor with Chat</h2>
+    </div>
+    <ul>
+        <li><strong>Select</strong> the entire Calculator class</li>
+        <li>In Chat, type:</li>
+    </ul>
+    <pre>Refactor this to use arrow functions and add input validation for non-numeric values</pre>
+    <ul>
+        <li>Review the diff that Copilot shows</li>
+        <li>Click <strong>Accept</strong> (or Apply) to apply the changes</li>
+    </ul>
+    <div class="expected">Cleaner code with arrow function syntax and input validation that checks for non-numeric values before performing operations.</div>
+    <div class="troubleshoot">If you don't see a diff view, try using <strong>Edit mode</strong> (the pencil icon in Chat) instead of Ask mode. You can also copy the refactored code and paste it manually.</div>
+</div>
+
+<!-- Step 3 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">3</div>
+        <h2>Generate Tests with /tests</h2>
+    </div>
+    <ul>
+        <li><strong>Select</strong> the Calculator class</li>
+        <li>In Chat, type:</li>
+    </ul>
+    <pre>/tests</pre>
+    <ul>
+        <li>Review the generated test suite</li>
+        <li>Look for edge cases: division by zero, negative numbers, decimals</li>
+    </ul>
+    <div class="expected">A Vitest (or Jest) test suite covering normal operations, edge cases (division by zero), and potentially invalid input scenarios.</div>
+    <div class="troubleshoot">If <code>/tests</code> isn't recognized, try typing: "Write unit tests for this code using Vitest". Make sure the Calculator class code is selected before invoking.</div>
+</div>
+
+<!-- Step 4 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">4</div>
+        <h2>Generate Docs with /doc</h2>
+    </div>
+    <ul>
+        <li><strong>Select</strong> the Calculator class</li>
+        <li>In Chat, type:</li>
+    </ul>
+    <pre>/doc</pre>
+    <ul>
+        <li>Review the generated documentation</li>
+    </ul>
+    <div class="expected">JSDoc comments on every method — including <code>@param</code> types, <code>@returns</code> descriptions, and <code>@throws</code> for the division-by-zero case.</div>
+    <div class="troubleshoot">If <code>/doc</code> isn't recognized, try: "Add JSDoc documentation to every method in this class". Place your cursor inside the class before the first method and type <code>/**</code> — Copilot may auto-complete the docs.</div>
+</div>
+
+<!-- Step 5 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">5</div>
+        <h2>Prompt Engineering: #file and #selection</h2>
+    </div>
+    <ul>
+        <li>Create a new file called <code>utils.ts</code></li>
+        <li>In Chat, type the following prompt (referencing your existing file):</li>
+    </ul>
+    <pre>Using the same coding style as #file:calculator.ts, create a StringUtils class
+with capitalize, reverse, and isPalindrome methods</pre>
+    <ul>
+        <li>Review: Does it match the coding style of your Calculator class?</li>
+    </ul>
+    <div class="expected">A <code>StringUtils</code> class that mirrors the style of your Calculator — same patterns for arrow functions (if refactored), validation, and JSDoc comments.</div>
+    <div class="troubleshoot">If <code>#file:</code> doesn't auto-complete, make sure the file <code>calculator.ts</code> is in your workspace. Try typing <code>#file:</code> and wait for the dropdown to appear. You can also try <code>#file:./calculator.ts</code>.</div>
+</div>
+
+<!-- Stretch Goal -->
+<div class="stretch">
+    <h3>🚀 Finished Early?</h3>
+    <p>Try <strong>multi-turn conversation</strong> — keep the chat thread going:</p>
+    <pre>Now add a power method to the Calculator class</pre>
+    <p>Then, in the same conversation:</p>
+    <pre>Add tests for the power method</pre>
+    <p>Notice how Copilot retains context from earlier in the conversation. This is the power of multi-turn prompting — each message builds on the last.</p>
+</div>
+
+</body>
+</html>

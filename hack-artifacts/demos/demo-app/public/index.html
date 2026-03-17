@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚔️ Emoji Battle Arena</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+      border-bottom: 1px solid #30363d;
+    }
+    header h1 { font-size: 2.5rem; margin-bottom: 0.25rem; }
+    header p { color: #8b949e; font-size: 1.1rem; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 1.5rem;
+    }
+
+    .arena { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .fighter-select {
+      display: flex; gap: 1rem; align-items: flex-end;
+      background: #161b22;
+      padding: 1.25rem;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+    }
+    .fighter-select .col { flex: 1; }
+    .fighter-select label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #8b949e; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .fighter-select select {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+      background: #0d1117;
+      color: #e6edf3;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .vs { font-size: 1.8rem; font-weight: 900; color: #f85149; align-self: center; padding-bottom: 0.25rem; }
+
+    #fight-btn {
+      padding: 0.75rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #f85149, #da3633);
+      color: #fff;
+      transition: transform 0.1s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+    #fight-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(248,81,73,0.4); }
+    #fight-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .battle-log {
+      background: #161b22;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+      padding: 1.25rem;
+      min-height: 300px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .battle-log h2 { margin-bottom: 1rem; font-size: 1.2rem; }
+    .battle-log .round {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #21262d;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .battle-log .round:last-child { border-bottom: none; }
+    .winner-banner {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #238636, #2ea043);
+    }
+
+    .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .stats-card {
+      background: #161b22;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+      padding: 1.25rem;
+    }
+    .stats-card h2 { margin-bottom: 1rem; font-size: 1.1rem; }
+    .fighter-stats {
+      display: flex; flex-direction: column; gap: 0.6rem;
+    }
+    .fighter-stat {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      background: #0d1117;
+      font-size: 0.9rem;
+    }
+    .fighter-stat .name { font-weight: 600; }
+    .fighter-stat .record { color: #8b949e; }
+    .fighter-stat .wins { color: #3fb950; font-weight: 700; }
+    .fighter-stat .losses { color: #f85149; font-weight: 700; }
+
+    .leaderboard {
+      background: #161b22;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+      padding: 1.25rem;
+    }
+    .leaderboard h2 { margin-bottom: 1rem; font-size: 1.1rem; }
+    .leaderboard .error {
+      color: #f0883e;
+      font-style: italic;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      background: #2d1b00;
+      border-radius: 6px;
+    }
+
+    .empty-state {
+      color: #484f58;
+      font-style: italic;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    @media (max-width: 800px) {
+      .container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⚔️ Emoji Battle Arena</h1>
+    <p>Choose your fighters and let the emoji clash begin!</p>
+  </header>
+
+  <div class="container">
+    <div class="arena">
+      <!-- Fighter Selection -->
+      <div class="fighter-select">
+        <div class="col">
+          <label for="fighter1">🟥 Fighter 1</label>
+          <select id="fighter1"><option>Loading…</option></select>
+        </div>
+        <div class="vs">VS</div>
+        <div class="col">
+          <label for="fighter2">🟦 Fighter 2</label>
+          <select id="fighter2"><option>Loading…</option></select>
+        </div>
+        <button id="fight-btn">⚔️ FIGHT!</button>
+      </div>
+
+      <!-- Battle Log -->
+      <div class="battle-log" id="battle-log">
+        <h2>📜 Battle Log</h2>
+        <div class="empty-state" id="empty-state">Select two fighters and hit FIGHT! to begin.</div>
+        <div id="rounds"></div>
+        <div id="winner"></div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <!-- Fighter Stats -->
+      <div class="stats-card">
+        <h2>📊 Fighter Records</h2>
+        <div class="fighter-stats" id="fighter-stats">
+          <div class="empty-state">Loading fighters…</div>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="leaderboard">
+        <h2>🏆 Leaderboard</h2>
+        <div id="leaderboard-content">
+          <div class="empty-state">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = '';
+    let fighters = [];
+
+    async function loadFighters() {
+      try {
+        const res = await fetch(`${API}/api/fighters`);
+        const json = await res.json();
+        fighters = json.data || [];
+        populateSelects();
+        renderStats();
+      } catch (e) {
+        console.error('Failed to load fighters:', e);
+      }
+    }
+
+    function populateSelects() {
+      const s1 = document.getElementById('fighter1');
+      const s2 = document.getElementById('fighter2');
+      s1.innerHTML = '';
+      s2.innerHTML = '';
+      fighters.forEach((f, i) => {
+        const opt1 = new Option(`${f.emoji} ${f.name} (ATK:${f.attack} DEF:${f.defense} HP:${f.hp})`, f.id);
+        const opt2 = new Option(`${f.emoji} ${f.name} (ATK:${f.attack} DEF:${f.defense} HP:${f.hp})`, f.id);
+        s1.appendChild(opt1);
+        s2.appendChild(opt2);
+        if (i === 1) s2.value = f.id;
+      });
+    }
+
+    function renderStats() {
+      const container = document.getElementById('fighter-stats');
+      if (!fighters.length) { container.innerHTML = '<div class="empty-state">No fighters loaded.</div>'; return; }
+      container.innerHTML = fighters.map(f =>
+        `<div class="fighter-stat">
+          <span class="name">${f.emoji} ${f.name}</span>
+          <span class="record"><span class="wins">${f.wins}W</span> / <span class="losses">${f.losses}L</span></span>
+        </div>`
+      ).join('');
+    }
+
+    async function loadLeaderboard() {
+      const container = document.getElementById('leaderboard-content');
+      try {
+        const res = await fetch(`${API}/api/leaderboard`);
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error);
+        container.innerHTML = '<div class="empty-state">🏆 Leaderboard ready!</div>';
+      } catch (e) {
+        container.innerHTML = `<div class="error">⚠️ ${e.message || 'Leaderboard not available'}</div>`;
+      }
+    }
+
+    async function fight() {
+      const f1Id = document.getElementById('fighter1').value;
+      const f2Id = document.getElementById('fighter2').value;
+      if (f1Id === f2Id) { alert('A fighter cannot battle themselves! Pick two different fighters.'); return; }
+
+      const btn = document.getElementById('fight-btn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Fighting…';
+
+      document.getElementById('empty-state').style.display = 'none';
+      document.getElementById('rounds').innerHTML = '';
+      document.getElementById('winner').innerHTML = '';
+
+      try {
+        const res = await fetch(`${API}/api/battles`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fighter1Id: f1Id, fighter2Id: f2Id }),
+        });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error);
+
+        const battle = json.data;
+        const roundsEl = document.getElementById('rounds');
+
+        // Animate rounds one by one
+        for (let i = 0; i < battle.rounds.length; i++) {
+          await new Promise(r => setTimeout(r, 300));
+          const round = battle.rounds[i];
+          const div = document.createElement('div');
+          div.className = 'round';
+          div.textContent = round.narration;
+          roundsEl.appendChild(div);
+          roundsEl.scrollTop = roundsEl.scrollHeight;
+        }
+
+        // Show winner
+        const winnerFighter = fighters.find(f => f.id === battle.winner);
+        document.getElementById('winner').innerHTML =
+          `<div class="winner-banner">🎉 ${winnerFighter ? winnerFighter.emoji + ' ' + winnerFighter.name : 'Unknown'} WINS! 🎉</div>`;
+
+        // Refresh data
+        await loadFighters();
+        await loadLeaderboard();
+
+      } catch (e) {
+        document.getElementById('rounds').innerHTML = `<div class="round" style="color:#f85149">❌ Error: ${e.message}</div>`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '⚔️ FIGHT!';
+      }
+    }
+
+    document.getElementById('fight-btn').addEventListener('click', fight);
+
+    // Initial load
+    loadFighters();
+    loadLeaderboard();
+  </script>
+</body>
+</html>

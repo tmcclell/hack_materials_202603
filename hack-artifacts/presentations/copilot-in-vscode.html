@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Copilot Works Inside VS Code</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      padding: 2rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 1rem; }
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      background: linear-gradient(135deg, #58a6ff, #3fb950);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle { color: #8b949e; font-size: 1.15rem; margin-bottom: 2.5rem; }
+    .section { margin-bottom: 3rem; }
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #30363d;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-title .num {
+      background: #58a6ff;
+      color: #0d1117;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.2rem; }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .card h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card p, .card ul { color: #b1bac4; font-size: 1rem; }
+    .card ul { padding-left: 1.3rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-blue { background: rgba(88,166,255,0.15); color: #58a6ff; }
+    .badge-green { background: rgba(63,185,80,0.15); color: #3fb950; }
+    .badge-yellow { background: rgba(210,153,34,0.15); color: #d29922; }
+    .badge-red { background: rgba(248,81,73,0.15); color: #f85149; }
+    .icon { font-size: 1.4rem; }
+    code, .code-block {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      border-radius: 6px;
+    }
+    code { padding: 0.15rem 0.4rem; font-size: 0.9em; color: #e6edf3; }
+    .code-block { padding: 1rem 1.2rem; overflow-x: auto; font-size: 0.9rem; line-height: 1.5; }
+    .callout {
+      background: rgba(88,166,255,0.08);
+      border-left: 4px solid #58a6ff;
+      border-radius: 0 12px 12px 0;
+      padding: 1rem 1.5rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    .callout strong { color: #58a6ff; }
+    .callout.green { background: rgba(63,185,80,0.08); border-left-color: #3fb950; }
+    .callout.green strong { color: #3fb950; }
+
+    /* Context diagram */
+    .diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      padding: 2rem 1rem;
+    }
+    .diagram-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      min-width: 160px;
+    }
+    .diagram-box.highlight {
+      border-color: #58a6ff;
+      box-shadow: 0 0 20px rgba(88,166,255,0.15);
+    }
+    .diagram-box h4 { font-size: 1rem; margin-bottom: 0.3rem; }
+    .diagram-box p { color: #8b949e; font-size: 0.85rem; }
+    .diagram-arrow {
+      font-size: 1.8rem;
+      color: #58a6ff;
+      padding: 0 0.8rem;
+      flex-shrink: 0;
+    }
+
+    /* Table styles */
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #30363d;
+      font-size: 0.95rem;
+    }
+    th { color: #8b949e; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { color: #e6edf3; }
+    tr:hover td { background: rgba(88,166,255,0.04); }
+
+    /* UI mockup */
+    .vscode-mockup {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    .vscode-titlebar {
+      background: #0d1117;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid #30363d;
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+    .vscode-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .vscode-body { display: flex; min-height: 360px; }
+    .vscode-sidebar {
+      width: 280px;
+      border-right: 1px solid #30363d;
+      padding: 1rem;
+      flex-shrink: 0;
+    }
+    .vscode-editor { flex: 1; padding: 1rem; position: relative; }
+    .vscode-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+    .label-blue { background: rgba(88,166,255,0.2); color: #58a6ff; }
+    .label-green { background: rgba(63,185,80,0.2); color: #3fb950; }
+    .label-yellow { background: rgba(210,153,34,0.2); color: #d29922; }
+    .ghost-text { color: #484f58; font-style: italic; }
+    .editor-line {
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      color: #e6edf3;
+    }
+    .editor-line .keyword { color: #ff7b72; }
+    .editor-line .func { color: #d2a8ff; }
+    .editor-line .string { color: #a5d6ff; }
+    .editor-line .comment { color: #8b949e; }
+    .chat-bubble {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .chat-bubble.user { border-left: 3px solid #58a6ff; }
+    .chat-bubble.copilot { border-left: 3px solid #3fb950; }
+    .model-picker {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #e6edf3;
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+    }
+    .model-picker .chevron { color: #8b949e; font-size: 0.7rem; }
+
+    @media (max-width: 900px) {
+      body { padding: 1rem; }
+      h1 { font-size: 2rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .diagram { flex-direction: column; }
+      .diagram-arrow { transform: rotate(90deg); padding: 0.3rem 0; }
+      .vscode-body { flex-direction: column; }
+      .vscode-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #30363d; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="agenda.html" class="back-link">← Back to Agenda</a>
+
+  <h1>How Copilot Works Inside VS Code</h1>
+  <p class="subtitle">Understanding the three interaction modes, context system, and model selection</p>
+
+  <!-- Section 1: Three Interaction Modes -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">1</span> The Three Interaction Modes</h2>
+    <div class="card-grid">
+      <div class="card" style="border-top: 3px solid #58a6ff;">
+        <h3><span class="icon">⌨️</span> Inline Completions <span class="badge badge-blue">Fastest</span></h3>
+        <p>Ghost text appears as you type — just press <code>Tab</code> to accept.</p>
+        <ul>
+          <li>Suggests whole lines or blocks of code</li>
+          <li>Context drawn from <strong>open files</strong> and nearby comments</li>
+          <li>Multi-line suggestions for repetitive patterns</li>
+          <li>Press <code>Esc</code> to dismiss, <code>Alt+]</code> to cycle alternatives</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 3px solid #3fb950;">
+        <h3><span class="icon">💬</span> Copilot Chat Panel <span class="badge badge-green">Conversational</span></h3>
+        <p>Ask questions, get explanations, and request code changes in natural language.</p>
+        <ul>
+          <li><code>/explain</code> — explain selected code</li>
+          <li><code>/fix</code> — fix bugs in selection</li>
+          <li><code>/tests</code> — generate unit tests</li>
+          <li><code>/doc</code> — add documentation</li>
+          <li><code>@workspace</code> — ask project-wide questions</li>
+          <li>Multi-turn conversations with context memory</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 3px solid #d29922;">
+        <h3><span class="icon">🤖</span> Agent Mode <span class="badge badge-yellow">Autonomous</span></h3>
+        <p>Copilot plans, executes, and self-corrects across your entire project.</p>
+        <ul>
+          <li>Multi-file edits in one session</li>
+          <li>Runs terminal commands (build, test, lint)</li>
+          <li>Iterative loop: <strong>Plan → Execute → Verify → Self-correct</strong></li>
+          <li>Reviews its own output and fixes errors</li>
+          <li>Toggle via the Agent Mode button in Chat</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: How Context Works -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">2</span> How Context Works</h2>
+    <div class="diagram">
+      <div class="diagram-box">
+        <h4>📂 Your Code</h4>
+        <p>Open files, selections,<br><code>#file</code> references,<br><code>@workspace</code> index</p>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box highlight">
+        <h4>📦 Context Window</h4>
+        <p>Assembled &amp; prioritized<br>snippets sent to the model<br>(token-limited)</p>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box">
+        <h4>🧠 Model</h4>
+        <p>Claude, GPT, Gemini<br>processes context &amp;<br>generates response</p>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box">
+        <h4>✨ Response</h4>
+        <p>Code suggestions,<br>explanations, edits,<br>terminal commands</p>
+      </div>
+    </div>
+    <div class="card" style="max-width: 800px; margin: 0 auto;">
+      <h3>What feeds the context window?</h3>
+      <table>
+        <tr><th>Source</th><th>How It Works</th></tr>
+        <tr><td>Currently open file</td><td>Highest priority — code near your cursor is always included</td></tr>
+        <tr><td>Other open tabs</td><td>Related files provide supporting context automatically</td></tr>
+        <tr><td>Selected code</td><td>Highlighted code in editor is sent as primary context</td></tr>
+        <tr><td><code>#file:path</code></td><td>Explicitly attach a file to your chat message</td></tr>
+        <tr><td><code>@workspace</code></td><td>Indexes your entire project for broad, project-wide answers</td></tr>
+        <tr><td>Conversation history</td><td>Previous turns in multi-turn chat provide continuity</td></tr>
+      </table>
+    </div>
+    <div class="callout green" style="max-width: 800px; margin: 1rem auto 0;">
+      <strong>💡 Better context = better output.</strong> The more relevant code Copilot can see, the more accurate and useful its suggestions. Use <code>#file</code> and <code>@workspace</code> liberally!
+    </div>
+  </div>
+
+  <!-- Section 3: Model Selection -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">3</span> Model Selection</h2>
+    <div class="card">
+      <h3>Available Models in VS Code</h3>
+      <table>
+        <tr>
+          <th>Model</th>
+          <th>Provider</th>
+          <th>Best For</th>
+          <th>Speed</th>
+        </tr>
+        <tr>
+          <td><strong>Claude Sonnet 4.x</strong></td>
+          <td>Anthropic</td>
+          <td>Great all-rounder, excellent code quality</td>
+          <td><span class="badge badge-green">Fast</span></td>
+        </tr>
+        <tr>
+          <td><strong>Claude Opus 4.5 / 4.6</strong></td>
+          <td>Anthropic</td>
+          <td>Complex reasoning, architecture decisions</td>
+          <td><span class="badge badge-yellow">Medium</span></td>
+        </tr>
+        <tr>
+          <td><strong>GPT-5.x</strong></td>
+          <td>OpenAI</td>
+          <td>Versatile, strong at many tasks</td>
+          <td><span class="badge badge-green">Fast</span></td>
+        </tr>
+        <tr>
+          <td><strong>GPT-5 mini</strong></td>
+          <td>OpenAI</td>
+          <td>Quick tasks, included model (free)</td>
+          <td><span class="badge badge-blue">Very Fast</span></td>
+        </tr>
+        <tr>
+          <td><strong>Gemini 3 Pro</strong></td>
+          <td>Google</td>
+          <td>Large context window, multimodal</td>
+          <td><span class="badge badge-green">Fast</span></td>
+        </tr>
+      </table>
+    </div>
+    <div class="card-grid" style="margin-top: 1.2rem;">
+      <div class="card">
+        <h3>🔄 Auto Selection</h3>
+        <p>Select <strong>"Auto"</strong> in the model picker and Copilot chooses the best model for each request. You also get a <strong>10% discount</strong> on premium request costs.</p>
+      </div>
+      <div class="card">
+        <h3>🎯 Manual Selection</h3>
+        <p>Click the <strong>model picker</strong> dropdown at the bottom of the Chat panel to manually choose a specific model for specialized tasks.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: The VS Code UI -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">4</span> The VS Code UI</h2>
+    <div class="vscode-mockup">
+      <div class="vscode-titlebar">
+        <span class="vscode-dot" style="background:#f85149;"></span>
+        <span class="vscode-dot" style="background:#d29922;"></span>
+        <span class="vscode-dot" style="background:#3fb950;"></span>
+        <span style="margin-left: 0.5rem;">Visual Studio Code — my-project</span>
+      </div>
+      <div class="vscode-body">
+        <div class="vscode-sidebar">
+          <div class="vscode-label label-green">Chat Panel (Sidebar)</div>
+          <div class="chat-bubble user"><strong>You:</strong> How do I add auth to this API?</div>
+          <div class="chat-bubble copilot"><strong>Copilot:</strong> I'll help you add JWT authentication. Here's the approach...</div>
+          <div class="chat-bubble user"><strong>You:</strong> @workspace Where is the middleware defined?</div>
+          <div class="chat-bubble copilot"><strong>Copilot:</strong> The middleware is in <code>src/middleware/</code>...</div>
+          <div style="margin-top: 1rem;">
+            <div class="vscode-label label-yellow">Agent Mode Toggle</div>
+            <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 0.4rem 0.7rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span style="color: #8b949e;">Mode:</span>
+              <span style="background: #d29922; color: #0d1117; padding: 0.1rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Agent</span>
+              <span style="color: #484f58; padding: 0.1rem 0.5rem; font-size: 0.75rem;">Chat</span>
+            </div>
+          </div>
+        </div>
+        <div class="vscode-editor">
+          <div class="vscode-label label-blue">Editor with Inline Suggestions</div>
+          <div class="editor-line"><span class="keyword">async function</span> <span class="func">getUserById</span>(id: string) {</div>
+          <div class="editor-line">&nbsp;&nbsp;<span class="keyword">const</span> user = <span class="keyword">await</span> db.users.findUnique({</div>
+          <div class="editor-line">&nbsp;&nbsp;&nbsp;&nbsp;where: { id },</div>
+          <div class="editor-line">&nbsp;&nbsp;});</div>
+          <div class="editor-line ghost-text">&nbsp;&nbsp;if (!user) {</div>
+          <div class="editor-line ghost-text">&nbsp;&nbsp;&nbsp;&nbsp;throw new NotFoundError(`User ${id} not found`);</div>
+          <div class="editor-line ghost-text">&nbsp;&nbsp;}</div>
+          <div class="editor-line ghost-text">&nbsp;&nbsp;return user;</div>
+          <div class="editor-line">}</div>
+          <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #484f58;">
+            ↑ <span style="color: #8b949e;">Ghost text</span> — press <code style="border: none; background: none; color: #58a6ff;">Tab</code> to accept
+          </div>
+          <div class="model-picker">
+            <div class="vscode-label label-yellow" style="margin-bottom: 0; margin-right: 0.3rem;">Model Picker</div>
+            🤖 Claude Sonnet 4 <span class="chevron">▼</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

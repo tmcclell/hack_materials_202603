@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Squad: AI Agent Teams</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            padding: 2rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            color: #8b949e;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #58a6ff; text-decoration: none; }
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .duration {
+            display: inline-block;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 20px;
+            padding: 0.25rem 0.85rem;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+        .key-message {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #58a6ff;
+        }
+        .key-message .label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #58a6ff;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .key-message .message {
+            font-size: 1.15rem;
+            font-weight: 500;
+            font-style: italic;
+        }
+        .section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-header {
+            border-left: 4px solid #58a6ff;
+            padding-left: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .section-header.green { border-left-color: #3fb950; }
+        .section-header.yellow { border-left-color: #d29922; }
+        .section-header.red { border-left-color: #f85149; }
+        .section-header h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+        .section-header p {
+            font-size: 0.9rem;
+            color: #8b949e;
+            margin-top: 0.25rem;
+        }
+        .talking-points {
+            list-style: none;
+            padding: 0;
+        }
+        .talking-points li {
+            position: relative;
+            padding: 0.6rem 0 0.6rem 1.75rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .talking-points li:last-child { border-bottom: none; }
+        .talking-points li::before {
+            content: '▸';
+            position: absolute;
+            left: 0.25rem;
+            color: #58a6ff;
+            font-weight: 700;
+        }
+        .talking-points li.green::before { color: #3fb950; }
+        .talking-points li.yellow::before { color: #d29922; }
+        .talking-points li.red::before { color: #f85149; }
+        code {
+            background: #21262d;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #f0883e;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.75rem;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            text-align: left;
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .comparison-table th {
+            color: #8b949e;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .comparison-table td { font-size: 0.95rem; }
+        .alpha-badge {
+            display: inline-block;
+            background: #f8514922;
+            color: #f85149;
+            border: 1px solid #f8514944;
+            border-radius: 6px;
+            padding: 0.15rem 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .qa-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-top: 2rem;
+        }
+        .qa-section h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            border-left: 4px solid #d29922;
+            padding-left: 1rem;
+        }
+        .qa-item {
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .qa-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .qa-item .question {
+            font-weight: 600;
+            color: #d29922;
+            margin-bottom: 0.35rem;
+        }
+        .qa-item .answer {
+            color: #b1bac4;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .qa-item .answer::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #3fb950;
+        }
+    </style>
+</head>
+<body>
+    <a href="../agenda.html" class="back-link">← Back to Agenda</a>
+
+    <div class="page-header">
+        <h1>Squad: AI Agent Teams <span class="alpha-badge">Alpha</span></h1>
+        <span class="duration">⏱ Referenced from Autonomous Copilot section</span>
+    </div>
+
+    <div class="key-message">
+        <div class="label">🎯 Key Message</div>
+        <div class="message">"Squad gives you an AI development team — each member runs in its own context, shares decisions, and persists across sessions."</div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h2>What is Squad?</h2>
+            <p>Open-source project by Brady Gaster — <a href="https://github.com/bradygaster/squad" target="_blank">github.com/bradygaster/squad</a></p>
+        </div>
+        <ul class="talking-points">
+            <li>"AI agent teams for any project. One command. A team that grows with your code."</li>
+            <li>Each team member (frontend, backend, tester, lead) runs in its own context</li>
+            <li>Parallel execution — multiple agents work simultaneously</li>
+            <li>Session persistence — crashes resume from checkpoint</li>
+            <li>Decision logging — every decision recorded in <code>.squad/decisions.md</code></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header green">
+            <h2>How It Works</h2>
+        </div>
+        <ul class="talking-points">
+            <li class="green"><code>npm install -g @bradygaster/squad-cli</code></li>
+            <li class="green"><code>squad init</code> → creates <code>.squad/team.md</code></li>
+            <li class="green">Talk to agents: <code>@Keaton, analyze the architecture</code> or <code>Build the login page</code></li>
+            <li class="green">Coordinator routes to right agents</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-header yellow">
+            <h2>Pattern Comparison</h2>
+        </div>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Pattern</th>
+                    <th>Agents</th>
+                    <th>Mode</th>
+                    <th>Style</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Single Copilot Agent</td>
+                    <td>One</td>
+                    <td>One task</td>
+                    <td>Interactive</td>
+                </tr>
+                <tr>
+                    <td>Autopilot</td>
+                    <td>One</td>
+                    <td>Autonomous</td>
+                    <td>End-to-end</td>
+                </tr>
+                <tr>
+                    <td><strong>Squad</strong></td>
+                    <td><strong>Multiple specialized</strong></td>
+                    <td><strong>Coordinated</strong></td>
+                    <td><strong>Persistent</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-header red">
+            <h2>⚠️ Alpha Software</h2>
+        </div>
+        <ul class="talking-points">
+            <li class="red">Experimental — APIs may change</li>
+            <li class="red">Great for exploration and prototyping, not production dependencies</li>
+        </ul>
+    </div>
+
+    <div class="qa-section">
+        <h2>❓ Anticipated Questions</h2>
+
+        <div class="qa-item">
+            <div class="question">"Can we use this today?"</div>
+            <div class="answer">Yes, it's on npm, but alpha — experiment, don't depend on it</div>
+        </div>
+
+        <div class="qa-item">
+            <div class="question">"Does it work with VS Code?"</div>
+            <div class="answer">Yes, through Copilot agent selection</div>
+        </div>
+
+        <div class="qa-item">
+            <div class="question">"How is this different from just opening multiple chat windows?"</div>
+            <div class="answer">Persistent context, shared decisions, specialized roles</div>
+        </div>
+    </div>
+</body>
+</html>

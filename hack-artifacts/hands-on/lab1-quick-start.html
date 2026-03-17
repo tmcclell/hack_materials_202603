@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 1: Quick Start</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0d1117; color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7; padding: 2rem; max-width: 900px; margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link { display: inline-block; margin-bottom: 2rem; font-size: 0.95rem; }
+        .lab-header {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+            padding: 2rem; margin-bottom: 2rem;
+        }
+        .lab-header h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; }
+        .badge {
+            display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600;
+        }
+        .badge-time { background: rgba(88,166,255,0.15); color: #58a6ff; }
+        .badge-level { background: rgba(63,185,80,0.15); color: #3fb950; }
+        .goal {
+            background: rgba(88,166,255,0.08); border-left: 3px solid #58a6ff;
+            padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+        .step-card {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+            padding: 1.75rem; margin-bottom: 1.5rem;
+        }
+        .step-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .step-number {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #58a6ff; color: #0d1117; display: flex;
+            align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1rem; flex-shrink: 0;
+        }
+        .step-header h2 { font-size: 1.2rem; }
+        .step-card ul { margin: 0.75rem 0 0.75rem 1.5rem; }
+        .step-card li { margin-bottom: 0.4rem; }
+        pre {
+            background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+            padding: 1rem 1.25rem; overflow-x: auto; margin: 0.75rem 0;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem; line-height: 1.6;
+        }
+        code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 0.9rem; }
+        :not(pre) > code {
+            background: rgba(110,118,129,0.2); padding: 0.15rem 0.4rem; border-radius: 4px;
+        }
+        .expected {
+            background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.3);
+            border-radius: 8px; padding: 0.85rem 1.1rem; margin: 0.75rem 0;
+        }
+        .expected::before { content: '✅ Expected Result: '; font-weight: 600; color: #3fb950; }
+        .troubleshoot {
+            background: rgba(210,153,34,0.08); border: 1px solid rgba(210,153,34,0.3);
+            border-radius: 8px; padding: 0.85rem 1.1rem; margin: 0.75rem 0;
+        }
+        .troubleshoot::before { content: '🆘 Stuck? Try this: '; font-weight: 600; color: #d29922; }
+        .stretch {
+            background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.3);
+            border-radius: 12px; padding: 1.5rem; margin-top: 2rem;
+        }
+        .stretch h3 { color: #58a6ff; margin-bottom: 0.5rem; }
+        kbd {
+            background: #21262d; border: 1px solid #30363d; border-radius: 4px;
+            padding: 0.1rem 0.45rem; font-size: 0.85rem; font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<a href="../" class="back-link">← Back to Agenda</a>
+
+<div class="lab-header">
+    <h1>🚀 Lab 1: Quick Start</h1>
+    <p>Verify Copilot is active and experience the three core interaction modes.</p>
+    <div class="meta">
+        <span class="badge badge-time">⏱ 10 minutes</span>
+        <span class="badge badge-level">🟢 Beginner</span>
+    </div>
+</div>
+
+<div class="goal">
+    <strong>Goal:</strong> Verify Copilot is active and experience the three core interaction modes — inline completions, Chat, and the model picker.
+</div>
+
+<!-- Step 1 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">1</div>
+        <h2>Verify Copilot is Active</h2>
+    </div>
+    <ul>
+        <li>Open <strong>VS Code</strong></li>
+        <li>Check for the <strong>Copilot icon</strong> in the status bar (bottom-right)</li>
+        <li>Open the Copilot Chat panel: press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> or click the chat icon</li>
+        <li>Type the following into Chat:</li>
+    </ul>
+    <pre>Hello, are you working?</pre>
+    <ul>
+        <li>Verify you get a conversational response</li>
+    </ul>
+    <div class="expected">Copilot responds conversationally, confirming it's active and ready to help.</div>
+    <div class="troubleshoot">If you don't see the Copilot icon, make sure the GitHub Copilot extension is installed and you're signed in. Try <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → "GitHub Copilot: Sign In".</div>
+</div>
+
+<!-- Step 2 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">2</div>
+        <h2>Inline Completions</h2>
+    </div>
+    <ul>
+        <li>Create a new file called <code>hello.ts</code></li>
+        <li>Type the following comment on the first line:</li>
+    </ul>
+    <pre>// Function that greets a user by name and returns the greeting</pre>
+    <ul>
+        <li>Press <kbd>Enter</kbd> and start typing:</li>
+    </ul>
+    <pre>function greet</pre>
+    <ul>
+        <li>Wait for <strong>ghost text</strong> to appear (dimmed suggestion)</li>
+        <li>Press <kbd>Tab</kbd> to accept the completion</li>
+    </ul>
+    <div class="expected">Copilot completes the function — something like <code>function greetUser(name: string): string { return `Hello, ${name}!`; }</code></div>
+    <div class="troubleshoot">No ghost text? Make sure the file is saved as <code>.ts</code> (TypeScript). Try typing a bit more of the function signature to trigger the suggestion. You can also press <kbd>Ctrl</kbd>+<kbd>Space</kbd> to manually trigger suggestions.</div>
+</div>
+
+<!-- Step 3 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">3</div>
+        <h2>Chat: Explain Code</h2>
+    </div>
+    <ul>
+        <li><strong>Select</strong> the entire function you just created</li>
+        <li>Open Chat (if not already open)</li>
+        <li>Type:</li>
+    </ul>
+    <pre>/explain</pre>
+    <ul>
+        <li>Read the explanation Copilot provides</li>
+    </ul>
+    <div class="expected">Copilot explains what the function does — its purpose, parameters, return value, and any logic inside.</div>
+    <div class="troubleshoot">Make sure you have the code <em>selected</em> (highlighted) before running <code>/explain</code>. If Chat says it doesn't understand, try selecting the code and using "Explain This" from the right-click context menu instead.</div>
+</div>
+
+<!-- Step 4 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">4</div>
+        <h2>Check Your Model</h2>
+    </div>
+    <ul>
+        <li>Look at the <strong>model picker</strong> in the Chat panel (usually at the top or bottom of the chat input)</li>
+        <li>Note which model is currently selected (likely <strong>"Auto"</strong>)</li>
+        <li>Click it and try switching to a different model — notice the dropdown options</li>
+        <li>Switch back to <strong>Auto</strong> (recommended for the 10% discount!)</li>
+    </ul>
+    <div class="expected">You can see and switch between available models. "Auto" is the recommended default.</div>
+    <div class="troubleshoot">If you don't see the model picker, make sure you're using the latest version of the GitHub Copilot Chat extension. Update via <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> → search "GitHub Copilot Chat" → Update.</div>
+</div>
+
+<!-- Stretch Goal -->
+<div class="stretch">
+    <h3>🚀 Finished Early?</h3>
+    <p>Try workspace-level context! In Chat, type:</p>
+    <pre>@workspace What files are in this project?</pre>
+    <p>This shows Copilot can see your entire project structure, not just the open file. It's a great way to orient yourself (and Copilot) in a new codebase.</p>
+</div>
+
+</body>
+</html>

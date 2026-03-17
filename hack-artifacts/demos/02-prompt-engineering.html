@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo: Prompt Engineering + Chat Deep Dive</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      line-height: 1.7;
+      padding: 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .back-link:hover {
+      opacity: 1;
+    }
+
+    /* Header */
+    .demo-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 2.5rem 2rem;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .demo-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #58a6ff, #3fb950, #d29922);
+    }
+
+    .demo-header .topic-badge {
+      display: inline-block;
+      background: rgba(88, 166, 255, 0.15);
+      color: #58a6ff;
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .demo-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #e6edf3;
+    }
+
+    .demo-header .duration {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 1rem;
+      color: #8b949e;
+      background: rgba(139, 148, 158, 0.1);
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 0.35rem 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Setup section */
+    .setup-section {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.8rem 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .setup-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #e6edf3;
+    }
+
+    .setup-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .setup-section ul li {
+      position: relative;
+      padding: 0.5rem 0 0.5rem 1.8rem;
+      color: #c9d1d9;
+    }
+
+    .setup-section ul li::before {
+      content: '✅';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+    }
+
+    /* Step cards */
+    .step-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2rem 2rem 2rem 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step-number-bg {
+      position: absolute;
+      top: -0.2rem;
+      right: 1rem;
+      font-size: 8rem;
+      font-weight: 900;
+      color: rgba(88, 166, 255, 0.06);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .step-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.3rem;
+      position: relative;
+    }
+
+    .step-card .step-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #58a6ff;
+      margin-bottom: 0.4rem;
+    }
+
+    .step-card .step-location {
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin-bottom: 1.2rem;
+    }
+
+    /* Say callout */
+    .callout-say {
+      background: rgba(88, 166, 255, 0.08);
+      border-left: 4px solid #58a6ff;
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .callout-say .callout-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #58a6ff;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.3rem;
+    }
+
+    .callout-say p {
+      color: #c9d1d9;
+      font-style: italic;
+      font-size: 0.95rem;
+    }
+
+    /* Type action */
+    .callout-type {
+      margin-bottom: 1rem;
+    }
+
+    .callout-type .callout-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #3fb950;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .callout-type pre {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: #e6edf3;
+    }
+
+    .callout-type .type-note {
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin-top: 0.4rem;
+      font-style: italic;
+    }
+
+    /* What They See */
+    .callout-see {
+      background: rgba(63, 185, 80, 0.07);
+      border: 1px solid rgba(63, 185, 80, 0.25);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .callout-see .callout-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #3fb950;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.3rem;
+    }
+
+    .callout-see p {
+      color: #c9d1d9;
+      font-size: 0.92rem;
+    }
+
+    /* Teaching Point */
+    .callout-teach {
+      background: rgba(210, 153, 34, 0.08);
+      border-left: 4px solid #d29922;
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .callout-teach .callout-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #d29922;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.3rem;
+    }
+
+    .callout-teach p {
+      color: #c9d1d9;
+      font-size: 0.92rem;
+    }
+
+    /* Footer */
+    .demo-footer {
+      text-align: center;
+      color: #484f58;
+      font-size: 0.8rem;
+      padding: 2rem 0 1rem;
+      border-top: 1px solid #21262d;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Back to Agenda -->
+  <a href="../index.html" class="back-link">← Back to Agenda</a>
+
+  <!-- Header -->
+  <header class="demo-header">
+    <div class="topic-badge">🧠 Prompt Techniques &amp; Chat</div>
+    <h1>🎯 Prompt Engineering + Chat Deep Dive</h1>
+    <div class="duration">⏱️ 10 min</div>
+  </header>
+
+  <!-- Setup Section -->
+  <section class="setup-section">
+    <h2>🎬 Setup</h2>
+    <p style="color: #8b949e; margin-bottom: 1rem; font-size: 0.9rem;">Have the following ready before starting the demo:</p>
+    <ul>
+      <li>VS Code open with the <strong>demo-app</strong> project (<code style="background:#0d1117; border:1px solid #30363d; border-radius:4px; padding:0.15rem 0.4rem; font-family:monospace; font-size:0.85rem;">../demo-app/</code> — TypeScript/Express game API)</li>
+      <li>GitHub Copilot <strong>Chat panel</strong> open and visible on the side</li>
+      <li>File <code style="background:#0d1117; border:1px solid #30363d; border-radius:4px; padding:0.15rem 0.4rem; font-family:monospace; font-size:0.85rem;">src/utils/validators.ts</code> open in the editor</li>
+      <li>A fresh Chat thread (clear any previous conversation)</li>
+    </ul>
+  </section>
+
+  <!-- Step 1: Zero-Shot Prompting -->
+  <article class="step-card">
+    <div class="step-number-bg">1</div>
+    <span class="step-label">Step 1</span>
+    <h3>🎯 Zero-Shot Prompting</h3>
+    <p class="step-location">📍 In Copilot Chat panel</p>
+
+    <div class="callout-say">
+      <div class="callout-label">💬 Say:</div>
+      <p>"Let's start with the simplest kind of prompt — just ask for what you want."</p>
+    </div>
+
+    <div class="callout-type">
+      <div class="callout-label">⌨️ Type:</div>
+      <pre>Create a function that validates an emoji is a single Unicode emoji character</pre>
+    </div>
+
+    <div class="callout-see">
+      <div class="callout-label">👀 What They See:</div>
+      <p>Copilot generates a function using regex or Unicode checks — works but may miss edge cases like compound emojis or zero-width joiners.</p>
+    </div>
+
+    <div class="callout-teach">
+      <div class="callout-label">💡 Teaching Point:</div>
+      <p>Simple prompt, decent result — but notice it may miss edge cases. We can do better.</p>
+    </div>
+  </article>
+
+  <!-- Step 2: Few-Shot Prompting -->
+  <article class="step-card">
+    <div class="step-number-bg">2</div>
+    <span class="step-label">Step 2</span>
+    <h3>🎯 Few-Shot Prompting</h3>
+    <p class="step-location">📍 In Copilot Chat panel</p>
+
+    <div class="callout-say">
+      <div class="callout-label">💬 Say:</div>
+      <p>"Now watch what happens when we give examples."</p>
+    </div>
+
+    <div class="callout-type">
+      <div class="callout-label">⌨️ Type:</div>
+      <pre>Create a function that validates an emoji.
+Here are examples:
+  ✅ Valid: 🔥, ⚡, 🛡️
+  ❌ Invalid: 'fire', '🔥🔥', '', 'ab'</pre>
+    </div>
+
+    <div class="callout-see">
+      <div class="callout-label">👀 What They See:</div>
+      <p>Copilot generates a more robust function that handles the specific cases shown — much better coverage, often with explicit test-like logic for the examples provided.</p>
+    </div>
+
+    <div class="callout-teach">
+      <div class="callout-label">💡 Teaching Point:</div>
+      <p>Examples dramatically improve accuracy. A few concrete examples are worth a thousand words of description.</p>
+    </div>
+  </article>
+
+  <!-- Step 3: Comment Anchors -->
+  <article class="step-card">
+    <div class="step-number-bg">3</div>
+    <span class="step-label">Step 3</span>
+    <h3>📝 Comment Anchors</h3>
+    <p class="step-location">📍 In <code style="background:#0d1117; border:1px solid #30363d; border-radius:4px; padding:0.1rem 0.35rem; font-family:monospace; font-size:0.82rem;">src/utils/validators.ts</code> — above the <code style="background:#0d1117; border:1px solid #30363d; border-radius:4px; padding:0.1rem 0.35rem; font-family:monospace; font-size:0.82rem;">sanitizeInput</code> function</p>
+
+    <div class="callout-say">
+      <div class="callout-label">💬 Say:</div>
+      <p>"You don't always need the Chat panel. Detailed comments guide Copilot too."</p>
+    </div>
+
+    <div class="callout-type">
+      <div class="callout-label">⌨️ Type:</div>
+      <pre>// Sanitize input: trim whitespace, remove HTML tags
+// using regex, escape &amp;, &lt;, &gt;, ", ' characters.
+// Return the cleaned string.</pre>
+      <p class="type-note">Press Enter after the comment and let Copilot autocomplete the function body.</p>
+    </div>
+
+    <div class="callout-see">
+      <div class="callout-label">👀 What They See:</div>
+      <p>Ghost text appears implementing exactly what the comment describes — trim, regex strip tags, character escaping. The implementation follows the comment step-by-step.</p>
+    </div>
+
+    <div class="callout-teach">
+      <div class="callout-label">💡 Teaching Point:</div>
+      <p>Detailed comments = better completions. Think of comments as prompts that live in your code and help future developers <em>and</em> Copilot.</p>
+    </div>
+  </article>
+
+  <!-- Step 4: #file References -->
+  <article class="step-card">
+    <div class="step-number-bg">4</div>
+    <span class="step-label">Step 4</span>
+    <h3>📁 #file References</h3>
+    <p class="step-location">📍 In Copilot Chat panel</p>
+
+    <div class="callout-say">
+      <div class="callout-label">💬 Say:</div>
+      <p>"What if you want Copilot to follow YOUR code patterns? Use #file references."</p>
+    </div>
+
+    <div class="callout-type">
+      <div class="callout-label">⌨️ Type:</div>
+      <pre>Using the patterns from #file:src/services/fighterService.ts, create a PowerUpService with the same structure</pre>
+    </div>
+
+    <div class="callout-see">
+      <div class="callout-label">👀 What They See:</div>
+      <p>Generated service matches the existing pattern — same error handling, same response structure, same coding style. It's like having Copilot read your team's playbook.</p>
+    </div>
+
+    <div class="callout-teach">
+      <div class="callout-label">💡 Teaching Point:</div>
+      <p><code style="background:#0d1117; border:1px solid #30363d; border-radius:4px; padding:0.1rem 0.35rem; font-family:monospace; font-size:0.85rem;">#file</code> gives Copilot specific context from your codebase. It's the difference between generic code and code that fits <em>your</em> project.</p>
+    </div>
+  </article>
+
+  <!-- Step 5: Multi-turn Conversation -->
+  <article class="step-card">
+    <div class="step-number-bg">5</div>
+    <span class="step-label">Step 5</span>
+    <h3>🔄 Multi-turn Conversation</h3>
+    <p class="step-location">📍 Continue in the <strong>same</strong> Chat thread</p>
+
+    <div class="callout-say">
+      <div class="callout-label">💬 Say:</div>
+      <p>"Chat remembers context. We can iterate on the same conversation."</p>
+    </div>
+
+    <div class="callout-type">
+      <div class="callout-label">⌨️ Type:</div>
+      <pre>Now add a method to apply a power-up to a fighter, modifying their stats temporarily</pre>
+    </div>
+
+    <div class="callout-type" style="margin-top: 0.5rem;">
+      <div class="callout-label">⌨️ Then Type:</div>
+      <pre>What edge cases should I handle?</pre>
+    </div>
+
+    <div class="callout-see">
+      <div class="callout-label">👀 What They See:</div>
+      <p>Copilot builds on the previous PowerUpService, adds the method, then lists edge cases like expired power-ups, stat stacking limits, invalid fighter IDs, and concurrent modifications.</p>
+    </div>
+
+    <div class="callout-teach">
+      <div class="callout-label">💡 Teaching Point:</div>
+      <p>Multi-turn conversations build context — each message makes the next one smarter. Think of Chat as a pair programmer who remembers the whole conversation.</p>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="demo-footer">
+    <p>🎯 Prompt Engineering + Chat Deep Dive — Instructor Demo Script</p>
+  </footer>
+
+</body>
+</html>

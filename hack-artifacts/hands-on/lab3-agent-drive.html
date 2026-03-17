@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 3: Let the Agent Drive</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0d1117; color: #e6edf3;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.7; padding: 2rem; max-width: 900px; margin: 0 auto;
+        }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .back-link { display: inline-block; margin-bottom: 2rem; font-size: 0.95rem; }
+        .lab-header {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+            padding: 2rem; margin-bottom: 2rem;
+        }
+        .lab-header h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; }
+        .badge {
+            display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600;
+        }
+        .badge-time { background: rgba(88,166,255,0.15); color: #58a6ff; }
+        .badge-level { background: rgba(210,153,34,0.15); color: #d29922; }
+        .goal {
+            background: rgba(88,166,255,0.08); border-left: 3px solid #58a6ff;
+            padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+        .step-card {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+            padding: 1.75rem; margin-bottom: 1.5rem;
+        }
+        .step-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .step-number {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #d29922; color: #0d1117; display: flex;
+            align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1rem; flex-shrink: 0;
+        }
+        .step-header h2 { font-size: 1.2rem; }
+        .step-card ul { margin: 0.75rem 0 0.75rem 1.5rem; }
+        .step-card li { margin-bottom: 0.4rem; }
+        pre {
+            background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+            padding: 1rem 1.25rem; overflow-x: auto; margin: 0.75rem 0;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem; line-height: 1.6;
+        }
+        code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 0.9rem; }
+        :not(pre) > code {
+            background: rgba(110,118,129,0.2); padding: 0.15rem 0.4rem; border-radius: 4px;
+        }
+        .expected {
+            background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.3);
+            border-radius: 8px; padding: 0.85rem 1.1rem; margin: 0.75rem 0;
+        }
+        .expected::before { content: '✅ Expected Result: '; font-weight: 600; color: #3fb950; }
+        .troubleshoot {
+            background: rgba(210,153,34,0.08); border: 1px solid rgba(210,153,34,0.3);
+            border-radius: 8px; padding: 0.85rem 1.1rem; margin: 0.75rem 0;
+        }
+        .troubleshoot::before { content: '🆘 Stuck? Try this: '; font-weight: 600; color: #d29922; }
+        .stretch {
+            background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.3);
+            border-radius: 12px; padding: 1.5rem; margin-top: 2rem;
+        }
+        .stretch h3 { color: #58a6ff; margin-bottom: 0.5rem; }
+        .callout {
+            background: rgba(248,81,73,0.08); border: 1px solid rgba(248,81,73,0.3);
+            border-radius: 8px; padding: 0.85rem 1.1rem; margin: 0.75rem 0;
+        }
+        .callout strong { color: #f85149; }
+        kbd {
+            background: #21262d; border: 1px solid #30363d; border-radius: 4px;
+            padding: 0.1rem 0.45rem; font-size: 0.85rem; font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<a href="../" class="back-link">← Back to Agenda</a>
+
+<div class="lab-header">
+    <h1>🤖 Lab 3: Let the Agent Drive</h1>
+    <p>Experience Agent Mode building a multi-file feature from plain English.</p>
+    <div class="meta">
+        <span class="badge badge-time">⏱ 25 minutes</span>
+        <span class="badge badge-level">🟡 Intermediate</span>
+    </div>
+</div>
+
+<div class="goal">
+    <strong>Goal:</strong> Experience Agent Mode building a multi-file feature from a single plain-English prompt. Watch Copilot plan, create files, run commands, and self-correct.
+</div>
+
+<!-- Step 1 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">1</div>
+        <h2>Enable Agent Mode</h2>
+    </div>
+    <ul>
+        <li>Open Copilot Chat</li>
+        <li>Look for the <strong>mode selector</strong> at the top of the chat input — you'll see options like <strong>Ask</strong>, <strong>Edit</strong>, and <strong>Agent</strong></li>
+        <li>Switch to <strong>"Agent"</strong> mode</li>
+    </ul>
+    <div class="callout">
+        <strong>⚠️ Key difference:</strong> Unlike Ask or Edit mode, Agent mode can <em>create files</em>, <em>run terminal commands</em>, and <em>iterate on its own work</em>. It will ask for your confirmation before executing commands.
+    </div>
+    <div class="expected">The mode selector shows "Agent" and the chat input may show a slightly different UI indicating agent capabilities.</div>
+    <div class="troubleshoot">If you don't see the Agent option, check that you're on the latest Copilot Chat extension. The mode selector is usually a dropdown or toggle near the chat input area.</div>
+</div>
+
+<!-- Step 2 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">2</div>
+        <h2>Give the Agent a Task</h2>
+    </div>
+    <ul>
+        <li>Type the following prompt into the Agent chat:</li>
+    </ul>
+    <pre>Create a TodoList module with:
+- A TodoItem interface (id, title, completed, createdAt)
+- A TodoService with CRUD operations using an in-memory array
+- A basic Express router at /api/todos
+- Include input validation</pre>
+    <ul>
+        <li>Press <kbd>Enter</kbd> and <strong>watch the agent work</strong></li>
+        <li>It will start creating files, writing code, and may run commands</li>
+        <li>Approve any terminal command prompts when asked</li>
+    </ul>
+    <div class="expected">Multiple files created — likely a model/interface file, a service file, and a routes file. The agent may also create or modify <code>package.json</code> and install Express.</div>
+    <div class="troubleshoot">If the agent seems stuck or asks a clarifying question, answer it and let it continue. If it generates everything in a single file, try: "Can you split this into separate files — one for the interface, one for the service, and one for the routes?"</div>
+</div>
+
+<!-- Step 3 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">3</div>
+        <h2>Watch the Decision-Making</h2>
+    </div>
+    <p>As the agent works, observe its process:</p>
+    <ul>
+        <li>🧠 <strong>Planning:</strong> Does it describe what files it will create?</li>
+        <li>📁 <strong>Order:</strong> Does it create files in a logical sequence (model → service → routes)?</li>
+        <li>🔧 <strong>Tooling:</strong> Does it run the TypeScript compiler or linter to check for errors?</li>
+        <li>🔄 <strong>Self-correction:</strong> If it finds issues, does it fix them automatically?</li>
+    </ul>
+    <div class="expected">The agent shows a clear reasoning process — stating what it plans to do, then executing step by step. You may see it fix import paths or type errors it catches.</div>
+    <div class="troubleshoot">If you're not seeing the reasoning steps, look for a "thinking" or "plan" section in the agent's output. Some models show more verbose reasoning than others — try switching to a different model if you want more detail.</div>
+</div>
+
+<!-- Step 4 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">4</div>
+        <h2>Test the Agent's Work</h2>
+    </div>
+    <ul>
+        <li>In the <em>same</em> Agent conversation, type:</li>
+    </ul>
+    <pre>Now write tests for the TodoService</pre>
+    <ul>
+        <li>Watch the agent:
+            <ul>
+                <li>Create a test file</li>
+                <li>Write test cases for each CRUD operation</li>
+                <li>Potentially run the tests</li>
+                <li>Fix any failures it discovers</li>
+            </ul>
+        </li>
+    </ul>
+    <div class="expected">A test file with tests for creating, reading, updating, and deleting todos. If the agent runs the tests, they should pass (it will fix issues if they don't).</div>
+    <div class="troubleshoot">If the agent doesn't run the tests automatically, ask it: "Run the tests and fix any failures." If there are dependency issues, ask: "Install any missing test dependencies and try again."</div>
+</div>
+
+<!-- Step 5 -->
+<div class="step-card">
+    <div class="step-header">
+        <div class="step-number">5</div>
+        <h2>Review and Reflect</h2>
+    </div>
+    <ul>
+        <li>Read through all the generated code</li>
+        <li>Ask yourself:</li>
+    </ul>
+    <ul>
+        <li>✅ Is the code style consistent across files?</li>
+        <li>✅ Did it follow any <code>copilot-instructions.md</code> you may have set up?</li>
+        <li>✅ Are the imports correct and organized?</li>
+        <li>✅ Is the input validation thorough?</li>
+        <li>❓ What would <em>you</em> change or improve?</li>
+    </ul>
+    <div class="expected">You should have a working multi-file feature with clear separation of concerns, reasonable validation, and passing tests.</div>
+</div>
+
+<!-- Stretch Goal -->
+<div class="stretch">
+    <h3>🚀 Finished Early?</h3>
+    <p>Test a <strong>cross-cutting change</strong>! In the same Agent conversation, type:</p>
+    <pre>Add a priority field (high/medium/low) to TodoItem and update all related code</pre>
+    <p>Watch how the agent handles updating the interface, service logic, route validation, and tests — all from a single prompt. This is where Agent Mode really shines.</p>
+</div>
+
+</body>
+</html>

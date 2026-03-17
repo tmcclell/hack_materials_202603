@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo: Plan Mode — Copilot Hack</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      line-height: 1.7;
+      padding: 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+
+    .back-link:hover {
+      opacity: 1;
+    }
+
+    /* Header */
+    .demo-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 2.5rem 2rem;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .demo-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #58a6ff, #3fb950, #d29922);
+    }
+
+    .demo-header .topic-badge {
+      display: inline-block;
+      background: rgba(88, 166, 255, 0.15);
+      color: #58a6ff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      margin-bottom: 1rem;
+    }
+
+    .demo-header h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .demo-header .duration {
+      font-size: 1.1rem;
+      color: #8b949e;
+    }
+
+    .demo-header .duration strong {
+      color: #3fb950;
+    }
+
+    /* Section headings */
+    .section-heading {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #30363d;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-heading .time-badge {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #3fb950;
+      background: rgba(63, 185, 80, 0.12);
+      border: 1px solid rgba(63, 185, 80, 0.3);
+      padding: 0.2rem 0.65rem;
+      border-radius: 20px;
+      margin-left: auto;
+    }
+
+    /* Section divider */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 3rem 0;
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #30363d, transparent);
+    }
+
+    .section-divider span {
+      color: #8b949e;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    /* Setup box */
+    .setup-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .setup-box h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .setup-box ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .setup-box ul li {
+      padding: 0.4rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      color: #c9d1d9;
+    }
+
+    .setup-box ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #3fb950;
+      font-weight: 700;
+    }
+
+    /* Step cards */
+    .step-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2rem 2rem 1.8rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step-card .step-number-bg {
+      position: absolute;
+      top: -0.15em;
+      right: 0.15em;
+      font-size: 7rem;
+      font-weight: 800;
+      color: #e6edf3;
+      opacity: 0.04;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .step-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .step-card h3 .step-label {
+      display: inline-block;
+      background: rgba(88, 166, 255, 0.15);
+      color: #58a6ff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.6rem;
+      border-radius: 6px;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    /* Sub-items within steps */
+    .step-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0.5rem 0;
+    }
+
+    .step-card ul li {
+      padding: 0.3rem 0 0.3rem 1.2rem;
+      position: relative;
+      color: #c9d1d9;
+    }
+
+    .step-card ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: #484f58;
+    }
+
+    /* Callout boxes */
+    .callout {
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      margin: 0.75rem 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .callout-say {
+      background: rgba(88, 166, 255, 0.08);
+      border-left: 4px solid #58a6ff;
+      color: #c9d1d9;
+    }
+
+    .callout-say .callout-label {
+      color: #58a6ff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .callout-say em {
+      font-style: italic;
+      color: #e6edf3;
+    }
+
+    .callout-type {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      margin: 0.75rem 0;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.9rem;
+      color: #e6edf3;
+      white-space: pre-wrap;
+      word-break: break-word;
+      position: relative;
+    }
+
+    .callout-type .callout-label {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      color: #3fb950;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .callout-see {
+      background: rgba(139, 148, 158, 0.08);
+      border: 1px dashed #484f58;
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      margin: 0.75rem 0;
+      color: #8b949e;
+    }
+
+    .callout-see .callout-label {
+      color: #c9d1d9;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .callout-tip {
+      background: rgba(210, 153, 34, 0.08);
+      border-left: 4px solid #d29922;
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      margin: 0.75rem 0;
+      color: #c9d1d9;
+    }
+
+    .callout-tip .callout-label {
+      color: #d29922;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    /* Autonomy spectrum table */
+    .spectrum-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    .spectrum-table th {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-weight: 700;
+      color: #e6edf3;
+    }
+
+    .spectrum-table th:first-child {
+      border-radius: 8px 0 0 0;
+    }
+
+    .spectrum-table th:last-child {
+      border-radius: 0 8px 0 0;
+    }
+
+    .spectrum-table td {
+      border: 1px solid #30363d;
+      padding: 0.65rem 1rem;
+      color: #c9d1d9;
+      vertical-align: top;
+    }
+
+    .spectrum-table tbody tr:last-child td:first-child {
+      border-radius: 0 0 0 8px;
+    }
+
+    .spectrum-table tbody tr:last-child td:last-child {
+      border-radius: 0 0 8px 0;
+    }
+
+    .spectrum-table .mode-name {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .spectrum-flow {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      margin: 1.5rem 0 1rem;
+      position: relative;
+    }
+
+    .spectrum-flow::after {
+      content: '';
+      position: absolute;
+      bottom: -1.2rem;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #58a6ff, #3fb950, #d29922, #f85149);
+      border-radius: 2px;
+    }
+
+    .spectrum-item {
+      flex: 1;
+      padding: 1rem 0.8rem;
+      text-align: center;
+      border: 1px solid #30363d;
+      position: relative;
+    }
+
+    .spectrum-item:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    .spectrum-item:last-child {
+      border-radius: 0 8px 8px 0;
+    }
+
+    .spectrum-item .mode-icon {
+      font-size: 1.6rem;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .spectrum-item .mode-label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .spectrum-item .mode-desc {
+      font-size: 0.75rem;
+      color: #8b949e;
+      display: block;
+    }
+
+    .spectrum-item.mode-chat {
+      background: rgba(88, 166, 255, 0.08);
+      border-color: rgba(88, 166, 255, 0.3);
+    }
+
+    .spectrum-item.mode-chat .mode-label {
+      color: #58a6ff;
+    }
+
+    .spectrum-item.mode-agent {
+      background: rgba(63, 185, 80, 0.08);
+      border-color: rgba(63, 185, 80, 0.3);
+    }
+
+    .spectrum-item.mode-agent .mode-label {
+      color: #3fb950;
+    }
+
+    .spectrum-item.mode-plan {
+      background: rgba(210, 153, 34, 0.08);
+      border-color: rgba(210, 153, 34, 0.3);
+    }
+
+    .spectrum-item.mode-plan .mode-label {
+      color: #d29922;
+    }
+
+    .spectrum-item.mode-auto {
+      background: rgba(248, 81, 73, 0.08);
+      border-color: rgba(248, 81, 73, 0.3);
+    }
+
+    .spectrum-item.mode-auto .mode-label {
+      color: #f85149;
+    }
+
+    .spectrum-arrow-label {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.8rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.75rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Footer */
+    .demo-footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #21262d;
+      color: #484f58;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Back link -->
+  <a href="../index.html" class="back-link">← Back to Agenda</a>
+
+  <!-- Header -->
+  <header class="demo-header">
+    <div class="topic-badge">🗺️ Agentic Workflows</div>
+    <h1>📋 Plan Mode</h1>
+    <p class="duration">⏱️ Duration: <strong>15 min</strong></p>
+  </header>
+
+  <!-- Setup -->
+  <section class="setup-box">
+    <h2>🎬 Setup</h2>
+    <p style="color:#8b949e; margin-bottom:0.75rem;">Have these ready before you begin:</p>
+    <ul>
+      <li>VS Code open with the <code style="background:#0d1117;border:1px solid #30363d;padding:0.15rem 0.45rem;border-radius:4px;font-family:monospace;font-size:0.9em;">demo-app/</code> project loaded (Emoji Battle Arena — TypeScript/Express)</li>
+      <li>Copilot Chat panel open and visible</li>
+      <li>Plan Mode toggle visible in the Chat panel (mode selector dropdown)</li>
+      <li>No pending unsaved changes in the editor</li>
+      <li>Terminal clear and ready</li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 1: Concept                              -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <h2 class="section-heading">
+    📖 Section 1: Concept
+    <span class="time-badge">5 min</span>
+  </h2>
+
+  <!-- Step 1 -->
+  <article class="step-card">
+    <div class="step-number-bg">1</div>
+    <h3>
+      <span class="step-label">Step 1</span>
+      🤔 What is Plan Mode?
+    </h3>
+
+    <div class="callout callout-say">
+      <span class="callout-label">💬 Say:</span>
+      <em>"Plan Mode is 'trust but verify.' The agent proposes steps, you review and approve before anything executes."</em>
+    </div>
+
+    <ul>
+      <li>Show the Plan Mode toggle in VS Code — click the mode selector in the Chat panel</li>
+      <li>Point out the available modes: Ask, Edit, Agent, and Plan</li>
+    </ul>
+
+    <div class="callout callout-see">
+      <span class="callout-label">👀 What They See:</span>
+      The Plan Mode toggle/checkbox in the Chat panel — a dropdown or mode selector that switches Copilot's behavior from immediate action to plan-first workflow.
+    </div>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">💡 Teaching Point:</span>
+      Explain the autonomy spectrum — there's a range from you doing everything to the agent doing everything. Plan Mode sits right in the sweet spot of supervised autonomy.
+    </div>
+
+    <!-- Autonomy Spectrum Visual -->
+    <div style="margin-top:1.2rem;">
+      <p style="font-weight:600; font-size:0.95rem; margin-bottom:0.75rem; color:#e6edf3;">
+        🔀 The Autonomy Spectrum
+      </p>
+
+      <div class="spectrum-flow">
+        <div class="spectrum-item mode-chat">
+          <span class="mode-icon">💬</span>
+          <span class="mode-label">Chat</span>
+          <span class="mode-desc">You drive</span>
+        </div>
+        <div class="spectrum-item mode-agent">
+          <span class="mode-icon">🤝</span>
+          <span class="mode-label">Agent Mode</span>
+          <span class="mode-desc">You collaborate</span>
+        </div>
+        <div class="spectrum-item mode-plan">
+          <span class="mode-icon">📋</span>
+          <span class="mode-label">Plan Mode</span>
+          <span class="mode-desc">You supervise</span>
+        </div>
+        <div class="spectrum-item mode-auto">
+          <span class="mode-icon">🚀</span>
+          <span class="mode-label">Autopilot</span>
+          <span class="mode-desc">Full autonomy</span>
+        </div>
+      </div>
+
+      <div class="spectrum-arrow-label">
+        <span>← More human control</span>
+        <span>More AI autonomy →</span>
+      </div>
+
+      <table class="spectrum-table">
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Who Decides?</th>
+            <th>Best For</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mode-name" style="color:#58a6ff;">💬 Chat</span></td>
+            <td>You ask, AI answers — no code changes</td>
+            <td>Questions, exploration, learning</td>
+          </tr>
+          <tr>
+            <td><span class="mode-name" style="color:#3fb950;">🤝 Agent Mode</span></td>
+            <td>AI proposes each action, you approve one-by-one</td>
+            <td>Interactive collaboration, unfamiliar code</td>
+          </tr>
+          <tr>
+            <td><span class="mode-name" style="color:#d29922;">📋 Plan Mode</span></td>
+            <td>AI proposes full plan, you approve upfront, then it executes</td>
+            <td>Complex features, team review, oversight</td>
+          </tr>
+          <tr>
+            <td><span class="mode-name" style="color:#f85149;">🚀 Autopilot</span></td>
+            <td>AI decides and executes — full trust</td>
+            <td>Routine tasks, high-confidence changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <!-- Section Divider -->
+  <div class="section-divider">
+    <span>✦ &nbsp; Moving to Live Demo &nbsp; ✦</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 2: Live Demo                            -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <h2 id="live-demo" class="section-heading">
+    🎯 Section 2: Live Demo
+    <span class="time-badge">10 min</span>
+  </h2>
+
+  <!-- Step 2 -->
+  <article class="step-card">
+    <div class="step-number-bg">2</div>
+    <h3>
+      <span class="step-label">Step 2</span>
+      🚀 Start a Plan Mode Task
+    </h3>
+
+    <div class="callout callout-say">
+      <span class="callout-label">💬 Say:</span>
+      <em>"Let's give it a complex feature and see how it plans. We're going to ask Copilot to add a fighter evolution system — XP, leveling, stat bonuses — across multiple files."</em>
+    </div>
+
+    <ul>
+      <li>Enable <strong>Plan Mode</strong> in the Chat panel mode selector</li>
+      <li>Type the following prompt into the Chat input:</li>
+    </ul>
+
+    <div class="callout callout-type">
+      <span class="callout-label">⌨️ Type:</span>
+Refactor the Emoji Battle Arena to add a fighter evolution system. Fighters should gain XP from battles and level up, gaining stat bonuses. Add an evolution method to fighterService, update the battle system to award XP, and create tests.</div>
+
+    <ul>
+      <li>Press <strong>Enter</strong> and wait for the plan to generate</li>
+      <li>Do <strong>NOT</strong> approve yet — let the audience read the plan</li>
+    </ul>
+
+    <div class="callout callout-see">
+      <span class="callout-label">👀 What They See:</span>
+      The agent produces a detailed, numbered plan showing: files to create/modify, what changes go where, and the order of operations. Crucially — <strong>nothing has executed yet</strong>. No files have changed. It's a proposal, not an action.
+    </div>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">💡 Teaching Point:</span>
+      The plan IS the value. Before a single line of code changes, you can review the entire approach, share it with your team, or reject it entirely. This is what makes Plan Mode ideal for complex, multi-file features.
+    </div>
+  </article>
+
+  <!-- Step 3 -->
+  <article class="step-card">
+    <div class="step-number-bg">3</div>
+    <h3>
+      <span class="step-label">Step 3</span>
+      🔍 Review the Plan
+    </h3>
+
+    <div class="callout callout-say">
+      <span class="callout-label">💬 Say:</span>
+      <em>"Look — it's showing us exactly what it will do before doing it. This is perfect for complex features where you want oversight. Let's walk through each step together."</em>
+    </div>
+
+    <ul>
+      <li>Walk through each proposed step with the audience — read them aloud</li>
+      <li>Point out the structure: which files get modified, which get created, the dependency order</li>
+      <li>Now add a constraint — type a follow-up message:</li>
+    </ul>
+
+    <div class="callout callout-type">
+      <span class="callout-label">⌨️ Type:</span>
+Actually, let's cap the max level at 10 and make each level require progressively more XP.</div>
+
+    <div class="callout callout-see">
+      <span class="callout-label">👀 What They See:</span>
+      The plan updates based on the feedback — Copilot revises the relevant steps to incorporate the level cap and progressive XP curve, without losing the rest of the plan. The plan is a living document you can negotiate with.
+    </div>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">💡 Teaching Point:</span>
+      You can negotiate with the plan — add constraints, remove steps, reorder things. Think of it like a code review before the code even exists. This is collaborative planning, not just asking for code.
+    </div>
+  </article>
+
+  <!-- Step 4 -->
+  <article class="step-card">
+    <div class="step-number-bg">4</div>
+    <h3>
+      <span class="step-label">Step 4</span>
+      ✅ Approve and Watch Execution
+    </h3>
+
+    <div class="callout callout-say">
+      <span class="callout-label">💬 Say:</span>
+      <em>"I'm happy with this plan. Let's let it execute. Watch how it follows the plan step by step — just like a developer working through a task list."</em>
+    </div>
+
+    <ul>
+      <li>Click the <strong>Approve</strong> / <strong>Execute Plan</strong> button</li>
+      <li>Watch the execution proceed step by step</li>
+      <li>Point out each step as it completes — file edits, new file creation, test generation</li>
+    </ul>
+
+    <div class="callout callout-see">
+      <span class="callout-label">👀 What They See:</span>
+      Each plan step executes in order with progress indicators. Files open and get edited, new files are created, tests are written and potentially run — all following the exact plan that was approved. The audience can see the plan being realized in real time.
+    </div>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">💡 Teaching Point:</span>
+      Plan Mode gives you control without micromanaging — the best of both worlds. You set the direction and constraints upfront, then the agent handles the execution. It's like being an architect who approves blueprints before construction begins.
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="demo-footer">
+    <p>📋 Plan Mode — Copilot Hack Instructor Guide</p>
+  </footer>
+
+</body>
+</html>

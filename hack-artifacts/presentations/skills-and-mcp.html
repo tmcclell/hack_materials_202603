@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills &amp; MCP (Model Context Protocol)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      padding: 2rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 1rem; }
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      background: linear-gradient(135deg, #58a6ff, #d2a8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle { color: #8b949e; font-size: 1.15rem; margin-bottom: 2.5rem; }
+    .section { margin-bottom: 3rem; }
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #30363d;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-title .num {
+      background: #58a6ff;
+      color: #0d1117;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card p, .card ul { color: #b1bac4; font-size: 1rem; }
+    .card ul { padding-left: 1.3rem; }
+    .card ul li { margin-bottom: 0.3rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-blue { background: rgba(88,166,255,0.15); color: #58a6ff; }
+    .badge-green { background: rgba(63,185,80,0.15); color: #3fb950; }
+    .badge-yellow { background: rgba(210,153,34,0.15); color: #d29922; }
+    .badge-purple { background: rgba(210,168,255,0.15); color: #d2a8ff; }
+    code {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      border-radius: 6px;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.9em;
+      color: #e6edf3;
+    }
+    .code-block {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .callout {
+      background: rgba(88,166,255,0.08);
+      border-left: 4px solid #58a6ff;
+      border-radius: 0 12px 12px 0;
+      padding: 1rem 1.5rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    .callout strong { color: #58a6ff; }
+    .callout.purple { background: rgba(210,168,255,0.08); border-left-color: #d2a8ff; }
+    .callout.purple strong { color: #d2a8ff; }
+    .callout.green { background: rgba(63,185,80,0.08); border-left-color: #3fb950; }
+    .callout.green strong { color: #3fb950; }
+    .callout.yellow { background: rgba(210,153,34,0.08); border-left-color: #d29922; }
+    .callout.yellow strong { color: #d29922; }
+
+    /* Architecture diagram styles */
+    .arch-diagram {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 0;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .arch-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      min-width: 160px;
+    }
+    .arch-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      width: 100%;
+      max-width: 220px;
+    }
+    .arch-box h4 { font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .arch-box p { color: #8b949e; font-size: 0.8rem; margin: 0; }
+    .arch-box.primary { border-color: #58a6ff; box-shadow: 0 0 20px rgba(88,166,255,0.12); }
+    .arch-box.secondary { border-color: #d2a8ff; box-shadow: 0 0 15px rgba(210,168,255,0.1); }
+    .arch-box.tool { border-color: #3fb950; }
+    .arch-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+      min-width: 120px;
+    }
+    .arch-arrow {
+      font-size: 1.5rem;
+      color: #58a6ff;
+      letter-spacing: 2px;
+    }
+    .arch-label {
+      font-size: 0.7rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-align: center;
+      margin-top: 0.2rem;
+    }
+
+    /* Skills flow diagram */
+    .flow-container {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 1rem;
+    }
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 1.5rem;
+    }
+    .flow-row:last-child { margin-bottom: 0; }
+    .flow-node {
+      background: #0d1117;
+      border: 2px solid #30363d;
+      border-radius: 12px;
+      padding: 0.8rem 1.2rem;
+      text-align: center;
+      min-width: 140px;
+      position: relative;
+    }
+    .flow-node.copilot { border-color: #58a6ff; }
+    .flow-node.mcp { border-color: #d2a8ff; }
+    .flow-node.server { border-color: #3fb950; }
+    .flow-node.data { border-color: #d29922; }
+    .flow-node h5 { font-size: 0.9rem; margin-bottom: 0.15rem; }
+    .flow-node p { color: #8b949e; font-size: 0.75rem; margin: 0; }
+    .flow-arrow {
+      color: #58a6ff;
+      font-size: 1.5rem;
+      padding: 0 0.8rem;
+      flex-shrink: 0;
+    }
+    .flow-arrow.bi {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    /* Server cards grid */
+    .server-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .server-card {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .server-card:hover { border-color: #58a6ff; transform: translateY(-2px); }
+    .server-card .server-icon { font-size: 1.8rem; margin-bottom: 0.3rem; }
+    .server-card .server-name { font-weight: 600; font-size: 0.95rem; }
+    .server-card .server-desc { color: #8b949e; font-size: 0.8rem; margin-top: 0.2rem; }
+
+    /* Vision / roadmap */
+    .vision-timeline {
+      position: relative;
+      padding-left: 2.5rem;
+      margin-top: 1rem;
+    }
+    .vision-timeline::before {
+      content: '';
+      position: absolute;
+      left: 12px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #58a6ff, #d2a8ff, #3fb950);
+    }
+    .vision-item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1rem;
+    }
+    .vision-item::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 0.5rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid #58a6ff;
+      background: #0d1117;
+    }
+    .vision-item:nth-child(2)::before { border-color: #d2a8ff; }
+    .vision-item:nth-child(3)::before { border-color: #3fb950; }
+    .vision-item h4 { font-size: 1.05rem; margin-bottom: 0.3rem; }
+    .vision-item p { color: #b1bac4; font-size: 0.95rem; }
+
+    /* Extensions grid */
+    .ext-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-top: 1rem; }
+
+    @media (max-width: 900px) {
+      body { padding: 1rem; }
+      h1 { font-size: 2rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .arch-diagram { flex-direction: column; align-items: center; }
+      .arch-connector { padding: 0.5rem 0; transform: rotate(90deg); min-width: auto; }
+      .flow-row { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); padding: 0.3rem 0; }
+      .server-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="agenda.html" class="back-link">← Back to Agenda</a>
+
+  <h1>Skills &amp; MCP</h1>
+  <p class="subtitle">Extending Copilot with custom tools, data sources, and the Model Context Protocol</p>
+
+  <!-- Section 1: What Are Skills? -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">1</span> What Are Skills?</h2>
+    <div class="card-grid">
+      <div class="card" style="border-top: 3px solid #58a6ff;">
+        <h3><span style="font-size:1.4rem;">🔌</span> Plugins for Copilot</h3>
+        <p>Skills extend Copilot's capabilities beyond code generation. Think of them as <strong style="color:#e6edf3;">plugins</strong> that give Copilot new abilities — like querying a database, calling an API, or accessing internal tools.</p>
+      </div>
+      <div class="card" style="border-top: 3px solid #3fb950;">
+        <h3><span style="font-size:1.4rem;">🧩</span> How They Work</h3>
+        <p>When you use a skill, Copilot sends your request to a specialized tool that processes it and returns structured results. The AI then uses those results to form its response to you.</p>
+      </div>
+      <div class="card" style="border-top: 3px solid #d2a8ff;">
+        <h3><span style="font-size:1.4rem;">📦</span> Built-in Examples</h3>
+        <ul>
+          <li><code>@workspace</code> — search your codebase</li>
+          <li><code>@terminal</code> — interact with the terminal</li>
+          <li><code>@vscode</code> — VS Code settings &amp; actions</li>
+          <li><code>#file</code> — reference specific files</li>
+          <li><code>#selection</code> — reference selected code</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout" style="margin-top: 1rem;">
+      <strong>💡 Key insight:</strong> Skills turn Copilot from a code suggestion tool into an <strong>intelligent assistant</strong> that can interact with your entire development ecosystem.
+    </div>
+  </div>
+
+  <!-- Section 2: Model Context Protocol (MCP) -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">2</span> Model Context Protocol (MCP)</h2>
+
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <h3><span style="font-size:1.4rem;">📡</span> An Open Standard for AI Tool Integration</h3>
+      <p>MCP is an <strong style="color:#e6edf3;">open protocol</strong> that standardizes how AI assistants connect to external tools and data sources. Instead of building custom integrations for every tool, MCP provides a universal interface.</p>
+    </div>
+
+    <!-- Architecture Diagram -->
+    <div class="flow-container">
+      <h3 style="text-align: center; margin-bottom: 1.5rem; color: #8b949e; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">Architecture Overview</h3>
+      <div class="flow-row">
+        <div class="flow-node copilot">
+          <h5>🤖 Copilot</h5>
+          <p>VS Code / CLI / Chat</p>
+        </div>
+        <div class="flow-arrow">
+          <div class="flow-arrow bi">
+            <span>←→</span>
+            <span style="font-size:0.6rem; color:#8b949e; margin-top:2px;">MCP Protocol</span>
+          </div>
+        </div>
+        <div class="flow-node mcp">
+          <h5>🔗 MCP Client</h5>
+          <p>Built into Copilot</p>
+        </div>
+        <div class="flow-arrow">
+          <div class="flow-arrow bi">
+            <span>←→</span>
+            <span style="font-size:0.6rem; color:#8b949e; margin-top:2px;">JSON-RPC / stdio</span>
+          </div>
+        </div>
+        <div class="flow-node server">
+          <h5>⚙️ MCP Server</h5>
+          <p>Local or remote process</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node data">
+          <h5>📊 External Tools</h5>
+          <p>APIs, DBs, services</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-grid" style="margin-top: 1.5rem;">
+      <div class="card">
+        <h3>🔧 How MCP Works</h3>
+        <ul>
+          <li>MCP servers expose <strong style="color:#e6edf3;">tools</strong> (functions the AI can call)</li>
+          <li>MCP servers expose <strong style="color:#e6edf3;">resources</strong> (data the AI can read)</li>
+          <li>Communication via JSON-RPC over stdio or HTTP</li>
+          <li>Servers run locally or remotely</li>
+          <li>Configuration in <code>.vscode/mcp.json</code> or user settings</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>📝 Config Example</h3>
+        <div class="code-block">
+<span style="color:#8b949e;">// .vscode/mcp.json</span>
+{
+  <span style="color:#7ee787;">"servers"</span>: {
+    <span style="color:#7ee787;">"github"</span>: {
+      <span style="color:#7ee787;">"command"</span>: <span style="color:#a5d6ff;">"github-mcp-server"</span>,
+      <span style="color:#7ee787;">"args"</span>: [<span style="color:#a5d6ff;">"stdio"</span>]
+    },
+    <span style="color:#7ee787;">"postgres"</span>: {
+      <span style="color:#7ee787;">"command"</span>: <span style="color:#a5d6ff;">"mcp-server-postgres"</span>,
+      <span style="color:#7ee787;">"args"</span>: [<span style="color:#a5d6ff;">"$DB_URL"</span>]
+    }
+  }
+}
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: #8b949e; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">Popular Community MCP Servers</h3>
+    <div class="server-grid">
+      <div class="server-card">
+        <div class="server-icon">🐙</div>
+        <div class="server-name">GitHub</div>
+        <div class="server-desc">Issues, PRs, repos, actions</div>
+      </div>
+      <div class="server-card">
+        <div class="server-icon">📁</div>
+        <div class="server-name">Filesystem</div>
+        <div class="server-desc">Read/write/search files</div>
+      </div>
+      <div class="server-card">
+        <div class="server-icon">🐘</div>
+        <div class="server-name">PostgreSQL</div>
+        <div class="server-desc">Query &amp; manage databases</div>
+      </div>
+      <div class="server-card">
+        <div class="server-icon">🌐</div>
+        <div class="server-name">Fetch / Web</div>
+        <div class="server-desc">HTTP requests, web scraping</div>
+      </div>
+      <div class="server-card">
+        <div class="server-icon">🐳</div>
+        <div class="server-name">Docker</div>
+        <div class="server-desc">Container management</div>
+      </div>
+      <div class="server-card">
+        <div class="server-icon">📊</div>
+        <div class="server-name">Slack</div>
+        <div class="server-desc">Messages, channels, search</div>
+      </div>
+      <div class="server-card">
+        <div class="server-icon">🗄️</div>
+        <div class="server-name">SQLite</div>
+        <div class="server-desc">Local database queries</div>
+      </div>
+      <div class="server-card">
+        <div class="server-icon">☁️</div>
+        <div class="server-name">Azure</div>
+        <div class="server-desc">Cloud resource management</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Where This Is Heading -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">3</span> Where This Is Heading</h2>
+
+    <div class="vision-timeline">
+      <div class="vision-item">
+        <h4 style="color: #58a6ff;">🏗️ Custom MCP Servers for Your Org</h4>
+        <p>Build MCP servers tailored to your organization's internal tools — CI/CD systems, deployment pipelines, monitoring dashboards, wiki systems. Copilot becomes fluent in <em>your</em> infrastructure.</p>
+      </div>
+      <div class="vision-item">
+        <h4 style="color: #d2a8ff;">🔗 Internal API Access Through Copilot</h4>
+        <p>Imagine asking Copilot <em>"What's the status of the production deployment?"</em> or <em>"Show me the error rates from the last hour"</em> — and getting real answers from your internal APIs.</p>
+      </div>
+      <div class="vision-item">
+        <h4 style="color: #3fb950;">🌍 A Universal Tool Ecosystem</h4>
+        <p>As MCP adoption grows, an ecosystem of shared servers emerges — install a server, and Copilot instantly gains new capabilities. Like npm for AI tools.</p>
+      </div>
+    </div>
+
+    <div class="callout yellow" style="margin-top: 1rem;">
+      <strong>📋 Note for this session:</strong> This is presentation-only — the customer is exploring MCP concepts but is not building custom MCP servers yet. The goal is awareness of what's possible.
+    </div>
+
+    <!-- Aspirational example -->
+    <div class="card" style="margin-top: 1.5rem;">
+      <h3><span style="font-size:1.4rem;">💭</span> Imagine the Workflow</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 0.8rem;">
+        <div style="background:#0d1117; border:1px solid #30363d; border-radius:10px; padding:1rem;">
+          <div style="color:#58a6ff; font-weight:600; font-size:0.85rem; margin-bottom:0.5rem;">YOU ASK</div>
+          <p style="color:#e6edf3; font-size:0.95rem; font-style:italic;">"Check the Jenkins build status for the auth-service and fix any failing tests."</p>
+        </div>
+        <div style="background:#0d1117; border:1px solid #30363d; border-radius:10px; padding:1rem;">
+          <div style="color:#3fb950; font-weight:600; font-size:0.85rem; margin-bottom:0.5rem;">COPILOT DOES</div>
+          <ul style="color:#b1bac4; font-size:0.9rem; padding-left:1.2rem;">
+            <li>Calls Jenkins MCP server → gets build status</li>
+            <li>Identifies 2 failing tests</li>
+            <li>Reads test logs via MCP</li>
+            <li>Opens failing files, applies fixes</li>
+            <li>Runs tests locally to verify</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Copilot Extensions -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">4</span> Copilot Extensions</h2>
+
+    <div class="ext-grid">
+      <div class="card" style="border-top: 3px solid #58a6ff;">
+        <h3><span style="font-size:1.4rem;">🛒</span> GitHub Marketplace</h3>
+        <p>Browse and install Copilot extensions from the GitHub Marketplace. These extensions add specialized capabilities directly into your Copilot experience.</p>
+        <ul style="margin-top: 0.5rem;">
+          <li>One-click install from Marketplace</li>
+          <li>Curated and community extensions</li>
+          <li>Use via <code>@extension-name</code> in chat</li>
+          <li>Org admins control which extensions are allowed</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 3px solid #d2a8ff;">
+        <h3><span style="font-size:1.4rem;">🛠️</span> Custom Extensions (SDK)</h3>
+        <p>Build your own extensions using the Copilot Extensions SDK. Create specialized agents for your team's unique needs.</p>
+        <ul style="margin-top: 0.5rem;">
+          <li>Build with Node.js, Python, or any language</li>
+          <li>Access org-specific data and tools</li>
+          <li>Deploy as GitHub Apps</li>
+          <li>Combine with MCP for maximum power</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 3px solid #3fb950;">
+        <h3><span style="font-size:1.4rem;">🔄</span> MCP vs Extensions</h3>
+        <p>Both extend Copilot, but they serve different roles:</p>
+        <div style="margin-top: 0.8rem;">
+          <div style="display:flex; gap:0.5rem; align-items:center; margin-bottom:0.5rem;">
+            <span class="badge badge-purple">MCP</span>
+            <span style="color:#b1bac4; font-size:0.9rem;">Tool integration — give Copilot access to data &amp; actions</span>
+          </div>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <span class="badge badge-blue">Extensions</span>
+            <span style="color:#b1bac4; font-size:0.9rem;">Experience customization — custom agents, workflows, UIs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ecosystem visual -->
+    <div class="flow-container" style="margin-top: 1.5rem;">
+      <h3 style="text-align: center; margin-bottom: 1.5rem; color: #8b949e; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">The Extensibility Ecosystem</h3>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap;">
+        <div style="text-align: center;">
+          <div style="width: 100px; height: 100px; border-radius: 50%; border: 2px solid #58a6ff; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 0.5rem; background: rgba(88,166,255,0.05);">🤖</div>
+          <div style="font-weight: 600;">Copilot</div>
+          <div style="color: #8b949e; font-size: 0.8rem;">AI Core</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: #58a6ff;">←→</span>
+            <div style="background: #0d1117; border: 1px solid #d2a8ff; border-radius: 8px; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+              <span style="color: #d2a8ff;">⚙️</span> MCP Servers <span style="color:#8b949e;">(Tools &amp; Data)</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: #58a6ff;">←→</span>
+            <div style="background: #0d1117; border: 1px solid #58a6ff; border-radius: 8px; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+              <span style="color: #58a6ff;">🛒</span> Extensions <span style="color:#8b949e;">(Agents &amp; UX)</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: #58a6ff;">←→</span>
+            <div style="background: #0d1117; border: 1px solid #3fb950; border-radius: 8px; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+              <span style="color: #3fb950;">🔌</span> Built-in Skills <span style="color:#8b949e;">(@workspace etc.)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
