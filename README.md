@@ -7,7 +7,6 @@
 A comprehensive preparation repository for a full-day GitHub Copilot hackathon.
 
 - **Day 2** of a multi-day engagement focused on hands-on Copilot skills
-- **38 in-person + 24 remote** attendees across engineering disciplines
 - **Narrative arc:** Basics → Intermediate → Advanced → Hands-On Hacking
 
 ---
@@ -182,5 +181,3 @@ Before arriving at the hackathon, ensure:
 | GitHub Docs: Premium Requests | [docs.github.com](https://docs.github.com/en/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests) |
 
 ---
-
-*GitHub × Microsoft × Customer · Hackathon Day 2*

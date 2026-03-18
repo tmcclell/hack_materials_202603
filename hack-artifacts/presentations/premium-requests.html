@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Premium Requests &amp; Model Selection</title>
+  <title>GitHub Copilot for Business — Premium Requests &amp; Model Selection</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -26,7 +26,9 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .subtitle { color: #8b949e; font-size: 1.15rem; margin-bottom: 2.5rem; }
+    .subtitle { color: #8b949e; font-size: 1.15rem; margin-bottom: 0.8rem; }
+    .source-link { color: #8b949e; font-size: 0.95rem; margin-bottom: 2.5rem; display: block; }
+    .source-link a { color: #58a6ff; }
     .section { margin-bottom: 3rem; }
     .section-title {
       font-size: 1.6rem;
@@ -154,7 +156,7 @@
       box-shadow: 0 0 20px rgba(88,166,255,0.12);
     }
     .plan-card.popular::before {
-      content: "MOST POPULAR";
+      content: "BUSINESS";
       position: absolute;
       top: -10px;
       left: 50%;
@@ -167,6 +169,25 @@
       font-weight: 700;
       letter-spacing: 0.08em;
     }
+    .plan-card.enterprise {
+      border-color: #d29922;
+      box-shadow: 0 0 20px rgba(210,153,34,0.12);
+    }
+    .plan-card.enterprise::before {
+      content: "ENTERPRISE";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #d29922;
+      color: #0d1117;
+      padding: 0.15rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .plan-card.dimmed { opacity: 0.5; }
 
     /* Multiplier grid */
     .mult-grid {
@@ -252,8 +273,9 @@
 
   <a href="../../" class="back-link">← Back to Agenda</a>
 
-  <h1>Premium Requests &amp; Model Selection</h1>
-  <p class="subtitle">Understanding costs, quotas, and how to get the most from your Copilot plan</p>
+  <h1>GitHub Copilot for Business</h1>
+  <p class="subtitle">Premium requests, model selection, and how to maximize value for your organization</p>
+  <span class="source-link">Based on <a href="https://github.com/features/copilot/plans" target="_blank" rel="noopener">github.com/features/copilot/plans</a></span>
 
   <!-- Section 1: What Are Premium Requests? -->
   <div class="section">
@@ -284,34 +306,34 @@
   <div class="section">
     <h2 class="section-title"><span class="num">2</span> Plan Allocations</h2>
     <div class="plan-grid">
-      <div class="plan-card">
+      <div class="plan-card dimmed">
         <div class="plan-name">Free</div>
         <div class="plan-price">$0/month</div>
-        <div class="plan-requests" style="color: #8b949e;">50</div>
+        <div class="plan-requests" style="color: #484f58;">50</div>
+        <div class="plan-label">premium requests/mo</div>
+      </div>
+      <div class="plan-card dimmed">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$10/month</div>
+        <div class="plan-requests" style="color: #484f58;">300</div>
+        <div class="plan-label">premium requests/mo</div>
+      </div>
+      <div class="plan-card dimmed">
+        <div class="plan-name">Pro+</div>
+        <div class="plan-price">$39/month</div>
+        <div class="plan-requests" style="color: #484f58;">1,500</div>
         <div class="plan-label">premium requests/mo</div>
       </div>
       <div class="plan-card popular">
-        <div class="plan-name">Pro</div>
-        <div class="plan-price">$10/month</div>
-        <div class="plan-requests" style="color: #58a6ff;">300</div>
-        <div class="plan-label">premium requests/mo</div>
-      </div>
-      <div class="plan-card">
-        <div class="plan-name">Pro+</div>
-        <div class="plan-price">$39/month</div>
-        <div class="plan-requests" style="color: #3fb950;">1,500</div>
-        <div class="plan-label">premium requests/mo</div>
-      </div>
-      <div class="plan-card">
         <div class="plan-name">Business</div>
         <div class="plan-price">$19/user/month</div>
         <div class="plan-requests" style="color: #58a6ff;">300</div>
         <div class="plan-label">per user/mo</div>
       </div>
-      <div class="plan-card">
+      <div class="plan-card enterprise">
         <div class="plan-name">Enterprise</div>
         <div class="plan-price">$39/user/month</div>
-        <div class="plan-requests" style="color: #3fb950;">1,000</div>
+        <div class="plan-requests" style="color: #d29922;">1,000</div>
         <div class="plan-label">per user/mo</div>
       </div>
     </div>
@@ -322,6 +344,13 @@
       <div class="callout" style="flex: 1; min-width: 280px;">
         <strong>🗓️ Resets monthly.</strong> Your quota resets on the 1st of each month (UTC).
       </div>
+    </div>
+    <div class="callout" style="margin-top: 1rem;">
+      <strong>💡 Additional premium requests</strong> can be purchased at <strong style="color:#e6edf3;">$0.04/request</strong> when overage billing is enabled by an org admin.
+    </div>
+    <div class="callout green" style="margin-top: 0.5rem;">
+      <strong>✅ Business &amp; Enterprise include features individual plans don't</strong> — IP indemnity, SAML SSO, enterprise-grade security, centralized user management, and usage metrics.
+      See <a href="https://github.com/features/copilot/plans" target="_blank" rel="noopener">full plan comparison</a>.
     </div>
   </div>
 
@@ -386,20 +415,11 @@
         </div>
         <div class="mult-row">
           <div><strong>Claude Opus 4.5 / 4.6</strong></div>
-          <div class="mult-value mult-normal">1×</div>
+          <div class="mult-value mult-normal">3×</div>
           <div>1 request</div>
           <div style="color:#8b949e;">Premium quality</div>
         </div>
-        <div class="mult-row" style="border-top: 2px solid #30363d; background: rgba(248,81,73,0.04);">
-          <div><strong style="color:#f85149;">Claude Opus 4</strong></div>
-          <div class="mult-value mult-expensive">10×</div>
-          <div><span class="badge badge-red">10 requests</span></div>
-          <div style="color:#f85149; font-weight:600;">Deep reasoning — use wisely!</div>
-        </div>
       </div>
-    </div>
-    <div class="callout red" style="margin-top: 1rem;">
-      <strong>⚠️ Heads up!</strong> Using <strong>Claude Opus 4</strong> costs <strong>10×</strong> — a single request eats <strong>10 premium requests</strong> from your quota. On a Pro plan (300/mo), that's only 30 Opus 4 uses per month!
     </div>
   </div>
 
@@ -476,7 +496,7 @@
         <h3><span style="font-size:1.4rem;">❤️‍🔥</span> Deep Reasoning</h3>
         <p style="margin-bottom: 0.5rem;">Manually select <strong style="color:#f85149;">Claude Opus 4</strong> when needed.</p>
         <div style="background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:0.6rem; margin-top:0.5rem; text-align:center;">
-          <span style="font-size:1.5rem; font-weight:800; color:#f85149;">10×</span>
+          <span style="font-size:1.5rem; font-weight:800; color:#f85149;">6×</span>
           <div style="color:#8b949e; font-size:0.8rem;">cost per request</div>
         </div>
         <p style="margin-top:0.8rem; font-size:0.9rem;">Reserve for truly complex problems — architecture design, deep debugging, cross-system analysis. Know the cost before you click!</p>
@@ -511,6 +531,13 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Footer reference -->
+  <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #30363d; color: #8b949e; font-size: 0.9rem;">
+    📖 Full plan comparison and pricing: <a href="https://github.com/features/copilot/plans" target="_blank" rel="noopener">github.com/features/copilot/plans</a>
+    &nbsp;|&nbsp;
+    📚 Premium request docs: <a href="https://docs.github.com/en/copilot/concepts/billing/copilot-requests" target="_blank" rel="noopener">docs.github.com</a>
   </div>
 
 </body>
