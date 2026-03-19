@@ -1,637 +1,729 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demo: Copilot in Terminal + GitHub CLI</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo: Copilot in Terminal + GitHub CLI</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    body {
-      background: #0d1117;
-      color: #e6edf3;
-      font-family: 'Inter', 'Segoe UI', sans-serif;
-      line-height: 1.7;
-      padding: 2rem;
-      max-width: 960px;
-      margin: 0 auto;
-    }
+      body {
+        background: #0d1117;
+        color: #e6edf3;
+        font-family: "Inter", "Segoe UI", sans-serif;
+        line-height: 1.7;
+        padding: 2rem;
+        max-width: 960px;
+        margin: 0 auto;
+      }
 
-    a {
-      color: #58a6ff;
-      text-decoration: none;
-    }
+      a {
+        color: #58a6ff;
+        text-decoration: none;
+      }
 
-    a:hover {
-      text-decoration: underline;
-    }
+      a:hover {
+        text-decoration: underline;
+      }
 
-    /* Back link */
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
-      transition: background 0.2s;
-    }
+      /* Back link */
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        transition: background 0.2s;
+      }
 
-    .back-link:hover {
-      background: rgba(88, 166, 255, 0.1);
-    }
+      .back-link:hover {
+        background: rgba(88, 166, 255, 0.1);
+      }
 
-    /* Header */
-    .demo-header {
-      text-align: center;
-      margin-bottom: 3rem;
-      padding: 2.5rem 2rem;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-    }
+      /* Header */
+      .demo-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 2.5rem 2rem;
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+      }
 
-    .demo-header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #58a6ff, #3fb950, #d29922);
-    }
+      .demo-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #58a6ff, #3fb950, #d29922);
+      }
 
-    .demo-header .badge-row {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
+      .demo-header .badge-row {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
 
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
+      .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
 
-    .badge-duration {
-      background: rgba(63, 185, 80, 0.15);
-      color: #3fb950;
-      border: 1px solid rgba(63, 185, 80, 0.3);
-    }
+      .badge-duration {
+        background: rgba(63, 185, 80, 0.15);
+        color: #3fb950;
+        border: 1px solid rgba(63, 185, 80, 0.3);
+      }
 
-    .badge-topic {
-      background: rgba(88, 166, 255, 0.15);
-      color: #58a6ff;
-      border: 1px solid rgba(88, 166, 255, 0.3);
-    }
+      .badge-topic {
+        background: rgba(88, 166, 255, 0.15);
+        color: #58a6ff;
+        border: 1px solid rgba(88, 166, 255, 0.3);
+      }
 
-    .badge-type {
-      background: rgba(210, 153, 34, 0.15);
-      color: #d29922;
-      border: 1px solid rgba(210, 153, 34, 0.3);
-    }
+      .badge-type {
+        background: rgba(210, 153, 34, 0.15);
+        color: #d29922;
+        border: 1px solid rgba(210, 153, 34, 0.3);
+      }
 
-    .demo-header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
+      .demo-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
 
-    .demo-header p {
-      color: #8b949e;
-      font-size: 1rem;
-    }
+      .demo-header p {
+        color: #8b949e;
+        font-size: 1rem;
+      }
 
-    /* Setup section */
-    .setup-section {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      padding: 1.5rem 2rem;
-      margin-bottom: 3rem;
-    }
+      /* Setup section */
+      .setup-section {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 1.5rem 2rem;
+        margin-bottom: 3rem;
+      }
 
-    .setup-section h2 {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-      color: #e6edf3;
-    }
+      .setup-section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #e6edf3;
+      }
 
-    .setup-list {
-      list-style: none;
-      padding: 0;
-    }
+      .setup-list {
+        list-style: none;
+        padding: 0;
+      }
 
-    .setup-list li {
-      padding: 0.5rem 0;
-      padding-left: 1.5rem;
-      position: relative;
-      color: #c9d1d9;
-    }
+      .setup-list li {
+        padding: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+        color: #c9d1d9;
+      }
 
-    .setup-list li::before {
-      content: '✅';
-      position: absolute;
-      left: 0;
-    }
+      .setup-list li::before {
+        content: "✅";
+        position: absolute;
+        left: 0;
+      }
 
-    .setup-list li code {
-      background: #0d1117;
-      border: 1px solid #30363d;
-      padding: 0.15rem 0.5rem;
-      border-radius: 6px;
-      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-      font-size: 0.88rem;
-      color: #e6edf3;
-    }
+      .setup-list li code {
+        background: #0d1117;
+        border: 1px solid #30363d;
+        padding: 0.15rem 0.5rem;
+        border-radius: 6px;
+        font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+        font-size: 0.88rem;
+        color: #e6edf3;
+      }
 
-    /* Section divider */
-    .section-divider {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin: 3rem 0 2.5rem;
-    }
+      /* Section divider */
+      .section-divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 3rem 0 2.5rem;
+      }
 
-    .section-divider::before,
-    .section-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #30363d, transparent);
-    }
+      .section-divider::before,
+      .section-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #30363d, transparent);
+      }
 
-    .section-divider h2 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      white-space: nowrap;
-      color: #e6edf3;
-    }
+      .section-divider h2 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        white-space: nowrap;
+        color: #e6edf3;
+      }
 
-    .section-meta {
-      text-align: center;
-      margin-bottom: 2rem;
-      color: #8b949e;
-      font-size: 0.9rem;
-    }
+      .section-meta {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #8b949e;
+        font-size: 0.9rem;
+      }
 
-    .section-meta .time-badge {
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      background: rgba(63, 185, 80, 0.15);
-      color: #3fb950;
-      border: 1px solid rgba(63, 185, 80, 0.3);
-      margin-left: 0.5rem;
-    }
+      .section-meta .time-badge {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: rgba(63, 185, 80, 0.15);
+        color: #3fb950;
+        border: 1px solid rgba(63, 185, 80, 0.3);
+        margin-left: 0.5rem;
+      }
 
-    /* Step card */
-    .step-card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      padding: 2rem 2rem 1.5rem;
-      margin-bottom: 1.75rem;
-      position: relative;
-      overflow: hidden;
-    }
+      /* Step card */
+      .step-card {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 2rem 2rem 1.5rem;
+        margin-bottom: 1.75rem;
+        position: relative;
+        overflow: hidden;
+      }
 
-    .step-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 4px;
-      background: #58a6ff;
-    }
+      .step-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 4px;
+        background: #58a6ff;
+      }
 
-    .step-number-bg {
-      position: absolute;
-      top: -0.2rem;
-      right: 1rem;
-      font-size: 6rem;
-      font-weight: 800;
-      color: rgba(88, 166, 255, 0.07);
-      line-height: 1;
-      pointer-events: none;
-      user-select: none;
-    }
+      .step-number-bg {
+        position: absolute;
+        top: -0.2rem;
+        right: 1rem;
+        font-size: 6rem;
+        font-weight: 800;
+        color: rgba(88, 166, 255, 0.07);
+        line-height: 1;
+        pointer-events: none;
+        user-select: none;
+      }
 
-    .step-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      position: relative;
-    }
+      .step-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+      }
 
-    .step-title .step-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 1.8rem;
-      height: 1.8rem;
-      background: #58a6ff;
-      color: #0d1117;
-      border-radius: 50%;
-      font-size: 0.85rem;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
+      .step-title .step-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.8rem;
+        height: 1.8rem;
+        background: #58a6ff;
+        color: #0d1117;
+        border-radius: 50%;
+        font-size: 0.85rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
 
-    /* Say callout */
-    .callout-say {
-      background: rgba(88, 166, 255, 0.08);
-      border: 1px solid rgba(88, 166, 255, 0.25);
-      border-radius: 8px;
-      padding: 0.85rem 1.1rem;
-      margin-bottom: 1rem;
-      position: relative;
-    }
+      /* Say callout */
+      .callout-say {
+        background: rgba(88, 166, 255, 0.08);
+        border: 1px solid rgba(88, 166, 255, 0.25);
+        border-radius: 8px;
+        padding: 0.85rem 1.1rem;
+        margin-bottom: 1rem;
+        position: relative;
+      }
 
-    .callout-say .callout-label {
-      font-weight: 700;
-      color: #58a6ff;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.25rem;
-    }
+      .callout-say .callout-label {
+        font-weight: 700;
+        color: #58a6ff;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.25rem;
+      }
 
-    .callout-say p {
-      color: #c9d1d9;
-      font-style: italic;
-      font-size: 0.95rem;
-    }
+      .callout-say p {
+        color: #c9d1d9;
+        font-style: italic;
+        font-size: 0.95rem;
+      }
 
-    /* Type action */
-    .callout-type {
-      margin-bottom: 1rem;
-    }
+      /* Type action */
+      .callout-type {
+        margin-bottom: 1rem;
+      }
 
-    .callout-type .callout-label {
-      font-weight: 700;
-      color: #3fb950;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.4rem;
-    }
+      .callout-type .callout-label {
+        font-weight: 700;
+        color: #3fb950;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.4rem;
+      }
 
-    .callout-type pre {
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 0.85rem 1.1rem;
-      overflow-x: auto;
-      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-      font-size: 0.88rem;
-      line-height: 1.6;
-      color: #e6edf3;
-    }
+      .callout-type pre {
+        background: #0d1117;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        padding: 0.85rem 1.1rem;
+        overflow-x: auto;
+        font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+        font-size: 0.88rem;
+        line-height: 1.6;
+        color: #e6edf3;
+      }
 
-    /* What They See */
-    .callout-see {
-      background: rgba(139, 148, 158, 0.08);
-      border: 1px solid rgba(139, 148, 158, 0.2);
-      border-left: 3px solid #8b949e;
-      border-radius: 8px;
-      padding: 0.85rem 1.1rem;
-      margin-bottom: 1rem;
-    }
+      /* What They See */
+      .callout-see {
+        background: rgba(139, 148, 158, 0.08);
+        border: 1px solid rgba(139, 148, 158, 0.2);
+        border-left: 3px solid #8b949e;
+        border-radius: 8px;
+        padding: 0.85rem 1.1rem;
+        margin-bottom: 1rem;
+      }
 
-    .callout-see .callout-label {
-      font-weight: 700;
-      color: #8b949e;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.25rem;
-    }
+      .callout-see .callout-label {
+        font-weight: 700;
+        color: #8b949e;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.25rem;
+      }
 
-    .callout-see p {
-      color: #c9d1d9;
-      font-size: 0.92rem;
-    }
+      .callout-see p {
+        color: #c9d1d9;
+        font-size: 0.92rem;
+      }
 
-    .callout-see code {
-      background: #0d1117;
-      border: 1px solid #30363d;
-      padding: 0.15rem 0.5rem;
-      border-radius: 6px;
-      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-      font-size: 0.85rem;
-      color: #e6edf3;
-    }
+      .callout-see code {
+        background: #0d1117;
+        border: 1px solid #30363d;
+        padding: 0.15rem 0.5rem;
+        border-radius: 6px;
+        font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+        font-size: 0.85rem;
+        color: #e6edf3;
+      }
 
-    /* Teaching point */
-    .callout-tip {
-      background: rgba(210, 153, 34, 0.08);
-      border: 1px solid rgba(210, 153, 34, 0.25);
-      border-radius: 8px;
-      padding: 0.85rem 1.1rem;
-      margin-bottom: 0.25rem;
-    }
+      /* Teaching point */
+      .callout-tip {
+        background: rgba(210, 153, 34, 0.08);
+        border: 1px solid rgba(210, 153, 34, 0.25);
+        border-radius: 8px;
+        padding: 0.85rem 1.1rem;
+        margin-bottom: 0.25rem;
+      }
 
-    .callout-tip .callout-label {
-      font-weight: 700;
-      color: #d29922;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.25rem;
-    }
+      .callout-tip .callout-label {
+        font-weight: 700;
+        color: #d29922;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.25rem;
+      }
 
-    .callout-tip p {
-      color: #c9d1d9;
-      font-size: 0.92rem;
-    }
+      .callout-tip p {
+        color: #c9d1d9;
+        font-size: 0.92rem;
+      }
 
-    /* Audience activity card */
-    .step-card.audience-card::before {
-      background: #3fb950;
-    }
+      /* Audience activity card */
+      .step-card.audience-card::before {
+        background: #3fb950;
+      }
 
-    .audience-instructions {
-      background: rgba(63, 185, 80, 0.08);
-      border: 1px solid rgba(63, 185, 80, 0.25);
-      border-radius: 8px;
-      padding: 0.85rem 1.1rem;
-      margin-bottom: 1rem;
-    }
+      .audience-instructions {
+        background: rgba(63, 185, 80, 0.08);
+        border: 1px solid rgba(63, 185, 80, 0.25);
+        border-radius: 8px;
+        padding: 0.85rem 1.1rem;
+        margin-bottom: 1rem;
+      }
 
-    .audience-instructions .callout-label {
-      font-weight: 700;
-      color: #3fb950;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.25rem;
-    }
+      .audience-instructions .callout-label {
+        font-weight: 700;
+        color: #3fb950;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.25rem;
+      }
 
-    .audience-instructions p {
-      color: #c9d1d9;
-      font-size: 0.92rem;
-    }
+      .audience-instructions p {
+        color: #c9d1d9;
+        font-size: 0.92rem;
+      }
 
-    .audience-instructions code {
-      background: #0d1117;
-      border: 1px solid #30363d;
-      padding: 0.15rem 0.5rem;
-      border-radius: 6px;
-      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-      font-size: 0.85rem;
-      color: #e6edf3;
-    }
+      .audience-instructions code {
+        background: #0d1117;
+        border: 1px solid #30363d;
+        padding: 0.15rem 0.5rem;
+        border-radius: 6px;
+        font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+        font-size: 0.85rem;
+        color: #e6edf3;
+      }
 
-    /* Footer */
-    .page-footer {
-      text-align: center;
-      padding: 2rem 0 1rem;
-      color: #484f58;
-      font-size: 0.85rem;
-      border-top: 1px solid #21262d;
-      margin-top: 3rem;
-    }
-  </style>
-</head>
-<body>
+      /* Footer */
+      .page-footer {
+        text-align: center;
+        padding: 2rem 0 1rem;
+        color: #484f58;
+        font-size: 0.85rem;
+        border-top: 1px solid #21262d;
+        margin-top: 3rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Back link -->
+    <a href="../../" class="back-link">← Back to Agenda</a>
 
-  <!-- Back link -->
-  <a href="../../" class="back-link">← Back to Agenda</a>
+    <!-- Header -->
+    <header class="demo-header">
+      <div class="badge-row">
+        <span class="badge badge-type">🎤 Instructor Demo</span>
+        <span class="badge badge-duration">⏱️ 15 min</span>
+        <span class="badge badge-topic">🖥️ Terminal &amp; CLI</span>
+      </div>
+      <h1>🚀 Copilot in Terminal + GitHub CLI</h1>
+      <p>
+        Live demo — natural-language shell commands, PR creation, and issue
+        management with Copilot &amp; <code>gh</code>
+      </p>
+    </header>
 
-  <!-- Header -->
-  <header class="demo-header">
-    <div class="badge-row">
-      <span class="badge badge-type">🎤 Instructor Demo</span>
-      <span class="badge badge-duration">⏱️ 15 min</span>
-      <span class="badge badge-topic">🖥️ Terminal &amp; CLI</span>
+    <!-- Setup -->
+    <section class="setup-section" aria-label="Setup checklist">
+      <h2>🎬 Setup — Before You Start</h2>
+      <ul class="setup-list">
+        <li>
+          VS Code open with an <strong>integrated terminal</strong> in the
+          <code>../demo-app/</code> directory (Emoji Battle Arena project)
+        </li>
+        <li>
+          GitHub CLI installed and authenticated — verify with
+          <code>gh auth status</code>
+        </li>
+        <li>
+          Copilot CLI installed — verify with <code>copilot --version</code>
+        </li>
+        <li>
+          Terminal font size increased for audience visibility (≥ 16 pt
+          recommended)
+        </li>
+        <li>
+          A feature branch ready with a small change for the PR demo (e.g., a
+          one-line fix in <code>battleService.ts</code>)
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 1: Copilot in the Terminal                           -->
+    <!-- ============================================================ -->
+    <div class="section-divider">
+      <h2>📟 Section 1 — Copilot in the Terminal</h2>
     </div>
-    <h1>🚀 Copilot in Terminal + GitHub CLI</h1>
-    <p>Live demo — natural-language shell commands, PR creation, and issue management with Copilot &amp; <code>gh</code></p>
-  </header>
+    <p class="section-meta">
+      Natural-language shell superpowers
+      <span class="time-badge">⏱️ 7 min</span>
+    </p>
 
-  <!-- Setup -->
-  <section class="setup-section" aria-label="Setup checklist">
-    <h2>🎬 Setup — Before You Start</h2>
-    <ul class="setup-list">
-      <li>VS Code open with an <strong>integrated terminal</strong> in the <code>../demo-app/</code> directory (Emoji Battle Arena project)</li>
-      <li>GitHub CLI installed and authenticated — verify with <code>gh auth status</code></li>
-      <li>Copilot CLI installed — verify with <code>copilot --version</code></li>
-      <li>Terminal font size increased for audience visibility (≥ 16 pt recommended)</li>
-      <li>A feature branch ready with a small change for the PR demo (e.g., a one-line fix in <code>battleService.ts</code>)</li>
-    </ul>
-  </section>
+    <!-- Step 1 -->
+    <article class="step-card">
+      <span class="step-number-bg" aria-hidden="true">1</span>
+      <div class="step-title">
+        <span class="step-num">1</span>
+        <span>copilot — Natural Language → Shell Commands</span>
+      </div>
 
-  <!-- ============================================================ -->
-  <!-- SECTION 1: Copilot in the Terminal                           -->
-  <!-- ============================================================ -->
-  <div class="section-divider">
-    <h2>📟 Section 1 — Copilot in the Terminal</h2>
-  </div>
-  <p class="section-meta">Natural-language shell superpowers <span class="time-badge">⏱️ 7 min</span></p>
+      <div class="callout-say">
+        <div class="callout-label">💬 Say:</div>
+        <p>
+          "Copilot isn't just in your editor — it's in your terminal too. Watch
+          this: I'll ask a plain-English question and get a working shell
+          command back."
+        </p>
+      </div>
 
-  <!-- Step 1 -->
-  <article class="step-card">
-    <span class="step-number-bg" aria-hidden="true">1</span>
-    <div class="step-title">
-      <span class="step-num">1</span>
-      <span>copilot — Natural Language → Shell Commands</span>
-    </div>
-
-    <div class="callout-say">
-      <div class="callout-label">💬 Say:</div>
-      <p>"Copilot isn't just in your editor — it's in your terminal too. Watch this: I'll ask a plain-English question and get a working shell command back."</p>
-    </div>
-
-    <div class="callout-type">
-      <div class="callout-label">⌨️ Type:</div>
-      <pre><code>copilot
+      <div class="callout-type">
+        <div class="callout-label">⌨️ Type:</div>
+        <pre><code>copilot
     how do I find which TypeScript files have TODO comments</code></pre>
-    </div>
+      </div>
 
-    <div class="callout-see">
-      <div class="callout-label">👀 What They See:</div>
-      <p>Copilot suggests a grep/find command like <code>grep -rn 'TODO' --include='*.ts' src/</code>. The terminal shows the suggested command with an option to copy or run it.</p>
-    </div>
+      <div class="callout-see">
+        <div class="callout-label">👀 What They See:</div>
+        <p>
+          Copilot suggests a grep/find command like
+          <code>grep -rn 'TODO' --include='*.ts' src/</code>. The terminal shows
+          the suggested command with an option to copy or run it.
+        </p>
+      </div>
 
-    <div class="callout-tip">
-      <div class="callout-label">💡 Teaching Point:</div>
-      <p>Natural language → shell commands. You don't need to memorize grep flags or arcane find syntax anymore. Just describe what you want.</p>
-    </div>
-  </article>
+      <div class="callout-tip">
+        <div class="callout-label">💡 Teaching Point:</div>
+        <p>
+          Natural language → shell commands. You don't need to memorize grep
+          flags or arcane find syntax anymore. Just describe what you want.
+        </p>
+      </div>
+    </article>
 
-  <!-- Step 2 -->
-  <article class="step-card">
-    <span class="step-number-bg" aria-hidden="true">2</span>
-    <div class="step-title">
-      <span class="step-num">2</span>
-      <span>copilot — Decode Cryptic Commands</span>
-    </div>
+    <!-- Step 2 -->
+    <article class="step-card">
+      <span class="step-number-bg" aria-hidden="true">2</span>
+      <div class="step-title">
+        <span class="step-num">2</span>
+        <span>copilot — Decode Cryptic Commands</span>
+      </div>
 
-    <div class="callout-say">
-      <div class="callout-label">💬 Say:</div>
-      <p>"Found a cryptic command in a README or on Stack Overflow? Copilot can explain it piece by piece."</p>
-    </div>
+      <div class="callout-say">
+        <div class="callout-label">💬 Say:</div>
+        <p>
+          "Found a cryptic command in a README or on Stack Overflow? Copilot can
+          explain it piece by piece."
+        </p>
+      </div>
 
-    <div class="callout-type">
-      <div class="callout-label">⌨️ Type:</div>
-      <pre><code>copilot
+      <div class="callout-type">
+        <div class="callout-label">⌨️ Type:</div>
+        <pre><code>copilot
     Explain this command: find src -name '*.ts' -exec grep -l 'TODO' {} \;</code></pre>
-    </div>
+      </div>
 
-    <div class="callout-see">
-      <div class="callout-label">👀 What They See:</div>
-      <p>Copilot breaks down each part of the command: <code>find src</code> searches the src directory, <code>-name '*.ts'</code> filters to TypeScript files, <code>-exec</code> runs a command on each match, <code>grep -l</code> lists files with matches, and <code>\;</code> terminates the -exec clause.</p>
-    </div>
+      <div class="callout-see">
+        <div class="callout-label">👀 What They See:</div>
+        <p>
+          Copilot breaks down each part of the command:
+          <code>find src</code> searches the src directory,
+          <code>-name '*.ts'</code> filters to TypeScript files,
+          <code>-exec</code> runs a command on each match,
+          <code>grep -l</code> lists files with matches, and
+          <code>\;</code> terminates the -exec clause.
+        </p>
+      </div>
 
-    <div class="callout-tip">
-      <div class="callout-label">💡 Teaching Point:</div>
-      <p>Great for understanding unfamiliar commands from Stack Overflow, documentation, or teammates. It's like having a senior engineer explain things on demand.</p>
-    </div>
-  </article>
+      <div class="callout-tip">
+        <div class="callout-label">💡 Teaching Point:</div>
+        <p>
+          Great for understanding unfamiliar commands from Stack Overflow,
+          documentation, or teammates. It's like having a senior engineer
+          explain things on demand.
+        </p>
+      </div>
+    </article>
 
-  <!-- Step 3 -->
-  <article class="step-card">
-    <span class="step-number-bg" aria-hidden="true">3</span>
-    <div class="step-title">
-      <span class="step-num">3</span>
-      <span>⚡ Quick Terminal Trick — Framework-Aware Suggestions</span>
-    </div>
+    <!-- Step 3 -->
+    <article class="step-card">
+      <span class="step-number-bg" aria-hidden="true">3</span>
+      <div class="step-title">
+        <span class="step-num">3</span>
+        <span>⚡ Quick Terminal Trick — Framework-Aware Suggestions</span>
+      </div>
 
-    <div class="callout-say">
-      <div class="callout-label">💬 Say:</div>
-      <p>"It knows your tech stack too. Watch — I'll ask about Vitest specifically."</p>
-    </div>
+      <div class="callout-say">
+        <div class="callout-label">💬 Say:</div>
+        <p>
+          "It knows your tech stack too. Watch — I'll ask about Vitest
+          specifically."
+        </p>
+      </div>
 
-    <div class="callout-type">
-      <div class="callout-label">⌨️ Type:</div>
-      <pre><code>copilot
+      <div class="callout-type">
+        <div class="callout-label">⌨️ Type:</div>
+        <pre><code>copilot
     how to run only the failing tests in vitest</code></pre>
+      </div>
+
+      <div class="callout-see">
+        <div class="callout-label">👀 What They See:</div>
+        <p>
+          Copilot suggests vitest-specific commands like
+          <code>npx vitest --reporter=verbose --bail</code> or similar flags. It
+          doesn't give generic Jest advice — it knows the difference.
+        </p>
+      </div>
+
+      <div class="callout-tip">
+        <div class="callout-label">💡 Teaching Point:</div>
+        <p>
+          Copilot knows your tech stack — framework-specific commands just work.
+          Whether it's Vitest, pytest, Maven, or Cargo, you get the right answer
+          for your tools.
+        </p>
+      </div>
+    </article>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 2: GitHub CLI Workflows                              -->
+    <!-- ============================================================ -->
+    <div class="section-divider">
+      <h2 id="cli-workflows">🔗 Section 2 — GitHub CLI Workflows</h2>
     </div>
+    <p class="section-meta">
+      Ship code and manage work from the terminal
+      <span class="time-badge">⏱️ 8 min</span>
+    </p>
 
-    <div class="callout-see">
-      <div class="callout-label">👀 What They See:</div>
-      <p>Copilot suggests vitest-specific commands like <code>npx vitest --reporter=verbose --bail</code> or similar flags. It doesn't give generic Jest advice — it knows the difference.</p>
-    </div>
+    <!-- Step 4 -->
+    <article class="step-card">
+      <span class="step-number-bg" aria-hidden="true">4</span>
+      <div class="step-title">
+        <span class="step-num">4</span>
+        <span>🚢 PR Creation — Ship from the Terminal</span>
+      </div>
 
-    <div class="callout-tip">
-      <div class="callout-label">💡 Teaching Point:</div>
-      <p>Copilot knows your tech stack — framework-specific commands just work. Whether it's Vitest, pytest, Maven, or Cargo, you get the right answer for your tools.</p>
-    </div>
-  </article>
+      <div class="callout-say">
+        <div class="callout-label">💬 Say:</div>
+        <p>
+          "The GitHub CLI is how Copilot connects to your GitHub workflow. Let's
+          create a PR without leaving the terminal."
+        </p>
+      </div>
 
-  <!-- ============================================================ -->
-  <!-- SECTION 2: GitHub CLI Workflows                              -->
-  <!-- ============================================================ -->
-  <div class="section-divider">
-    <h2 id="cli-workflows">🔗 Section 2 — GitHub CLI Workflows</h2>
-  </div>
-  <p class="section-meta">Ship code and manage work from the terminal <span class="time-badge">⏱️ 8 min</span></p>
+      <div class="callout-type">
+        <div class="callout-label">⌨️ Type:</div>
+        <pre><code>gh pr create --title "Fix battle damage calculation" --body "Fixed operator precedence bug in battleService.ts"</code></pre>
+      </div>
 
-  <!-- Step 4 -->
-  <article class="step-card">
-    <span class="step-number-bg" aria-hidden="true">4</span>
-    <div class="step-title">
-      <span class="step-num">4</span>
-      <span>🚢 PR Creation — Ship from the Terminal</span>
-    </div>
+      <div class="callout-see">
+        <div class="callout-label">👀 What They See:</div>
+        <p>
+          Terminal shows the PR being created with a direct link to the new PR
+          on GitHub. The audience sees the full flow: code → commit → PR in
+          seconds, all from the terminal.
+        </p>
+      </div>
 
-    <div class="callout-say">
-      <div class="callout-label">💬 Say:</div>
-      <p>"The GitHub CLI is how Copilot connects to your GitHub workflow. Let's create a PR without leaving the terminal."</p>
-    </div>
+      <div class="callout-tip">
+        <div class="callout-label">💡 Teaching Point:</div>
+        <p>
+          Copilot-assisted PR workflow — from finding the bug to shipping the
+          fix. No context-switching to the browser. Everything stays in your
+          flow.
+        </p>
+      </div>
+    </article>
 
-    <div class="callout-type">
-      <div class="callout-label">⌨️ Type:</div>
-      <pre><code>gh pr create --title "Fix battle damage calculation" --body "Fixed operator precedence bug in battleService.ts"</code></pre>
-    </div>
+    <!-- Step 5 -->
+    <article class="step-card">
+      <span class="step-number-bg" aria-hidden="true">5</span>
+      <div class="step-title">
+        <span class="step-num">5</span>
+        <span>📋 Issue Management — Create Work Items</span>
+      </div>
 
-    <div class="callout-see">
-      <div class="callout-label">👀 What They See:</div>
-      <p>Terminal shows the PR being created with a direct link to the new PR on GitHub. The audience sees the full flow: code → commit → PR in seconds, all from the terminal.</p>
-    </div>
+      <div class="callout-say">
+        <div class="callout-label">💬 Say:</div>
+        <p>
+          "Issues are the input for our autonomous agents later. Let's create
+          one with a clear description."
+        </p>
+      </div>
 
-    <div class="callout-tip">
-      <div class="callout-label">💡 Teaching Point:</div>
-      <p>Copilot-assisted PR workflow — from finding the bug to shipping the fix. No context-switching to the browser. Everything stays in your flow.</p>
-    </div>
-  </article>
+      <div class="callout-type">
+        <div class="callout-label">⌨️ Type:</div>
+        <pre><code>gh issue create --title "Implement leaderboard service" --body "The leaderboard service is currently a stub. Implement getLeaderboard() and getTopFighters()."</code></pre>
+      </div>
 
-  <!-- Step 5 -->
-  <article class="step-card">
-    <span class="step-number-bg" aria-hidden="true">5</span>
-    <div class="step-title">
-      <span class="step-num">5</span>
-      <span>📋 Issue Management — Create Work Items</span>
-    </div>
+      <div class="callout-see">
+        <div class="callout-label">👀 What They See:</div>
+        <p>
+          Issue created on GitHub with a direct link. The issue has a clear
+          title and an actionable body — exactly the kind of description that
+          gives an AI agent (or a human!) enough context to start working.
+        </p>
+      </div>
 
-    <div class="callout-say">
-      <div class="callout-label">💬 Say:</div>
-      <p>"Issues are the input for our autonomous agents later. Let's create one with a clear description."</p>
-    </div>
+      <div class="callout-tip">
+        <div class="callout-label">💡 Teaching Point:</div>
+        <p>
+          Well-written issues become instructions for the Copilot coding agent.
+          Think of issues as your <em>prompts</em> for autonomous development.
+          Quality in → quality out.
+        </p>
+      </div>
+    </article>
 
-    <div class="callout-type">
-      <div class="callout-label">⌨️ Type:</div>
-      <pre><code>gh issue create --title "Implement leaderboard service" --body "The leaderboard service is currently a stub. Implement getLeaderboard() and getTopFighters()."</code></pre>
-    </div>
+    <!-- Step 6 -->
+    <article class="step-card audience-card">
+      <span class="step-number-bg" aria-hidden="true">6</span>
+      <div class="step-title">
+        <span class="step-num">6</span>
+        <span>🙋 Quick Audience Try — Hands-On Moment</span>
+      </div>
 
-    <div class="callout-see">
-      <div class="callout-label">👀 What They See:</div>
-      <p>Issue created on GitHub with a direct link. The issue has a clear title and an actionable body — exactly the kind of description that gives an AI agent (or a human!) enough context to start working.</p>
-    </div>
+      <div class="callout-say">
+        <div class="callout-label">💬 Say:</div>
+        <p>
+          "Your turn! Open your terminal and try <code>copilot</code> with any
+          shell question you've been wondering about. Maybe something you always
+          Google."
+        </p>
+      </div>
 
-    <div class="callout-tip">
-      <div class="callout-label">💡 Teaching Point:</div>
-      <p>Well-written issues become instructions for the Copilot coding agent. Think of issues as your <em>prompts</em> for autonomous development. Quality in → quality out.</p>
-    </div>
-  </article>
+      <div class="audience-instructions">
+        <div class="callout-label">⏳ Audience Activity:</div>
+        <p>
+          Give <strong>2 minutes</strong> for hands-on exploration. Walk around
+          if possible. Encourage people to share interesting suggestions they
+          get. Call out any great examples you spot.
+        </p>
+      </div>
 
-  <!-- Step 6 -->
-  <article class="step-card audience-card">
-    <span class="step-number-bg" aria-hidden="true">6</span>
-    <div class="step-title">
-      <span class="step-num">6</span>
-      <span>🙋 Quick Audience Try — Hands-On Moment</span>
-    </div>
+      <div class="callout-tip">
+        <div class="callout-label">💡 Teaching Point:</div>
+        <p>
+          Hands-on moments keep energy up — let people try it themselves. This
+          is where the "aha" moments happen. Real learning requires real doing.
+        </p>
+      </div>
+    </article>
 
-    <div class="callout-say">
-      <div class="callout-label">💬 Say:</div>
-      <p>"Your turn! Open your terminal and try <code>copilot</code> with any shell question you've been wondering about. Maybe something you always Google."</p>
-    </div>
-
-    <div class="audience-instructions">
-      <div class="callout-label">⏳ Audience Activity:</div>
-      <p>Give <strong>2 minutes</strong> for hands-on exploration. Walk around if possible. Encourage people to share interesting suggestions they get. Call out any great examples you spot.</p>
-    </div>
-
-    <div class="callout-tip">
-      <div class="callout-label">💡 Teaching Point:</div>
-      <p>Hands-on moments keep energy up — let people try it themselves. This is where the "aha" moments happen. Real learning requires real doing.</p>
-    </div>
-  </article>
-
-  <!-- Footer -->
-  <footer class="page-footer">
-    <p>Copilot in Terminal + GitHub CLI — Instructor Demo Script</p>
-  </footer>
-
-</body>
+    <!-- Footer -->
+    <footer class="page-footer">
+      <p>Copilot in Terminal + GitHub CLI — Instructor Demo Script</p>
+    </footer>
+  </body>
 </html>
