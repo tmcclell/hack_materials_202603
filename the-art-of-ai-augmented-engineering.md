@@ -1,6 +1,4 @@
-# [📋 Open the Interactive Agenda](https://tmcclell.github.io/hack_materials_202603/)
-
-## The Art of AI-Augmented Engineering
+# The Art of AI-Augmented Engineering
 
 ### Mastering the Human-Machine Partnership
 
@@ -12,7 +10,7 @@ Most AI interactions aren't about fixing bugs. They're about restructuring, sepa
 
 ---
 
-### 🧠 The Uncomfortable Truth
+## 🧠 The Uncomfortable Truth
 
 **AI didn't eliminate engineering judgment — it amplified the consequences of not having it.**
 
@@ -20,7 +18,7 @@ A dev who doesn't understand dependency inversion used to write bad code one fil
 
 ---
 
-### 🔁 The Real Loop
+## 🔁 The Real Loop
 
 It's not *prompt → accept → ship.* It's:
 
@@ -32,7 +30,7 @@ Step 3 is where the engineering happens. AI gives you velocity. You give it **di
 
 ---
 
-### 🏗️ Architecture Is the Prompt
+## 🏗️ Architecture Is the Prompt
 
 Your project structure *is* the prompt. Clean codebase → clean AI output. Messy codebase → more mess, faster.
 
@@ -40,7 +38,7 @@ Your project structure *is* the prompt. Clean codebase → clean AI output. Mess
 
 ---
 
-### ⚡ The New Skill Gap
+## ⚡ The New Skill Gap
 
 It's not "can you write a binary search from memory?" anymore. It's:
 
@@ -52,13 +50,13 @@ It's not "can you write a binary search from memory?" anymore. It's:
 
 ---
 
-### 🛑 Give AI an Escape Route — Don't Let It Improvise Around Walls
+## 🛑 Give AI an Escape Route — Don't Let It Improvise Around Walls
 
 Here's a pattern every dev needs to internalize: **when AI hits a blocker, it doesn't stop. It gets creative.** And creative workarounds from an AI are how you end up with hand-rolled crypto, bypassed auth layers, and `// TODO: fix this later` load-bearing comments in production.
 
 AI doesn't know when to raise its hand and say *"I can't do this safely."* **You have to write that behavior into your instructions.**
 
-#### What This Looks Like in `copilot-instructions.md`
+### What This Looks Like in `copilot-instructions.md`
 
 ```markdown
 ## When You're Blocked
@@ -77,7 +75,7 @@ AI doesn't know when to raise its hand and say *"I can't do this safely."* **You
   silently override it.
 ```
 
-#### Why This Matters
+### Why This Matters
 
 Without explicit escape routes, AI defaults to *"complete the task at all costs."* That means:
 
@@ -88,6 +86,8 @@ Without explicit escape routes, AI defaults to *"complete the task at all costs.
 | Ambiguous requirement | Picks the first interpretation it finds | Leaves `// DECISION NEEDED` — you choose |
 | Convention conflict | Uses whatever pattern it knows best | Follows your conventions, flags the tension |
 
+### The Principle
+
 **Teach AI to fail visibly, not silently.** A `// BLOCKED` comment in a PR is a 5-second conversation. A silently invented workaround is a production incident.
 
 Think of it like error handling in your own code — you'd never write a `catch` block that swallows exceptions and continues. Don't let your AI instructions do the equivalent.
@@ -96,7 +96,7 @@ Think of it like error handling in your own code — you'd never write a `catch`
 
 ---
 
-### 🎯 What Steering Looks Like
+## 🎯 What Steering Looks Like
 
 | Instead of... | Try... |
 |---|---|
@@ -109,7 +109,7 @@ Specificity in, quality out. Every time.
 
 ---
 
-### 🚨 The Anti-Pattern: "It Works" ≠ "It's Right"
+## 🚨 The Anti-Pattern: "It Works" ≠ "It's Right"
 
 The most dangerous AI outcome: code that **passes every test, ships perfectly, and is architecturally bankrupt.** Six months later — full rewrite.
 
@@ -117,10 +117,8 @@ Functional correctness is table stakes. **Structural correctness is the craft.**
 
 ---
 
-### The Bottom Line
+## The Bottom Line
 
 AI-augmented engineering isn't about typing less. It's about **thinking more deliberately** — because the cost of *not* thinking just went from one bad file to an entire bad system generated in an afternoon.
 
 > *"The AI writes the code. You write the architecture. Whoever controls the architecture controls the system."*
-
----
