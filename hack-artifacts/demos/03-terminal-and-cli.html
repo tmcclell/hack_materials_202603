@@ -434,7 +434,7 @@
     <ul class="setup-list">
       <li>VS Code open with an <strong>integrated terminal</strong> in the <code>../demo-app/</code> directory (Emoji Battle Arena project)</li>
       <li>GitHub CLI installed and authenticated — verify with <code>gh auth status</code></li>
-      <li>Copilot CLI extension installed — verify with <code>gh copilot --version</code></li>
+      <li>Copilot CLI installed — verify with <code>copilot --version</code></li>
       <li>Terminal font size increased for audience visibility (≥ 16 pt recommended)</li>
       <li>A feature branch ready with a small change for the PR demo (e.g., a one-line fix in <code>battleService.ts</code>)</li>
     </ul>
@@ -453,7 +453,7 @@
     <span class="step-number-bg" aria-hidden="true">1</span>
     <div class="step-title">
       <span class="step-num">1</span>
-      <span>gh copilot suggest — Natural Language → Shell Commands</span>
+      <span>copilot — Natural Language → Shell Commands</span>
     </div>
 
     <div class="callout-say">
@@ -463,7 +463,8 @@
 
     <div class="callout-type">
       <div class="callout-label">⌨️ Type:</div>
-      <pre><code>gh copilot suggest "how do I find which TypeScript files have TODO comments"</code></pre>
+      <pre><code>copilot
+    how do I find which TypeScript files have TODO comments</code></pre>
     </div>
 
     <div class="callout-see">
@@ -482,7 +483,7 @@
     <span class="step-number-bg" aria-hidden="true">2</span>
     <div class="step-title">
       <span class="step-num">2</span>
-      <span>gh copilot explain — Decode Cryptic Commands</span>
+      <span>copilot — Decode Cryptic Commands</span>
     </div>
 
     <div class="callout-say">
@@ -492,7 +493,8 @@
 
     <div class="callout-type">
       <div class="callout-label">⌨️ Type:</div>
-      <pre><code>gh copilot explain "find src -name '*.ts' -exec grep -l 'TODO' {} \;"</code></pre>
+      <pre><code>copilot
+    Explain this command: find src -name '*.ts' -exec grep -l 'TODO' {} \;</code></pre>
     </div>
 
     <div class="callout-see">
@@ -521,7 +523,8 @@
 
     <div class="callout-type">
       <div class="callout-label">⌨️ Type:</div>
-      <pre><code>gh copilot suggest "how to run only the failing tests in vitest"</code></pre>
+      <pre><code>copilot
+    how to run only the failing tests in vitest</code></pre>
     </div>
 
     <div class="callout-see">
@@ -611,7 +614,7 @@
 
     <div class="callout-say">
       <div class="callout-label">💬 Say:</div>
-      <p>"Your turn! Open your terminal and try <code>gh copilot suggest</code> with any shell question you've been wondering about. Maybe something you always Google."</p>
+      <p>"Your turn! Open your terminal and try <code>copilot</code> with any shell question you've been wondering about. Maybe something you always Google."</p>
     </div>
 
     <div class="audience-instructions">
