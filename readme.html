@@ -1,964 +1,1355 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GitHub Copilot Hackathon — Customer</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Copilot Hackathon — Customer</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-  body {
-    font-family: 'Inter', 'Segoe UI', -apple-system, sans-serif;
-    background: #0d1117;
-    color: #e6edf3;
-    line-height: 1.6;
-  }
+      body {
+        font-family:
+          "Inter",
+          "Segoe UI",
+          -apple-system,
+          sans-serif;
+        background: #0d1117;
+        color: #e6edf3;
+        line-height: 1.6;
+      }
 
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0;
-  }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0;
+      }
 
-  /* Hero */
-  .hero {
-    background: linear-gradient(135deg, #0d1117 0%, #161b22 40%, #1a1e2e 100%);
-    border-bottom: 1px solid #30363d;
-    padding: 60px 48px 48px;
-    position: relative;
-    overflow: hidden;
-  }
+      /* Hero */
+      .hero {
+        background: linear-gradient(
+          135deg,
+          #0d1117 0%,
+          #161b22 40%,
+          #1a1e2e 100%
+        );
+        border-bottom: 1px solid #30363d;
+        padding: 60px 48px 48px;
+        position: relative;
+        overflow: hidden;
+      }
 
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(56, 139, 253, 0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(56, 139, 253, 0.08) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
 
-  .hero-eyebrow {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #58a6ff;
-    margin-bottom: 16px;
-  }
+      .hero-eyebrow {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #58a6ff;
+        margin-bottom: 16px;
+      }
 
-  .hero h1 {
-    font-size: 36px;
-    font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 8px;
-    background: linear-gradient(135deg, #ffffff 0%, #8b949e 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+      .hero h1 {
+        font-size: 36px;
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, #ffffff 0%, #8b949e 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
 
-  .hero-subtitle {
-    font-size: 18px;
-    color: #8b949e;
-    font-weight: 400;
-    margin-bottom: 32px;
-  }
+      .hero-subtitle {
+        font-size: 18px;
+        color: #8b949e;
+        font-weight: 400;
+        margin-bottom: 32px;
+      }
 
-  .hero-meta {
-    display: flex;
-    gap: 32px;
-    flex-wrap: wrap;
-  }
+      .hero-meta {
+        display: flex;
+        gap: 32px;
+        flex-wrap: wrap;
+      }
 
-  .meta-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: #c9d1d9;
-  }
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #c9d1d9;
+      }
 
-  .meta-icon {
-    font-size: 16px;
-    opacity: 0.7;
-  }
+      .meta-icon {
+        font-size: 16px;
+        opacity: 0.7;
+      }
 
-  .meta-label {
-    color: #8b949e;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    display: block;
-    margin-bottom: 2px;
-  }
+      .meta-label {
+        color: #8b949e;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: block;
+        margin-bottom: 2px;
+      }
 
-  /* Content */
-  .content {
-    padding: 48px;
-  }
+      /* Content */
+      .content {
+        padding: 48px;
+      }
 
-  /* Day Banner */
-  .day-banner {
-    background: linear-gradient(135deg, #161b22, #1c2333);
-    border: 1px solid #30363d;
-    border-radius: 12px;
-    padding: 32px;
-    margin-bottom: 40px;
-    position: relative;
-    overflow: hidden;
-  }
+      /* Day Banner */
+      .day-banner {
+        background: linear-gradient(135deg, #161b22, #1c2333);
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 32px;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+      }
 
-  .day-banner::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #58a6ff, #a371f7, #f778ba);
-  }
+      .day-banner::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #58a6ff, #a371f7, #f778ba);
+      }
 
-  .day-banner h2 {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #58a6ff;
-    margin-bottom: 8px;
-  }
+      .day-banner h2 {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #58a6ff;
+        margin-bottom: 8px;
+      }
 
-  .day-banner .day-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #e6edf3;
-    margin-bottom: 6px;
-  }
+      .day-banner .day-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #e6edf3;
+        margin-bottom: 6px;
+      }
 
-  .day-banner .day-desc {
-    color: #8b949e;
-    font-size: 15px;
-  }
+      .day-banner .day-desc {
+        color: #8b949e;
+        font-size: 15px;
+      }
 
-  /* Session Blocks */
-  .session {
-    margin-bottom: 40px;
-  }
+      /* Session Blocks */
+      .session {
+        margin-bottom: 40px;
+      }
 
-  .session-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #21262d;
-  }
+      .session-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #21262d;
+      }
 
-  .session-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
+      .session-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
 
-  .badge-green { background: rgba(63, 185, 80, 0.15); border: 1px solid rgba(63, 185, 80, 0.3); }
-  .badge-yellow { background: rgba(210, 153, 34, 0.15); border: 1px solid rgba(210, 153, 34, 0.3); }
-  .badge-red { background: rgba(248, 81, 73, 0.15); border: 1px solid rgba(248, 81, 73, 0.3); }
+      .badge-green {
+        background: rgba(63, 185, 80, 0.15);
+        border: 1px solid rgba(63, 185, 80, 0.3);
+      }
+      .badge-yellow {
+        background: rgba(210, 153, 34, 0.15);
+        border: 1px solid rgba(210, 153, 34, 0.3);
+      }
+      .badge-red {
+        background: rgba(248, 81, 73, 0.15);
+        border: 1px solid rgba(248, 81, 73, 0.3);
+      }
 
-  .session-title-block {
-    flex: 1;
-  }
+      .session-title-block {
+        flex: 1;
+      }
 
-  .session-level {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
+      .session-level {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
 
-  .level-green { color: #3fb950; }
-  .level-yellow { color: #d29922; }
-  .level-red { color: #f85149; }
+      .level-green {
+        color: #3fb950;
+      }
+      .level-yellow {
+        color: #d29922;
+      }
+      .level-red {
+        color: #f85149;
+      }
 
-  .session-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #e6edf3;
-  }
+      .session-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #e6edf3;
+      }
 
-  .session-duration {
-    font-size: 13px;
-    color: #8b949e;
-    background: #21262d;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-weight: 500;
-    flex-shrink: 0;
-  }
+      .session-duration {
+        font-size: 13px;
+        color: #8b949e;
+        background: #21262d;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 500;
+        flex-shrink: 0;
+      }
 
-  /* Topic Cards */
-  .topic-group {
-    margin-bottom: 24px;
-  }
+      /* Topic Cards */
+      .topic-group {
+        margin-bottom: 24px;
+      }
 
-  .topic-group-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #8b949e;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-    padding-left: 4px;
-  }
+      .topic-group-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #8b949e;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+        padding-left: 4px;
+      }
 
-  .topic-card {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    transition: border-color 0.2s;
-  }
+      .topic-card {
+        background: #161b22;
+        border: 1px solid #21262d;
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        transition: border-color 0.2s;
+      }
 
-  .topic-card:hover {
-    border-color: #30363d;
-  }
+      .topic-card:hover {
+        border-color: #30363d;
+      }
 
-  .topic-time {
-    font-size: 12px;
-    font-weight: 600;
-    color: #8b949e;
-    min-width: 48px;
-    padding-top: 2px;
-    flex-shrink: 0;
-  }
+      .topic-time {
+        font-size: 12px;
+        font-weight: 600;
+        color: #8b949e;
+        min-width: 48px;
+        padding-top: 2px;
+        flex-shrink: 0;
+      }
 
-  .topic-content {
-    flex: 1;
-  }
+      .topic-content {
+        flex: 1;
+      }
 
-  .topic-name {
-    font-size: 15px;
-    font-weight: 600;
-    color: #e6edf3;
-    margin-bottom: 4px;
-  }
+      .topic-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #e6edf3;
+        margin-bottom: 4px;
+      }
 
-  .topic-desc {
-    font-size: 13px;
-    color: #8b949e;
-    line-height: 1.5;
-  }
+      .topic-desc {
+        font-size: 13px;
+        color: #8b949e;
+        line-height: 1.5;
+      }
 
-  .topic-tag {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 2px 8px;
-    border-radius: 12px;
-    display: inline-block;
-    margin-top: 6px;
-  }
+      .topic-tag {
+        font-size: 11px;
+        font-weight: 500;
+        padding: 2px 8px;
+        border-radius: 12px;
+        display: inline-block;
+        margin-top: 6px;
+      }
 
-  .tag-demo { background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
-  .tag-handson { background: rgba(163, 113, 247, 0.15); color: #a371f7; }
-  .tag-discussion { background: rgba(210, 153, 34, 0.15); color: #d29922; }
-  .tag-presentation { background: rgba(63, 185, 80, 0.15); color: #3fb950; }
-  .tag-briefing { background: rgba(210, 153, 34, 0.15); color: #d29922; }
+      .tag-demo {
+        background: rgba(56, 139, 253, 0.15);
+        color: #58a6ff;
+      }
+      .tag-handson {
+        background: rgba(163, 113, 247, 0.15);
+        color: #a371f7;
+      }
+      .tag-discussion {
+        background: rgba(210, 153, 34, 0.15);
+        color: #d29922;
+      }
+      .tag-presentation {
+        background: rgba(63, 185, 80, 0.15);
+        color: #3fb950;
+      }
+      .tag-briefing {
+        background: rgba(210, 153, 34, 0.15);
+        color: #d29922;
+      }
 
-  a.topic-tag {
-    text-decoration: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
-  }
-  a.topic-tag:hover {
-    filter: brightness(1.3);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
+      a.topic-tag {
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+      a.topic-tag:hover {
+        filter: brightness(1.3);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
 
-  /* Escalation Arc */
-  .arc-visual {
-    background: linear-gradient(135deg, #161b22, #1c2333);
-    border: 1px solid #30363d;
-    border-radius: 12px;
-    padding: 24px 28px;
-    margin: 24px 0 32px;
-  }
+      /* Escalation Arc */
+      .arc-visual {
+        background: linear-gradient(135deg, #161b22, #1c2333);
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 24px 28px;
+        margin: 24px 0 32px;
+      }
 
-  .arc-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #58a6ff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-  }
+      .arc-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #58a6ff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+      }
 
-  .arc-steps {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+      .arc-steps {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
 
-  .arc-step {
-    text-align: center;
-    flex: 1;
-    min-width: 100px;
-  }
+      .arc-step {
+        text-align: center;
+        flex: 1;
+        min-width: 100px;
+      }
 
-  .arc-step-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: #e6edf3;
-    margin-bottom: 4px;
-  }
+      .arc-step-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: #e6edf3;
+        margin-bottom: 4px;
+      }
 
-  .arc-step-desc {
-    font-size: 11px;
-    color: #8b949e;
-  }
+      .arc-step-desc {
+        font-size: 11px;
+        color: #8b949e;
+      }
 
-  .arc-arrow {
-    color: #30363d;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
+      .arc-arrow {
+        color: #30363d;
+        font-size: 20px;
+        flex-shrink: 0;
+      }
 
-  /* Key Takeaway */
-  .takeaway {
-    background: rgba(56, 139, 253, 0.06);
-    border-left: 3px solid #58a6ff;
-    border-radius: 0 8px 8px 0;
-    padding: 16px 20px;
-    margin: 20px 0 32px;
-  }
+      /* Key Takeaway */
+      .takeaway {
+        background: rgba(56, 139, 253, 0.06);
+        border-left: 3px solid #58a6ff;
+        border-radius: 0 8px 8px 0;
+        padding: 16px 20px;
+        margin: 20px 0 32px;
+      }
 
-  .takeaway-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #58a6ff;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
+      .takeaway-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #58a6ff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
 
-  .takeaway p {
-    font-size: 14px;
-    color: #c9d1d9;
-    font-style: italic;
-  }
+      .takeaway p {
+        font-size: 14px;
+        color: #c9d1d9;
+        font-style: italic;
+      }
 
-  /* Prerequisites */
-  .prereq-section {
-    margin-top: 48px;
-    padding-top: 32px;
-    border-top: 1px solid #21262d;
-  }
+      /* Prerequisites */
+      .prereq-section {
+        margin-top: 48px;
+        padding-top: 32px;
+        border-top: 1px solid #21262d;
+      }
 
-  .prereq-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #e6edf3;
-    margin-bottom: 20px;
-  }
+      .prereq-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #e6edf3;
+        margin-bottom: 20px;
+      }
 
-  .prereq-list {
-    list-style: none;
-    padding: 0;
-  }
+      .prereq-list {
+        list-style: none;
+        padding: 0;
+      }
 
-  .prereq-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid #161b22;
-    font-size: 14px;
-    color: #c9d1d9;
-  }
+      .prereq-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #161b22;
+        font-size: 14px;
+        color: #c9d1d9;
+      }
 
-  .prereq-check {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #30363d;
-    border-radius: 4px;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
+      .prereq-check {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #30363d;
+        border-radius: 4px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
 
-  .prereq-list li code {
-    background: #21262d;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 12px;
-    color: #79c0ff;
-    font-family: 'Cascadia Code', 'Fira Code', monospace;
-  }
+      .prereq-list li code {
+        background: #21262d;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #79c0ff;
+        font-family: "Cascadia Code", "Fira Code", monospace;
+      }
 
-  /* Footer */
-  .footer {
-    margin-top: 48px;
-    padding: 32px 0;
-    border-top: 1px solid #21262d;
-    text-align: center;
-  }
+      /* Footer */
+      .footer {
+        margin-top: 48px;
+        padding: 32px 0;
+        border-top: 1px solid #21262d;
+        text-align: center;
+      }
 
-  .footer-logos {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 16px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #8b949e;
-  }
+      .footer-logos {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #8b949e;
+      }
 
-  .footer-text {
-    font-size: 12px;
-    color: #484f58;
-  }
+      .footer-text {
+        font-size: 12px;
+        color: #484f58;
+      }
 
-  /* Divider */
-  .section-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #30363d, transparent);
-    margin: 40px 0;
-  }
-</style>
-</head>
-<body>
-
-<div class="container">
-
-  <!-- Hero -->
-  <div class="hero">
-    <div class="hero-eyebrow">GitHub × Customer</div>
-    <h1>GitHub Copilot<br>Hackathon</h1>
-    <p class="hero-subtitle">From autocomplete to autonomous agents — hands-on.</p>
-    <div class="hero-meta">
-      <div class="meta-item">
-        <div>
-          <span class="meta-label">Date</span>
-          <strong>March 19, 2026</strong>
+      /* Divider */
+      .section-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #30363d, transparent);
+        margin: 40px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-eyebrow">GitHub × Customer</div>
+        <h1>GitHub Copilot<br />Hackathon</h1>
+        <p class="hero-subtitle">
+          From autocomplete to autonomous agents — hands-on.
+        </p>
+        <div class="hero-meta">
+          <div class="meta-item">
+            <div>
+              <span class="meta-label">Date</span>
+              <strong>March 19, 2026</strong>
+            </div>
+          </div>
+          <div class="meta-item">
+            <div>
+              <span class="meta-label">Format</span>
+              <strong>Onsite · Hands-on</strong>
+            </div>
+          </div>
+          <div class="meta-item">
+            <div>
+              <span class="meta-label">Duration</span>
+              <strong>Full Day · 9 AM – 5 PM</strong>
+            </div>
+          </div>
+          <div class="meta-item">
+            <div>
+              <span class="meta-label">Audience</span>
+              <strong>All Engineering Disciplines</strong>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="meta-item">
-        <div>
-          <span class="meta-label">Format</span>
-          <strong>Onsite · Hands-on</strong>
+
+      <div class="content">
+        <!-- Day Banner -->
+        <div class="day-banner">
+          <h2>Morning Agenda · 9:00 AM – 12:30 PM</h2>
+          <div class="day-title">
+            Three sessions. Four hands-on labs. Zero slides-only blocks.
+          </div>
+          <p class="day-desc">
+            Basics → Intermediate → Advanced. Each session builds on the last.
+            Agent Mode → Plan Mode → Autonomous Copilot. Four labs. Premium
+            request deep-dive.
+          </p>
         </div>
-      </div>
-      <div class="meta-item">
-        <div>
-          <span class="meta-label">Duration</span>
-          <strong>Full Day · 9 AM – 5 PM</strong>
+
+        <!-- ========== SESSION 1: BASICS ========== -->
+        <div class="session">
+          <div class="session-header">
+            <div class="session-badge badge-green">🟢</div>
+            <div class="session-title-block">
+              <div class="session-level level-green">Basics</div>
+              <div class="session-title">Copilot Fundamentals</div>
+            </div>
+            <div class="session-duration">25 min · 9:00 – 9:25</div>
+          </div>
+
+          <div class="topic-card">
+            <div class="topic-time">5 min</div>
+            <div class="topic-content">
+              <div class="topic-name">How Copilot Works Inside VS Code</div>
+              <div class="topic-desc">
+                Inline completions, Copilot Chat panel, Agent Mode — the three
+                interaction modes. Context window, model selection (approved
+                models), and how VS Code feeds context to Copilot.
+              </div>
+              <a
+                href="hack-artifacts/presentations/copilot-in-vscode.html"
+                target="_blank"
+                class="topic-tag tag-presentation"
+                >Presentation</a
+              >
+            </div>
+          </div>
+
+          <div class="topic-card">
+            <div class="topic-time">5 min</div>
+            <div class="topic-content">
+              <div class="topic-name">
+                Premium Requests &amp; Model Selection
+              </div>
+              <div class="topic-desc">
+                Plan allocations (Free 50, Pro 300, Business 300/user,
+                Enterprise 1,000/user), model multipliers (0× included → 10×
+                premium), Auto selection = 10% discount, quota resets, overage
+                billing at $0.04/request
+              </div>
+              <a
+                href="hack-artifacts/presentations/premium-requests.html"
+                target="_blank"
+                class="topic-tag tag-presentation"
+                >Presentation</a
+              >
+            </div>
+          </div>
+
+          <div class="topic-card">
+            <div class="topic-time">5 min</div>
+            <div class="topic-content">
+              <div class="topic-name">Live Demo — Copilot Chat</div>
+              <div class="topic-desc">
+                Copilot Chat panel, /explain, /fix, /tests, /doc slash commands,
+                @workspace for project-wide questions, multi-turn conversations,
+                inline Chat (Ctrl+I)
+              </div>
+              <a
+                href="hack-artifacts/demos/01-copilot-chat.html"
+                target="_blank"
+                class="topic-tag tag-demo"
+                >Demo</a
+              >
+            </div>
+          </div>
+
+          <div class="topic-card">
+            <div class="topic-time">10 min</div>
+            <div class="topic-content">
+              <div class="topic-name">Lab 1 — Quick Start</div>
+              <div class="topic-desc">
+                Verify Copilot is active, complete a function with inline
+                suggestions, use Chat to explain a code block
+              </div>
+              <a
+                href="hack-artifacts/hands-on/lab1-quick-start.html"
+                target="_blank"
+                class="topic-tag tag-handson"
+                >Hands-on</a
+              >
+            </div>
+          </div>
+
+          <div class="takeaway">
+            <div class="takeaway-label">Key Takeaway</div>
+            <p>
+              Copilot is a context-aware pair programmer — the better the
+              context you give it, the better the output.
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="meta-item">
-        <div>
-          <span class="meta-label">Audience</span>
-          <strong>All Engineering Disciplines</strong>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== SESSION 2: INTERMEDIATE ========== -->
+        <div class="session">
+          <div class="session-header">
+            <div class="session-badge badge-yellow">🟡</div>
+            <div class="session-title-block">
+              <div class="session-level level-yellow">Intermediate</div>
+              <div class="session-title">VS Code, GitHub CLI & Agent Mode</div>
+            </div>
+            <div class="session-duration">~90 min · 9:25 – 10:55</div>
+          </div>
+
+          <!-- Part A -->
+          <div class="topic-group">
+            <div class="topic-group-title">
+              VS Code Power Workflows — 30 min · 9:25 – 9:55
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">10 min</div>
+              <div class="topic-content">
+                <div class="topic-name">
+                  Prompt Engineering + Chat Deep Dive
+                </div>
+                <div class="topic-desc">
+                  Zero-shot vs few-shot, comment anchors, #file and #selection
+                  scoping, /explain, /fix, /tests, /doc, @workspace, multi-turn
+                  conversations
+                </div>
+                <a
+                  href="hack-artifacts/demos/02-prompt-engineering.html"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demo</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">20 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Lab 2 — IDE Workflow Sprint</div>
+                <div class="topic-desc">
+                  Write a function with comment-driven prompting, refactor it
+                  with Chat, generate unit tests with /tests, create inline
+                  documentation with /doc
+                </div>
+                <a
+                  href="hack-artifacts/hands-on/lab2-ide-workflow-sprint.html"
+                  target="_blank"
+                  class="topic-tag tag-handson"
+                  >Hands-on</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Part B -->
+          <div class="topic-group">
+            <div class="topic-group-title">
+              Copilot CLI + GitHub CLI — 15 min · 9:55 – 10:10 (Demo Only)
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">7 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Copilot in the Terminal</div>
+                <div class="topic-desc">
+                  copilot for shell and repo tasks, natural language prompts in
+                  terminal, model selection and interactive workflows
+                </div>
+                <a
+                  href="hack-artifacts/demos/03-terminal-and-cli.html"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demo</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">8 min</div>
+              <div class="topic-content">
+                <div class="topic-name">GitHub CLI Workflows</div>
+                <div class="topic-desc">
+                  PR creation, issue management, Actions troubleshooting — all
+                  Copilot-assisted. Quick audience try included.
+                </div>
+                <a
+                  href="hack-artifacts/demos/03-terminal-and-cli.html#cli-workflows"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demo</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Break -->
+          <div class="topic-group">
+            <div class="topic-group-title">
+              ☕ Break — 10 min · 10:10 – 10:20
+            </div>
+          </div>
+
+          <!-- Part C -->
+          <div class="topic-group">
+            <div class="topic-group-title">
+              Agent Mode — 35 min · 10:20 – 10:55
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">10 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Agent Mode in VS Code</div>
+                <div class="topic-desc">
+                  Multi-file edits, terminal command execution, iterative
+                  problem-solving — plan → execute → self-correct
+                </div>
+                <a
+                  href="hack-artifacts/demos/04-agent-mode.html"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demo</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">25 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Lab 3 — Let the Agent Drive</div>
+                <div class="topic-desc">
+                  Scaffold a new module from plain English, let the agent write
+                  tests and fix its own failures, observe its decision-making
+                  process
+                </div>
+                <a
+                  href="hack-artifacts/hands-on/lab3-agent-drive.html"
+                  target="_blank"
+                  class="topic-tag tag-handson"
+                  >Hands-on</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="takeaway">
+            <div class="takeaway-label">Key Takeaway</div>
+            <p>
+              Copilot isn't just autocomplete — it's a full IDE + terminal
+              companion. Agent Mode turns it from a suggestion engine into a
+              coding partner.
+            </p>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== SESSION 3: ADVANCED ========== -->
+        <div class="session">
+          <div class="session-header">
+            <div class="session-badge badge-red">🔴</div>
+            <div class="session-title-block">
+              <div class="session-level level-red">Advanced</div>
+              <div class="session-title">
+                Plan Mode, Skills, Autonomous Copilot &amp; Governance
+              </div>
+            </div>
+            <div class="session-duration">~90 min · 10:55 – 12:25</div>
+          </div>
+
+          <!-- Escalation Arc -->
+          <div class="arc-visual">
+            <div class="arc-title">The Autonomy Escalation Arc</div>
+            <div class="arc-steps">
+              <div class="arc-step">
+                <div class="arc-step-name">Agent Mode</div>
+                <div class="arc-step-desc">Interactive<br />co-pilot</div>
+              </div>
+              <div class="arc-arrow">→</div>
+              <div class="arc-step">
+                <div class="arc-step-name">Plan Mode</div>
+                <div class="arc-step-desc">Supervised<br />autonomy</div>
+              </div>
+              <div class="arc-arrow">→</div>
+              <div class="arc-step">
+                <div class="arc-step-name">Autonomous</div>
+                <div class="arc-step-desc">Autopilot +<br />Agent Teams</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part A: Plan Mode -->
+          <div class="topic-group">
+            <div class="topic-group-title">
+              Plan Mode — Supervised Autonomy — 15 min · 10:55 – 11:10
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">5 min</div>
+              <div class="topic-content">
+                <div class="topic-name">What is Plan Mode?</div>
+                <div class="topic-desc">
+                  Agent proposes a step-by-step plan, you review and approve
+                  before execution. The "trust but verify" workflow. When to use
+                  Plan vs Agent vs Autopilot.
+                </div>
+                <a
+                  href="hack-artifacts/demos/05-plan-mode.html"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demo</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">10 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Live Demo — Plan Mode in Action</div>
+                <div class="topic-desc">
+                  Start a task in Plan Mode, review the agent's proposed steps,
+                  approve or modify, watch execution. Compare the experience to
+                  Agent Mode.
+                </div>
+                <a
+                  href="hack-artifacts/demos/05-plan-mode.html#live-demo"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demo</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Part B: Agent/Skills + Copilot Instructions -->
+          <div class="topic-group">
+            <div class="topic-group-title">
+              Agent/Skills + Copilot Instructions — 30 min · 11:10 – 11:40
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">10 min</div>
+              <div class="topic-content">
+                <div class="topic-name">
+                  Copilot Instructions & Prompt Files
+                </div>
+                <div class="topic-desc">
+                  .github/copilot-instructions.md for org-wide coding standards,
+                  prompt files (.github/prompts/*.md) for reusable task-specific
+                  prompts. How these shape every Copilot interaction.
+                </div>
+                <a
+                  href="hack-artifacts/demos/06-copilot-instructions.html"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demo</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">5 min</div>
+              <div class="topic-content">
+                <div class="topic-name">
+                  Skills & MCP (Model Context Protocol)
+                </div>
+                <div class="topic-desc">
+                  Extending Copilot with custom tools and external data sources.
+                  Available community MCP servers. Where Customer might build
+                  custom MCPs.
+                </div>
+                <a
+                  href="hack-artifacts/presentations/skills-and-mcp.html"
+                  target="_blank"
+                  class="topic-tag tag-presentation"
+                  >Presentation</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">15 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Lab 4 — Configure & Extend</div>
+                <div class="topic-desc">
+                  Create a copilot-instructions.md with your team's standards,
+                  create a prompt file for a common task, observe how
+                  instructions change Copilot's output
+                </div>
+                <a
+                  href="hack-artifacts/hands-on/lab4-configure-extend.html"
+                  target="_blank"
+                  class="topic-tag tag-handson"
+                  >Hands-on</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Part C: Autonomous Copilot & Agent Teams -->
+          <div class="topic-group">
+            <div class="topic-group-title">
+              Autonomous Copilot &amp; Agent Teams — 25 min · 11:40 – 12:05
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">5 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Autonomous Copilot — Concept</div>
+                <div class="topic-desc">
+                  The full autonomy spectrum: Autopilot mode (no confirmations),
+                  Copilot coding agent (cloud PRs), agent teams (Squad pattern).
+                  Safety controls: step limits, permissions, background
+                  execution.
+                </div>
+                <a
+                  href="hack-artifacts/demos/07-autonomous-copilot.html"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demo</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">8 min</div>
+              <div class="topic-content">
+                <div class="topic-name">
+                  Live Demo — Autopilot &amp; Coding Agent
+                </div>
+                <div class="topic-desc">
+                  Run a task in Autopilot mode end-to-end. Show GitHub's coding
+                  agent creating a PR from an issue. Compare interactive vs
+                  autonomous workflows.
+                </div>
+                <a
+                  href="hack-artifacts/demos/07-autonomous-copilot.html#live-demo"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demo</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">7 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Squad — AI Agent Teams</div>
+                <div class="topic-desc">
+                  bradygaster/squad: persistent AI agent teams (frontend,
+                  backend, tester, lead) with parallel execution and shared
+                  decisions. The "fleet" concept as open-source tooling.
+                </div>
+                <a
+                  href="hack-artifacts/discussions/squad.html"
+                  target="_blank"
+                  class="topic-tag tag-discussion"
+                  >Discussion</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">5 min</div>
+              <div class="topic-content">
+                <div class="topic-name">When to Use Each Mode</div>
+                <div class="topic-desc">
+                  Agent Mode for focused tasks, Plan Mode for multi-file
+                  refactors, Autopilot for trusted patterns, Coding Agent for
+                  async PRs, Squad for complex multi-concern projects.
+                </div>
+                <a
+                  href="hack-artifacts/demos/07-autonomous-copilot.html"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demo</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Part E: Governance -->
+          <div class="topic-group">
+            <div class="topic-group-title">
+              Guardrails &amp; Governance — 10 min · 12:05 – 12:15
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">5 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Model Governance & Policy</div>
+                <div class="topic-desc">
+                  Approved model selection, choosing models by task type,
+                  content exclusions, IP filters, audit logging, responsible use
+                  guidelines
+                </div>
+                <a
+                  href="hack-artifacts/discussions/governance.html"
+                  target="_blank"
+                  class="topic-tag tag-discussion"
+                  >Discussion</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">5 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Audit & Compliance</div>
+                <div class="topic-desc">
+                  Session trails for autonomous agents, code review hygiene for
+                  AI-generated code, building trust incrementally
+                </div>
+                <a
+                  href="hack-artifacts/discussions/governance.html#audit"
+                  target="_blank"
+                  class="topic-tag tag-discussion"
+                  >Discussion</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Part E: What's Next -->
+          <div class="topic-group">
+            <div class="topic-group-title">
+              What's Next — 5 min · 12:15 – 12:20
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">5 min</div>
+              <div class="topic-content">
+                <div class="topic-name">Copilot SDK &amp; OpenClaw</div>
+                <div class="topic-desc">
+                  Build your own Copilot: @github/copilot-sdk (Node.js, Python,
+                  Go, .NET). OpenClaw — an open-source AI assistant built on the
+                  SDK. A glimpse at what's possible.
+                </div>
+                <a
+                  href="hack-artifacts/discussions/copilot-sdk.html"
+                  target="_blank"
+                  class="topic-tag tag-discussion"
+                  >Discussion</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Wrap-up -->
+          <div class="topic-group">
+            <div class="topic-group-title">
+              Wrap-Up &amp; Afternoon Hack Framing — 5 min · 12:20 – 12:25
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">5 min</div>
+              <div class="topic-content">
+                <div class="topic-name">What's Ahead This Afternoon</div>
+                <div class="topic-desc">
+                  Hack format, use-case themes, team formation, fallback track
+                  for teams without use cases, Show &amp; Tell expectations
+                </div>
+                <a
+                  href="hack-artifacts/discussions/afternoon-briefing.html"
+                  target="_blank"
+                  class="topic-tag tag-briefing"
+                  >Briefing</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="takeaway">
+            <div class="takeaway-label">Key Takeaway</div>
+            <p>
+              The path from assistant to autonomous teammate is Agent → Plan →
+              Autonomous. Pair with Copilot Instructions, custom skills, and
+              intentional guardrails to match your team's trust level.
+            </p>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== AFTERNOON: HACKING ========== -->
+        <div class="session">
+          <div class="session-header">
+            <div class="session-badge badge-yellow">🛠️</div>
+            <div class="session-title-block">
+              <div class="session-level level-yellow">Afternoon</div>
+              <div class="session-title">
+                Hands-On Hacking + Show &amp; Tell
+              </div>
+            </div>
+            <div class="session-duration">4 hours · 1:00 – 5:00 PM</div>
+          </div>
+
+          <div class="topic-group">
+            <div class="topic-group-title">Hack Schedule</div>
+
+            <div class="topic-card">
+              <div class="topic-time">20 min</div>
+              <div class="topic-content">
+                <div class="topic-name">1:00 — Hack Kickoff</div>
+                <div class="topic-desc">
+                  Use-case themes revealed, team formation, repo access,
+                  fallback track briefing for teams without pre-identified use
+                  cases
+                </div>
+                <a
+                  href="hack-artifacts/discussions/hack-kickoff.html"
+                  target="_blank"
+                  class="topic-tag tag-briefing"
+                  >Briefing</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">100 min</div>
+              <div class="topic-content">
+                <div class="topic-name">1:20 — Hacking Sprint 1</div>
+                <div class="topic-desc">
+                  Teams build using Copilot. Facilitators roam and provide
+                  support. Use Agent Mode, Plan Mode, or Autopilot.
+                </div>
+                <a
+                  href="hack-artifacts/hands-on/hacking-guide.html"
+                  target="_blank"
+                  class="topic-tag tag-handson"
+                  >Hands-on</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">15 min</div>
+              <div class="topic-content">
+                <div class="topic-name">3:00 — Mid-Hack Check-In</div>
+                <div class="topic-desc">
+                  Quick progress shares, unblock stuck teams, highlight
+                  interesting discoveries
+                </div>
+                <a
+                  href="hack-artifacts/discussions/hack-kickoff.html#checkin"
+                  target="_blank"
+                  class="topic-tag tag-discussion"
+                  >Discussion</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">60 min</div>
+              <div class="topic-content">
+                <div class="topic-name">3:15 — Hacking Sprint 2</div>
+                <div class="topic-desc">
+                  Continue building. Start preparing for Show &amp; Tell.
+                </div>
+                <a
+                  href="hack-artifacts/hands-on/hacking-guide.html#sprint-2"
+                  target="_blank"
+                  class="topic-tag tag-handson"
+                  >Hands-on</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">35 min</div>
+              <div class="topic-content">
+                <div class="topic-name">4:15 — 🎤 Show &amp; Tell</div>
+                <div class="topic-desc">
+                  Teams demo what they built (~5 min per team). What was the
+                  challenge? What Copilot features did you use? Live demo. What
+                  surprised you?
+                </div>
+                <a
+                  href="hack-artifacts/discussions/show-and-tell.html"
+                  target="_blank"
+                  class="topic-tag tag-demo"
+                  >Demos</a
+                >
+              </div>
+            </div>
+
+            <div class="topic-card">
+              <div class="topic-time">10 min</div>
+              <div class="topic-content">
+                <div class="topic-name">4:50 — Closing</div>
+                <div class="topic-desc">
+                  Next steps, office hours cadence, champion team formation,
+                  feedback collection
+                </div>
+                <a
+                  href="hack-artifacts/discussions/closing.html"
+                  target="_blank"
+                  class="topic-tag tag-discussion"
+                  >Planning</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="takeaway">
+            <div class="takeaway-label">Fallback Track</div>
+            <p>
+              No use case? Use Plan Mode + Autopilot to build a solution from a
+              plain-English spec: REST API from a PRD, Repo Health Automation,
+              or Internal Tool Generator.
+            </p>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Prerequisites -->
+        <div class="prereq-section">
+          <div class="prereq-title">✅ Before You Arrive</div>
+          <ul class="prereq-list">
+            <li>
+              <div class="prereq-check"></div>
+              <div>GitHub Copilot license active and working in your IDE</div>
+            </li>
+            <li>
+              <div class="prereq-check"></div>
+              <div>
+                VS Code installed with the <strong>GitHub Copilot</strong> and
+                <strong>Copilot Chat</strong> extensions (latest version)
+              </div>
+            </li>
+            <li>
+              <div class="prereq-check"></div>
+              <div>
+                Copilot CLI installed (Windows:
+                <code>winget install GitHub.Copilot</code>, or cross-platform:
+                <code>npm install -g @github/copilot</code>), verify with
+                <code>copilot --version</code>
+              </div>
+            </li>
+            <li>
+              <div class="prereq-check"></div>
+              <div>
+                Access to a test or sandbox repository for hands-on labs
+              </div>
+            </li>
+            <li>
+              <div class="prereq-check"></div>
+              <div>
+                Familiarity with basic Git workflows (clone, branch, commit,
+                pull request)
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="prereq-section">
+          <div class="prereq-title">Key References</div>
+          <ul class="prereq-list">
+            <li>
+              <div class="prereq-check"></div>
+              <div>
+                Squad - AI Agent Teams:
+                <a
+                  href="https://github.com/bradygaster/squad"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >github.com/bradygaster/squad</a
+                >
+              </div>
+            </li>
+            <li>
+              <div class="prereq-check"></div>
+              <div>
+                Copilot SDK: <code>@github/copilot-sdk</code> (technical
+                preview)
+              </div>
+            </li>
+            <li>
+              <div class="prereq-check"></div>
+              <div>
+                OpenClaw Video:
+                <a
+                  href="https://youtu.be/PEtM45hG-5A"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Build Your Own OpenClaw Bot like with GitHub Copilot</a
+                >
+              </div>
+            </li>
+            <li>
+              <div class="prereq-check"></div>
+              <div>
+                GitHub Docs: Premium Requests:
+                <a
+                  href="https://docs.github.com/en/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >docs.github.com</a
+                >
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+          <div class="footer-logos">
+            GitHub &nbsp;×&nbsp; Microsoft &nbsp;×&nbsp; Customer
+          </div>
+          <div class="footer-text">March 19, 2026 · Onsite Hackathon</div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="content">
-
-    <!-- Day Banner -->
-    <div class="day-banner">
-      <h2>Morning Agenda · 9:00 AM – 12:30 PM</h2>
-      <div class="day-title">Three sessions. Four hands-on labs. Zero slides-only blocks.</div>
-      <p class="day-desc">Basics → Intermediate → Advanced. Each session builds on the last. Agent Mode → Plan Mode → Autonomous Copilot. Four labs. Premium request deep-dive.</p>
-    </div>
-
-    <!-- ========== SESSION 1: BASICS ========== -->
-    <div class="session">
-      <div class="session-header">
-        <div class="session-badge badge-green">🟢</div>
-        <div class="session-title-block">
-          <div class="session-level level-green">Basics</div>
-          <div class="session-title">Copilot Fundamentals</div>
-        </div>
-        <div class="session-duration">25 min · 9:00 – 9:25</div>
-      </div>
-
-      <div class="topic-card">
-        <div class="topic-time">5 min</div>
-        <div class="topic-content">
-          <div class="topic-name">How Copilot Works Inside VS Code</div>
-          <div class="topic-desc">Inline completions, Copilot Chat panel, Agent Mode — the three interaction modes. Context window, model selection (approved models), and how VS Code feeds context to Copilot.</div>
-          <a href="hack-artifacts/presentations/copilot-in-vscode.html" target="_blank" class="topic-tag tag-presentation">Presentation</a>
-        </div>
-      </div>
-
-      <div class="topic-card">
-        <div class="topic-time">5 min</div>
-        <div class="topic-content">
-          <div class="topic-name">Premium Requests &amp; Model Selection</div>
-          <div class="topic-desc">Plan allocations (Free 50, Pro 300, Business 300/user, Enterprise 1,000/user), model multipliers (0× included → 10× premium), Auto selection = 10% discount, quota resets, overage billing at $0.04/request</div>
-          <a href="hack-artifacts/presentations/premium-requests.html" target="_blank" class="topic-tag tag-presentation">Presentation</a>
-        </div>
-      </div>
-
-      <div class="topic-card">
-        <div class="topic-time">5 min</div>
-        <div class="topic-content">
-          <div class="topic-name">Live Demo — Copilot Chat</div>
-          <div class="topic-desc">Copilot Chat panel, /explain, /fix, /tests, /doc slash commands, @workspace for project-wide questions, multi-turn conversations, inline Chat (Ctrl+I)</div>
-          <a href="hack-artifacts/demos/01-copilot-chat.html" target="_blank" class="topic-tag tag-demo">Demo</a>
-        </div>
-      </div>
-
-      <div class="topic-card">
-        <div class="topic-time">10 min</div>
-        <div class="topic-content">
-          <div class="topic-name">Lab 1 — Quick Start</div>
-          <div class="topic-desc">Verify Copilot is active, complete a function with inline suggestions, use Chat to explain a code block</div>
-          <a href="hack-artifacts/hands-on/lab1-quick-start.html" target="_blank" class="topic-tag tag-handson">Hands-on</a>
-        </div>
-      </div>
-
-      <div class="takeaway">
-        <div class="takeaway-label">Key Takeaway</div>
-        <p>Copilot is a context-aware pair programmer — the better the context you give it, the better the output.</p>
-      </div>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- ========== SESSION 2: INTERMEDIATE ========== -->
-    <div class="session">
-      <div class="session-header">
-        <div class="session-badge badge-yellow">🟡</div>
-        <div class="session-title-block">
-          <div class="session-level level-yellow">Intermediate</div>
-          <div class="session-title">VS Code, GitHub CLI & Agent Mode</div>
-        </div>
-        <div class="session-duration">~90 min · 9:25 – 10:55</div>
-      </div>
-
-      <!-- Part A -->
-      <div class="topic-group">
-        <div class="topic-group-title">VS Code Power Workflows — 30 min · 9:25 – 9:55</div>
-
-        <div class="topic-card">
-          <div class="topic-time">10 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Prompt Engineering + Chat Deep Dive</div>
-            <div class="topic-desc">Zero-shot vs few-shot, comment anchors, #file and #selection scoping, /explain, /fix, /tests, /doc, @workspace, multi-turn conversations</div>
-            <a href="hack-artifacts/demos/02-prompt-engineering.html" target="_blank" class="topic-tag tag-demo">Demo</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">20 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Lab 2 — IDE Workflow Sprint</div>
-            <div class="topic-desc">Write a function with comment-driven prompting, refactor it with Chat, generate unit tests with /tests, create inline documentation with /doc</div>
-            <a href="hack-artifacts/hands-on/lab2-ide-workflow-sprint.html" target="_blank" class="topic-tag tag-handson">Hands-on</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Part B -->
-      <div class="topic-group">
-        <div class="topic-group-title">GitHub CLI with Copilot — 15 min · 9:55 – 10:10 (Demo Only)</div>
-
-        <div class="topic-card">
-          <div class="topic-time">7 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Copilot in the Terminal</div>
-            <div class="topic-desc">gh copilot suggest for shell commands, gh copilot explain for understanding commands, natural language → CLI translation</div>
-            <a href="hack-artifacts/demos/03-terminal-and-cli.html" target="_blank" class="topic-tag tag-demo">Demo</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">8 min</div>
-          <div class="topic-content">
-            <div class="topic-name">GitHub CLI Workflows</div>
-            <div class="topic-desc">PR creation, issue management, Actions troubleshooting — all Copilot-assisted. Quick audience try included.</div>
-            <a href="hack-artifacts/demos/03-terminal-and-cli.html#cli-workflows" target="_blank" class="topic-tag tag-demo">Demo</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Break -->
-      <div class="topic-group">
-        <div class="topic-group-title">☕ Break — 10 min · 10:10 – 10:20</div>
-      </div>
-
-      <!-- Part C -->
-      <div class="topic-group">
-        <div class="topic-group-title">Agent Mode — 35 min · 10:20 – 10:55</div>
-
-        <div class="topic-card">
-          <div class="topic-time">10 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Agent Mode in VS Code</div>
-            <div class="topic-desc">Multi-file edits, terminal command execution, iterative problem-solving — plan → execute → self-correct</div>
-            <a href="hack-artifacts/demos/04-agent-mode.html" target="_blank" class="topic-tag tag-demo">Demo</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">25 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Lab 3 — Let the Agent Drive</div>
-            <div class="topic-desc">Scaffold a new module from plain English, let the agent write tests and fix its own failures, observe its decision-making process</div>
-            <a href="hack-artifacts/hands-on/lab3-agent-drive.html" target="_blank" class="topic-tag tag-handson">Hands-on</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="takeaway">
-        <div class="takeaway-label">Key Takeaway</div>
-        <p>Copilot isn't just autocomplete — it's a full IDE + terminal companion. Agent Mode turns it from a suggestion engine into a coding partner.</p>
-      </div>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- ========== SESSION 3: ADVANCED ========== -->
-    <div class="session">
-      <div class="session-header">
-        <div class="session-badge badge-red">🔴</div>
-        <div class="session-title-block">
-          <div class="session-level level-red">Advanced</div>
-          <div class="session-title">Plan Mode, Skills, Autonomous Copilot &amp; Governance</div>
-        </div>
-        <div class="session-duration">~90 min · 10:55 – 12:25</div>
-      </div>
-
-      <!-- Escalation Arc -->
-      <div class="arc-visual">
-        <div class="arc-title">The Autonomy Escalation Arc</div>
-        <div class="arc-steps">
-          <div class="arc-step">
-            <div class="arc-step-name">Agent Mode</div>
-            <div class="arc-step-desc">Interactive<br>co-pilot</div>
-          </div>
-          <div class="arc-arrow">→</div>
-          <div class="arc-step">
-            <div class="arc-step-name">Plan Mode</div>
-            <div class="arc-step-desc">Supervised<br>autonomy</div>
-          </div>
-          <div class="arc-arrow">→</div>
-          <div class="arc-step">
-            <div class="arc-step-name">Autonomous</div>
-            <div class="arc-step-desc">Autopilot +<br>Agent Teams</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Part A: Plan Mode -->
-      <div class="topic-group">
-        <div class="topic-group-title">Plan Mode — Supervised Autonomy — 15 min · 10:55 – 11:10</div>
-
-        <div class="topic-card">
-          <div class="topic-time">5 min</div>
-          <div class="topic-content">
-            <div class="topic-name">What is Plan Mode?</div>
-            <div class="topic-desc">Agent proposes a step-by-step plan, you review and approve before execution. The "trust but verify" workflow. When to use Plan vs Agent vs Autopilot.</div>
-            <a href="hack-artifacts/demos/05-plan-mode.html" target="_blank" class="topic-tag tag-demo">Demo</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">10 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Live Demo — Plan Mode in Action</div>
-            <div class="topic-desc">Start a task in Plan Mode, review the agent's proposed steps, approve or modify, watch execution. Compare the experience to Agent Mode.</div>
-            <a href="hack-artifacts/demos/05-plan-mode.html#live-demo" target="_blank" class="topic-tag tag-demo">Demo</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Part B: Agent/Skills + Copilot Instructions -->
-      <div class="topic-group">
-        <div class="topic-group-title">Agent/Skills + Copilot Instructions — 30 min · 11:10 – 11:40</div>
-
-        <div class="topic-card">
-          <div class="topic-time">10 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Copilot Instructions & Prompt Files</div>
-            <div class="topic-desc">.github/copilot-instructions.md for org-wide coding standards, prompt files (.github/prompts/*.md) for reusable task-specific prompts. How these shape every Copilot interaction.</div>
-            <a href="hack-artifacts/demos/06-copilot-instructions.html" target="_blank" class="topic-tag tag-demo">Demo</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">5 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Skills & MCP (Model Context Protocol)</div>
-            <div class="topic-desc">Extending Copilot with custom tools and external data sources. Available community MCP servers. Where Customer might build custom MCPs.</div>
-            <a href="hack-artifacts/presentations/skills-and-mcp.html" target="_blank" class="topic-tag tag-presentation">Presentation</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">15 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Lab 4 — Configure & Extend</div>
-            <div class="topic-desc">Create a copilot-instructions.md with your team's standards, create a prompt file for a common task, observe how instructions change Copilot's output</div>
-            <a href="hack-artifacts/hands-on/lab4-configure-extend.html" target="_blank" class="topic-tag tag-handson">Hands-on</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Part C: Autonomous Copilot & Agent Teams -->
-      <div class="topic-group">
-        <div class="topic-group-title">Autonomous Copilot &amp; Agent Teams — 25 min · 11:40 – 12:05</div>
-
-        <div class="topic-card">
-          <div class="topic-time">5 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Autonomous Copilot — Concept</div>
-            <div class="topic-desc">The full autonomy spectrum: Autopilot mode (no confirmations), Copilot coding agent (cloud PRs), agent teams (Squad pattern). Safety controls: step limits, permissions, background execution.</div>
-            <a href="hack-artifacts/demos/07-autonomous-copilot.html" target="_blank" class="topic-tag tag-demo">Demo</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">8 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Live Demo — Autopilot &amp; Coding Agent</div>
-            <div class="topic-desc">Run a task in Autopilot mode end-to-end. Show GitHub's coding agent creating a PR from an issue. Compare interactive vs autonomous workflows.</div>
-            <a href="hack-artifacts/demos/07-autonomous-copilot.html#live-demo" target="_blank" class="topic-tag tag-demo">Demo</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">7 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Squad — AI Agent Teams</div>
-            <div class="topic-desc">bradygaster/squad: persistent AI agent teams (frontend, backend, tester, lead) with parallel execution and shared decisions. The "fleet" concept as open-source tooling.</div>
-            <a href="hack-artifacts/discussions/squad.html" target="_blank" class="topic-tag tag-discussion">Discussion</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">5 min</div>
-          <div class="topic-content">
-            <div class="topic-name">When to Use Each Mode</div>
-            <div class="topic-desc">Agent Mode for focused tasks, Plan Mode for multi-file refactors, Autopilot for trusted patterns, Coding Agent for async PRs, Squad for complex multi-concern projects.</div>
-            <a href="hack-artifacts/demos/07-autonomous-copilot.html" target="_blank" class="topic-tag tag-demo">Demo</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Part E: Governance -->
-      <div class="topic-group">
-        <div class="topic-group-title">Guardrails &amp; Governance — 10 min · 12:05 – 12:15</div>
-
-        <div class="topic-card">
-          <div class="topic-time">5 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Model Governance & Policy</div>
-            <div class="topic-desc">Approved model selection, choosing models by task type, content exclusions, IP filters, audit logging, responsible use guidelines</div>
-            <a href="hack-artifacts/discussions/governance.html" target="_blank" class="topic-tag tag-discussion">Discussion</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">5 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Audit & Compliance</div>
-            <div class="topic-desc">Session trails for autonomous agents, code review hygiene for AI-generated code, building trust incrementally</div>
-            <a href="hack-artifacts/discussions/governance.html#audit" target="_blank" class="topic-tag tag-discussion">Discussion</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Part E: What's Next -->
-      <div class="topic-group">
-        <div class="topic-group-title">What's Next — 5 min · 12:15 – 12:20</div>
-
-        <div class="topic-card">
-          <div class="topic-time">5 min</div>
-          <div class="topic-content">
-            <div class="topic-name">Copilot SDK &amp; OpenClaw</div>
-            <div class="topic-desc">Build your own Copilot: @github/copilot-sdk (Node.js, Python, Go, .NET). OpenClaw — an open-source AI assistant built on the SDK. A glimpse at what's possible.</div>
-            <a href="hack-artifacts/discussions/copilot-sdk.html" target="_blank" class="topic-tag tag-discussion">Discussion</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Wrap-up -->
-      <div class="topic-group">
-        <div class="topic-group-title">Wrap-Up &amp; Afternoon Hack Framing — 5 min · 12:20 – 12:25</div>
-
-        <div class="topic-card">
-          <div class="topic-time">5 min</div>
-          <div class="topic-content">
-            <div class="topic-name">What's Ahead This Afternoon</div>
-            <div class="topic-desc">Hack format, use-case themes, team formation, fallback track for teams without use cases, Show &amp; Tell expectations</div>
-            <a href="hack-artifacts/discussions/afternoon-briefing.html" target="_blank" class="topic-tag tag-briefing">Briefing</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="takeaway">
-        <div class="takeaway-label">Key Takeaway</div>
-        <p>The path from assistant to autonomous teammate is Agent → Plan → Autonomous. Pair with Copilot Instructions, custom skills, and intentional guardrails to match your team's trust level.</p>
-      </div>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- ========== AFTERNOON: HACKING ========== -->
-    <div class="session">
-      <div class="session-header">
-        <div class="session-badge badge-yellow">🛠️</div>
-        <div class="session-title-block">
-          <div class="session-level level-yellow">Afternoon</div>
-          <div class="session-title">Hands-On Hacking + Show &amp; Tell</div>
-        </div>
-        <div class="session-duration">4 hours · 1:00 – 5:00 PM</div>
-      </div>
-
-      <div class="topic-group">
-        <div class="topic-group-title">Hack Schedule</div>
-
-        <div class="topic-card">
-          <div class="topic-time">20 min</div>
-          <div class="topic-content">
-            <div class="topic-name">1:00 — Hack Kickoff</div>
-            <div class="topic-desc">Use-case themes revealed, team formation, repo access, fallback track briefing for teams without pre-identified use cases</div>
-            <a href="hack-artifacts/discussions/hack-kickoff.html" target="_blank" class="topic-tag tag-briefing">Briefing</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">100 min</div>
-          <div class="topic-content">
-            <div class="topic-name">1:20 — Hacking Sprint 1</div>
-            <div class="topic-desc">Teams build using Copilot. Facilitators roam and provide support. Use Agent Mode, Plan Mode, or Autopilot.</div>
-            <a href="hack-artifacts/hands-on/hacking-guide.html" target="_blank" class="topic-tag tag-handson">Hands-on</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">15 min</div>
-          <div class="topic-content">
-            <div class="topic-name">3:00 — Mid-Hack Check-In</div>
-            <div class="topic-desc">Quick progress shares, unblock stuck teams, highlight interesting discoveries</div>
-            <a href="hack-artifacts/discussions/hack-kickoff.html#checkin" target="_blank" class="topic-tag tag-discussion">Discussion</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">60 min</div>
-          <div class="topic-content">
-            <div class="topic-name">3:15 — Hacking Sprint 2</div>
-            <div class="topic-desc">Continue building. Start preparing for Show &amp; Tell.</div>
-            <a href="hack-artifacts/hands-on/hacking-guide.html#sprint-2" target="_blank" class="topic-tag tag-handson">Hands-on</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">35 min</div>
-          <div class="topic-content">
-            <div class="topic-name">4:15 — 🎤 Show &amp; Tell</div>
-            <div class="topic-desc">Teams demo what they built (~5 min per team). What was the challenge? What Copilot features did you use? Live demo. What surprised you?</div>
-            <a href="hack-artifacts/discussions/show-and-tell.html" target="_blank" class="topic-tag tag-demo">Demos</a>
-          </div>
-        </div>
-
-        <div class="topic-card">
-          <div class="topic-time">10 min</div>
-          <div class="topic-content">
-            <div class="topic-name">4:50 — Closing</div>
-            <div class="topic-desc">Next steps, office hours cadence, champion team formation, feedback collection</div>
-            <a href="hack-artifacts/discussions/closing.html" target="_blank" class="topic-tag tag-discussion">Planning</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="takeaway">
-        <div class="takeaway-label">Fallback Track</div>
-        <p>No use case? Use Plan Mode + Autopilot to build a solution from a plain-English spec: REST API from a PRD, Repo Health Automation, or Internal Tool Generator.</p>
-      </div>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- Prerequisites -->
-    <div class="prereq-section">
-      <div class="prereq-title">✅ Before You Arrive</div>
-      <ul class="prereq-list">
-        <li>
-          <div class="prereq-check"></div>
-          <div>GitHub Copilot license active and working in your IDE</div>
-        </li>
-        <li>
-          <div class="prereq-check"></div>
-          <div>VS Code installed with the <strong>GitHub Copilot</strong> and <strong>Copilot Chat</strong> extensions (latest version)</div>
-        </li>
-        <li>
-          <div class="prereq-check"></div>
-          <div>GitHub CLI installed with the Copilot extension: <code>gh extension install github/gh-copilot</code></div>
-        </li>
-        <li>
-          <div class="prereq-check"></div>
-          <div>Access to a test or sandbox repository for hands-on labs</div>
-        </li>
-        <li>
-          <div class="prereq-check"></div>
-          <div>Familiarity with basic Git workflows (clone, branch, commit, pull request)</div>
-        </li>
-      </ul>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <div class="prereq-section">
-      <div class="prereq-title">Key References</div>
-      <ul class="prereq-list">
-        <li>
-          <div class="prereq-check"></div>
-          <div>Squad - AI Agent Teams: <a href="https://github.com/bradygaster/squad" target="_blank" rel="noopener noreferrer">github.com/bradygaster/squad</a></div>
-        </li>
-        <li>
-          <div class="prereq-check"></div>
-          <div>Copilot SDK: <code>@github/copilot-sdk</code> (technical preview)</div>
-        </li>
-        <li>
-          <div class="prereq-check"></div>
-          <div>OpenClaw Video: <a href="https://youtu.be/PEtM45hG-5A" target="_blank" rel="noopener noreferrer">Build Your Own OpenClaw Bot like with GitHub Copilot</a></div>
-        </li>
-        <li>
-          <div class="prereq-check"></div>
-          <div>GitHub Docs: Premium Requests: <a href="https://docs.github.com/en/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests" target="_blank" rel="noopener noreferrer">docs.github.com</a></div>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-logos">
-        GitHub &nbsp;×&nbsp; Microsoft &nbsp;×&nbsp; Customer
-      </div>
-      <div class="footer-text">March 19, 2026 · Onsite Hackathon</div>
-    </div>
-
-  </div>
-</div>
-
-</body>
+  </body>
 </html>
